@@ -1,0 +1,172 @@
+import * as dgraph from "../src";
+
+import { setSchema, setup, strToU8, u8ToStr } from "./helper";
+
+let client: dgraph.DgraphClient;
+
+describe("txn", () => {
+    describe("queryWithVars", () => {
+        beforeAll(async () => {
+            client = await setup();
+            await setSchema(client, "name: string @index(exact) .");
+
+            const mu = new dgraph.Mutation();
+            mu.setCommitNow(true);
+            mu.setSetNquads(strToU8('_:alice <name> "Alice" .'));
+            await client.newTxn().mutate(mu);
+        });
+
+        it("should query with variables", async () => {
+            let res = await client.newTxn().queryWithVars(
+                "query me($a: string) { me(func: eq(name, $a)) { name }}",
+                {
+                    $a: "Alice",
+                },
+            );
+            let resJson: {
+                me: { name: string }[],
+            } = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
+            expect(resJson.me).toHaveLength(1);
+            expect(resJson.me[0].name).toEqual("Alice");
+
+            res = await client.newTxn().queryWithVars(
+                "query me($a: string) { me(func: eq(name, $a)) { name }}",
+                {
+                    $a: new String("Alice"), // tslint:disable-line no-construct
+                    $b: true, // non-string properties are ignored
+                },
+            );
+            resJson = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
+            expect(resJson.me).toHaveLength(1);
+            expect(resJson.me[0].name).toEqual("Alice");
+        });
+
+        it("should ignore properties with non-string values", async () => {
+            const res = await client.newTxn().queryWithVars(
+                "query me($a: string) { me(func: eq(name, $a)) { name }}",
+                {
+                    $a: 1, // non-string properties are ignored
+                },
+            );
+            const resJson: {
+                me: { name: string }[],
+            } = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
+            expect(resJson.me).toHaveLength(0);
+        });
+
+        it("should throw finished error if txn is already finished", async () => {
+            const txn = client.newTxn();
+            await txn.commit();
+
+            const p = txn.queryWithVars(
+                '{ me(func: eq(name, "Alice")) { name }}',
+                null,
+            );
+            await expect(p).rejects.toBe(dgraph.ERR_FINISHED);
+        });
+    });
+
+    describe("mutate", () => {
+        beforeAll(async () => {
+            client = await setup();
+            await setSchema(client, "name: string @index(exact) .");
+        });
+
+        it("should throw finished error if txn is already finished", async () => {
+            const txn = client.newTxn();
+            await txn.commit();
+
+            const mu = new dgraph.Mutation();
+            mu.setSetNquads(strToU8('_:alice <name> "Alice" .'));
+            const p = txn.mutate(mu);
+            await expect(p).rejects.toBe(dgraph.ERR_FINISHED);
+        });
+
+        it("should throw error and discard if Stub.mutate throws an error", async () => {
+            const txn = client.newTxn();
+
+            const mu = new dgraph.Mutation();
+            // There is an error in the mutation NQuad.
+            mu.setSetNquads(strToU8('alice <name> "Alice" .'));
+            const p1 = txn.mutate(mu);
+            await expect(p1).rejects.toBeDefined();
+
+            const p2 = txn.commit();
+            await expect(p2).rejects.toBe(dgraph.ERR_FINISHED);
+        });
+
+        it("should throw aborted error if there is a conflict and commitNow is true", async () => {
+            const txn1 = client.newTxn();
+            const txn2 = client.newTxn();
+
+            let mu = new dgraph.Mutation();
+            mu.setSetNquads(strToU8('_:alice <name> "Alice" .'));
+
+            await txn1.mutate(mu);
+            await txn2.mutate(mu);
+
+            mu = new dgraph.Mutation();
+            mu.setSetNquads(strToU8('_:bob <name> "Bob" .'));
+            mu.setCommitNow(true);
+
+            await txn1.commit();
+
+            const p = txn2.mutate(mu);
+            await expect(p).rejects.toBe(dgraph.ERR_ABORTED);
+        });
+    });
+
+    describe("commit", () => {
+        beforeAll(async () => {
+            client = await setup();
+            await setSchema(client, "name: string @index(exact) .");
+        });
+
+        it("should throw finished error if txn is already finished", async () => {
+            const txn = client.newTxn();
+            await txn.commit();
+
+            const p = txn.commit();
+            await expect(p).rejects.toBe(dgraph.ERR_FINISHED);
+        });
+
+        it("should throw finished error after mutation with commitNow", async () => {
+            const txn = client.newTxn();
+
+            const mu = new dgraph.Mutation();
+            mu.setSetNquads(strToU8('_:alice <name> "Alice" .'));
+            mu.setCommitNow(true);
+            await txn.mutate(mu);
+
+            const p = txn.commit();
+            await expect(p).rejects.toBe(dgraph.ERR_FINISHED);
+        });
+    });
+
+    describe("discard", () => {
+        beforeAll(async () => {
+            client = await setup();
+            await setSchema(client, "name: string @index(exact) .");
+        });
+
+        it("should resolve and do nothing if txn is already finished", async () => {
+            const txn = client.newTxn();
+            await txn.commit();
+
+            const p = txn.discard();
+            await expect(p).resolves.toBeUndefined();
+        });
+
+        it("should resolve and do nothing after mutation with commitNow", async () => {
+            const txn = client.newTxn();
+
+            const mu = new dgraph.Mutation();
+            mu.setSetNquads(strToU8('_:alice <name> "Alice" .'));
+            mu.setCommitNow(true);
+            await txn.mutate(mu);
+
+            const p = txn.discard();
+            await expect(p).resolves.toBeUndefined();
+        });
+    });
+});
