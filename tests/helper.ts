@@ -57,15 +57,11 @@ export async function setup(): Promise<dgraph.DgraphClient> {
 }
 
 export function u8ToStr(arr: Uint8Array): string {
-    return Array.from(arr).map((item: number): string => {
-      return String.fromCharCode(item);
-    }).join("");
+    return new Buffer(arr).toString();
 }
 
 export function strToU8(str: string): Uint8Array {
-    return new Uint8Array(str.split("").map((item: string): number => {
-      return item.charCodeAt(0);
-    }));
+    return new Uint8Array(new Buffer(str));
 }
 
 export function wait(time: number): Promise<void> {
