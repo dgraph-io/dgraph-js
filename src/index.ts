@@ -1,5 +1,5 @@
 // Export all the message types.
-export * from "./generated/api_pb";
+export * from "../generated/api_pb";
 
 // Export DgraphClient class and deleteEdges function.
 export * from "./client";

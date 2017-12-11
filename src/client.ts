@@ -1,6 +1,6 @@
 import * as jspb from "google-protobuf";
 
-import * as  messages from "./generated/api_pb";
+import * as  messages from "../generated/api_pb";
 
 import { DgraphClientStub } from "./clientStub";
 import { ERR_NO_CLIENTS } from "./errors";

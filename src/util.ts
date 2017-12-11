@@ -1,7 +1,7 @@
 import * as jspb from "google-protobuf";
 import * as grpc from "grpc";
 
-import * as messages from "./generated/api_pb";
+import * as messages from "../generated/api_pb";
 
 export function mergeLinReads(target: messages.LinRead, src?: messages.LinRead | null): messages.LinRead {
     if (src == null) {

@@ -12,18 +12,18 @@
   },
   "homepage": "https://github.com/dgraph-io/dgraph-js#readme",
   "files": [
-    "lib"
+    "lib",
+    "generated"
   ],
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf coverage",
-    "build:protos:msgs": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:./src/generated/ --ts_out=service=false:./src/generated/ --proto_path=./protos/ api.proto",
-    "build:protos:srvs": "grpc_tools_node_protoc --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` --grpc_out=./src/generated/ --proto_path=./protos/ api.proto",
+    "build:protos:msgs": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:./generated/ --ts_out=service=false:./generated/ --proto_path=./protos/ api.proto",
+    "build:protos:srvs": "grpc_tools_node_protoc --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` --grpc_out=./generated/ --proto_path=./protos/ api.proto",
     "build:protos": "npm run build:protos:msgs && npm run build:protos:srvs",
-    "build:bootstrap": "rimraf lib && mkdir -p ./lib/generated && cp ./src/generated/* ./lib/generated/",
-    "build": "npm run build:bootstrap && tsc -p tsconfig.release.json",
-    "build:watch": "npm run build:bootstrap && tsc -w -p tsconfig.release.json",
+    "build": "tsc -p tsconfig.release.json",
+    "build:watch": "tsc -w -p tsconfig.release.json",
     "lint": "tslint -t stylish --project \"tsconfig.json\"",
     "lint:fix": "tslint --fix -t stylish --project \"tsconfig.json\"",
     "pretest": "npm run lint",

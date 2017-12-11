@@ -1,6 +1,6 @@
 import * as jspb from "google-protobuf";
 
-import * as messages from "./generated/api_pb";
+import * as messages from "../generated/api_pb";
 
 import { DgraphClient } from "./client";
 import { ERR_ABORTED, ERR_FINISHED } from "./errors";

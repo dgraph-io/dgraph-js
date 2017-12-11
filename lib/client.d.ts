@@ -1,4 +1,4 @@
-import * as messages from "./generated/api_pb";
+import * as messages from "../generated/api_pb";
 import { DgraphClientStub } from "./clientStub";
 import { Txn } from "./txn";
 export declare class DgraphClient {

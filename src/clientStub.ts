@@ -1,7 +1,7 @@
 import * as grpc from "grpc";
 
-import * as services from "./generated/api_grpc_pb";
-import * as messages from "./generated/api_pb";
+import * as services from "../generated/api_grpc_pb";
+import * as messages from "../generated/api_pb";
 
 import { promisify } from "./util";
 

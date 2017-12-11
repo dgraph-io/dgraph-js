@@ -1,5 +1,5 @@
 import * as grpc from "grpc";
-import * as messages from "./generated/api_pb";
+import * as messages from "../generated/api_pb";
 export declare class DgraphClientStub {
     private stub;
     private promisified;
