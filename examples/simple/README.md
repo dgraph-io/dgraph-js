@@ -47,19 +47,16 @@ npm install
 ## Run the sample code
 
 ```sh
-npm run start
+node index.js
 ```
 
 Your output should look something like this:
 
 ```
-> simple@ start /path/to/dgraph-js/examples/simple
-> node index.js
-
 people found: 1
 Alice
 
 DONE!
 ```
 
-You can explore the source code in `index.js` file.
+You can explore the source code in the `index.js` file.

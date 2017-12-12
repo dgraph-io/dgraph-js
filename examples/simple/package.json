@@ -1,8 +1,5 @@
 {
   "name": "simple",
-  "scripts": {
-    "start": "node index.js"
-  },
   "dependencies": {
     "dgraph-js": "^0.9.4-beta.1",
     "grpc": "^1.7.2"
