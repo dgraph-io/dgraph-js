@@ -15,6 +15,7 @@ and understand how to run and work with Dgraph.
 
 ## Table of Contents
 - [Install](#install)
+- [Quickstart](#quickstart)
 - [Using the Client](#using-the-client)
   * [Create the client](#create-the-client)
   * [Alter the database](#alter-the-database)
@@ -35,6 +36,13 @@ or yarn:
 ```sh
 yarn add dgraph-js@0.9.4-beta.1
 ```
+
+## Quickstart
+Build and run the [simple] project in the `examples` folder, which
+contains an end-to-end example of using the Dgraph javascript client. Follow the
+instructions in the README of that project.
+
+[simple]: https://github.com/dgraph-io/dgraph-js/tree/master/examples/simple
 
 ## Using the Client
 
