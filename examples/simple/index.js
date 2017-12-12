@@ -3,11 +3,7 @@ const grpc = require("grpc");
 
 // Create a client.
 function newClient() {
-    const clientStub = new dgraph.DgraphClientStub(
-        "localhost:9080",
-        grpc.credentials.createInsecure(),
-    );
-
+    const clientStub = new dgraph.DgraphClientStub("localhost:9080", grpc.credentials.createInsecure());
     return new dgraph.DgraphClient(clientStub);
 }
 
@@ -28,13 +24,11 @@ async function setSchema(dgraphClient) {
 
 // Create a node for a person with name Alice.
 async function createAlice(dgraphClient) {
-    // Create a new transaction
+    // Create a new transaction.
     const txn = dgraphClient.newTxn();
     try {
         // Create data.
-        const p = {
-            name: "Alice",
-        };
+        const p = { name: "Alice" };
 
         // Serialize it.
         const json = JSON.stringify(p);
