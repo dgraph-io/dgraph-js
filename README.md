@@ -115,19 +115,19 @@ We're going to use JSON. We define a person object to represent a person, serial
 it as `Uint8Array` (or `base64`) and use it in `Mutation` object.
 
 ```js
-// Create data
+// Create data.
 const p = {
     name: "Alice",
 };
 
-// Serialize it
+// Serialize it.
 const json = JSON.stringify(p);
 
 const serialized = new Uint8Array(new Buffer(json));
 // OR if you want to use base64
 // const serialized = new Buffer(json).toString("base64");
 
-// Run mutation
+// Run mutation.
 const mu = new dgraph.Mutation();
 mu.setSetJson(serialized);
 await txn.mutate(mu);
@@ -163,7 +163,7 @@ Run the query, deserialize the result from Uint8Array (or base64) encoded JSON a
 print it out:
 
 ```js
-// Query
+// Run query.
 const query = `query all($a: string) {
   all(func: eq(name, $a))
   {
@@ -173,14 +173,14 @@ const query = `query all($a: string) {
 const vars = { $a: "Alice" };
 const res = await dgraphClient.newTxn().queryWithVars(query, vars);
 
-// Deserialize
+// Deserialize result.
 const jsonStr = new Buffer(res.getJson_asU8()).toString();
 // OR if you want to use base64
 // const jsonStr = new Buffer(res.getJson_asB64(), "base64").toString();
 
 const ppl = JSON.parse(jsonStr);
 
-// Print results
+// Print results.
 console.log(`people found: ${ppl.all.length}`);
 ppl.all.forEach((person) => console.log(person.name));
 ```

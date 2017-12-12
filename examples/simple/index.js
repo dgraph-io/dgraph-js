@@ -59,6 +59,7 @@ async function createAlice(dgraphClient) {
 
 // Query for a person with name Alice.
 async function queryAlice(dgraphClient) {
+    // Run query.
     const query = `query all($a: string) {
         all(func: eq(name, $a))
         {
@@ -68,7 +69,7 @@ async function queryAlice(dgraphClient) {
     const vars = { $a: "Alice" };
     const res = await dgraphClient.newTxn().queryWithVars(query, vars);
 
-    // Deserialize.
+    // Deserialize result.
     const jsonStr = new Buffer(res.getJson_asU8()).toString();
     // OR if you want to use base64
     // const jsonStr = new Buffer(res.getJson_asB64(), "base64").toString();
