@@ -1,6 +1,7 @@
 # dgraph-js
 
-Official Dgraph client implementation for javascript, using [grpc].
+Official Dgraph client implementation for javascript (Node.js v6 and above),
+using [grpc].
 
 [grpc]: https://grpc.io/
 
