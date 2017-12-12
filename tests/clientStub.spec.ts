@@ -6,7 +6,7 @@ async function checkVersion(stub: dgraph.DgraphClientStub): Promise<void> {
     const v = await stub.checkVersion(new dgraph.Check());
     const tag = v.getTag();
     expect(typeof tag).toEqual("string");
-    expect(tag).not.toEqual("");
+    expect(tag).toBeDefined();
 }
 
 describe("clientStub", () => {
