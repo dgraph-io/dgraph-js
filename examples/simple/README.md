@@ -45,9 +45,16 @@ npm install
 ```
 
 ## Run the sample code
+For Node.js >= v7.6, run:
 
 ```sh
 node index.js
+```
+
+For Node.js < v7.6 or if you don't want to use the async/await syntax, run:
+
+```sh
+node index-pre-v7.6.js
 ```
 
 Your output should look something like this:
@@ -59,4 +66,4 @@ Alice
 DONE!
 ```
 
-You can explore the source code in the `index.js` file.
+You can explore the source code in the `index.js` and `index-pre-v7.6.js` files.
