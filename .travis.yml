@@ -1,7 +1,9 @@
 language: node_js
 node_js:
   - "node"
+  - "9"
   - "8"
+  - "6"
 sudo: required
 dist: trusty
 before_install:
