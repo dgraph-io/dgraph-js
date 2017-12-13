@@ -1,4 +1,4 @@
-# simple
+# Simple example project
 
 Simple project demonstrating the use of [dgraph-js], the official javascript client
 for Dgraph.
