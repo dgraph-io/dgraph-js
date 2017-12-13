@@ -5,6 +5,7 @@ set -x
 
 source scripts/functions.sh
 
+init
 startZero
 start
 
