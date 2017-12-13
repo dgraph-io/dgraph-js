@@ -7,7 +7,7 @@ for Dgraph.
 
 ## Running
 
-### Start Dgraph Server
+### Start Dgraph server
 You will need to install [Dgraph v0.9.4 or above][releases] and run it.
 
 [releases]: https://github.com/dgraph-io/dgraph/releases

@@ -14,10 +14,10 @@ and understand how to run and work with Dgraph.
 
 [docs.dgraph.io]:https://docs.dgraph.io
 
-## Table of Contents
+## Table of contents
 - [Install](#install)
 - [Quickstart](#quickstart)
-- [Using the Client](#using-the-client)
+- [Using the client](#using-the-client)
   * [Create the client](#create-the-client)
   * [Alter the database](#alter-the-database)
   * [Create a transaction](#create-a-transaction)
@@ -45,7 +45,7 @@ instructions in the README of that project.
 
 [simple]: https://github.com/dgraph-io/dgraph-js/tree/master/examples/simple
 
-## Using the Client
+## Using the client
 
 ### Create the client
 A `DgraphClient` object can be initialised by passing it a list of
