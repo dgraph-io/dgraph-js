@@ -4,7 +4,7 @@ import * as messages from "../generated/api_pb";
 
 import { DgraphClient } from "./client";
 import { ERR_ABORTED, ERR_FINISHED } from "./errors";
-import { isAbortedError, isConflictError, mergeLinReads } from "./util";
+import { isAbortedError, isConflictError, mergeLinReads, stringifyMessage } from "./util";
 
 /**
  * Txn is a single atomic transaction.
@@ -50,6 +50,7 @@ export class Txn {
         vars?: { [k: string]: any } | null, // tslint:disable-line no-any
     ): Promise<messages.Response> {
         if (this.finished) {
+            this.dc.debug(`Query request (ERR_FINISHED):\nquery = ${q}\nvars = ${vars}`);
             throw ERR_FINISHED;
         }
 
@@ -66,10 +67,13 @@ export class Txn {
                 }
             });
         }
+        this.dc.debug(`Query request:\n${stringifyMessage(req)}`);
 
         const c = this.dc.anyClient();
         const res = await c.query(req);
         this.mergeContext(res.getTxn());
+        this.dc.debug(`Query response:\n${stringifyMessage(res)}`);
+
         return res;
     }
 
@@ -87,11 +91,13 @@ export class Txn {
      */
     public async mutate(mu: messages.Mutation): Promise<messages.Assigned> {
         if (this.finished) {
+            this.dc.debug(`Mutate request (ERR_FINISHED):\nmutation = ${stringifyMessage(mu)}`);
             throw ERR_FINISHED;
         }
 
         this.mutated = true;
         mu.setStartTs(this.ctx.getStartTs());
+        this.dc.debug(`Mutate request:\n${stringifyMessage(mu)}`);
 
         let ag: messages.Assigned;
         const c = this.dc.anyClient();
@@ -118,6 +124,8 @@ export class Txn {
         }
 
         this.mergeContext(ag.getContext());
+        this.dc.debug(`Mutate response:\n${stringifyMessage(ag)}`);
+
         return ag;
     }
 

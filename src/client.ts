@@ -5,7 +5,7 @@ import * as  messages from "../generated/api_pb";
 import { DgraphClientStub } from "./clientStub";
 import { ERR_NO_CLIENTS } from "./errors";
 import { Txn } from "./txn";
-import { mergeLinReads } from "./util";
+import { mergeLinReads, stringifyMessage } from "./util";
 
 /**
  * Client is a transaction aware client to a set of Dgraph server instances.
@@ -13,6 +13,7 @@ import { mergeLinReads } from "./util";
 export class DgraphClient {
     private clients: DgraphClientStub[];
     private linRead: messages.LinRead;
+    private debugMode: boolean = false;
 
     /**
      * Creates a new Client for interacting with the Dgraph store.
@@ -40,8 +41,13 @@ export class DgraphClient {
      * 3. Drop the database.
      */
     public async alter(op: messages.Operation): Promise<messages.Payload> {
+        this.debug(`Alter request:\n${stringifyMessage(op)}`);
+
         const c = this.anyClient();
-        return await c.alter(op);
+        const pl = await c.alter(op);
+        this.debug(`Alter response:\n${stringifyMessage(pl)}`);
+
+        return pl;
     }
 
     /**
@@ -49,6 +55,24 @@ export class DgraphClient {
      */
     public newTxn(): Txn {
         return new Txn(this);
+    }
+
+    /**
+     * setDebugMode switches on/off the debug mode which prints helpful debug messages
+     * while performing alters, queries and mutations.
+     */
+    public setDebugMode(mode: boolean = true): void {
+        this.debugMode = mode;
+    }
+
+    /**
+     * debug prints a message on the console if debug mode is switched on.
+     */
+    public debug(msg: string): void {
+        if (this.debugMode) {
+            // tslint:disable-next-line no-console
+            console.log(msg);
+        }
     }
 
     public getLinRead(): messages.LinRead {

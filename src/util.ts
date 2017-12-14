@@ -20,22 +20,6 @@ export function mergeLinReads(target: messages.LinRead, src?: messages.LinRead |
     return target;
 }
 
-export function promisify<A, T>(
-    f: (arg: A, cb: (err?: Error | null, res?: T) => void) => void,
-    thisContext?: any, // tslint:disable-line no-any
-): (arg: A) => Promise<T> {
-    return (arg: A) => {
-        // tslint:disable-next-line no-any
-        return new Promise((resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void): void => {
-            f.call(
-                thisContext,
-                arg,
-                (err?: Error | null, result?: T): void => (err != null) ? reject(err) : resolve(result),
-            );
-        });
-    };
-}
-
 export function errorCode(err: any): { valid: boolean, code: number } { // tslint:disable-line no-any
     if (
         err == null ||
@@ -63,4 +47,24 @@ export function isAbortedError(err: any): boolean { // tslint:disable-line no-an
 export function isConflictError(err: any): boolean { // tslint:disable-line no-any
     const ec = errorCode(err);
     return ec.valid && (ec.code === grpc.status.ABORTED || ec.code === grpc.status.FAILED_PRECONDITION);
+}
+
+export function promisify<A, T>(
+    f: (arg: A, cb: (err?: Error | null, res?: T) => void) => void,
+    thisContext?: any, // tslint:disable-line no-any
+): (arg: A) => Promise<T> {
+    return (arg: A) => {
+        // tslint:disable-next-line no-any
+        return new Promise((resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void): void => {
+            f.call(
+                thisContext,
+                arg,
+                (err?: Error | null, result?: T): void => (err != null) ? reject(err) : resolve(result),
+            );
+        });
+    };
+}
+
+export function stringifyMessage(msg: jspb.Message): string {
+    return JSON.stringify(msg.toObject());
 }
