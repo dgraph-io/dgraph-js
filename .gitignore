@@ -6,6 +6,10 @@ npm-debug.log*
 # Dependencies
 node_modules/
 
+# package-lock.json for the examples
+package-lock.json
+!/package-lock.json
+
 # Node files
 npm-debug.log
 yarn-error.log
