@@ -1,5 +1,5 @@
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 
@@ -22,10 +22,10 @@ yarn-error.log
 .eslintcache
 
 # Coverage
-coverage
+coverage/
 
 # VS Code
-.vscode
+.vscode/
 !.vscode/tasks.js
 
 # JetBrains IDEs
