@@ -17,8 +17,8 @@ and understand how to run and work with Dgraph.
 ## Table of contents
 - [Install](#install)
 - [Quickstart](#quickstart)
-- [Using the client](#using-the-client)
-  * [Create the client](#create-the-client)
+- [Using a client](#using-a-client)
+  * [Create a client](#create-a-client)
   * [Alter the database](#alter-the-database)
   * [Create a transaction](#create-a-transaction)
   * [Run a mutation](#run-a-mutation)
@@ -46,9 +46,9 @@ instructions in the README of that project.
 
 [simple]: https://github.com/dgraph-io/dgraph-js/tree/master/examples/simple
 
-## Using the client
+## Using a client
 
-### Create the client
+### Create a client
 A `DgraphClient` object can be initialised by passing it a list of
 `DgraphClientStub` clients as variadic arguments. Connecting to multiple Dgraph
 servers in the same cluster allows for better distribution of workload.
