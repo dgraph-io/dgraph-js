@@ -24,6 +24,7 @@ and understand how to run and work with Dgraph.
   * [Run a mutation](#run-a-mutation)
   * [Run a query](#run-a-query)
   * [Commit a transaction](#commit-a-transaction)
+  * [Debug mode](#debug-mode)
 - [Development](#development)
   * [Building the source](#building-the-source)
   * [Running tests](#running-tests)
@@ -66,6 +67,8 @@ const clientStub = new dgraph.DgraphClientStub(
 );
 const dgraphClient = new dgraph.DgraphClient(clientStub);
 ```
+
+To facilitate debugging, [debug mode](#debug-mode) can be enabled for a client.
 
 ### Alter the database
 To set the schema, create an `Operation` object, set the schema and pass it to
@@ -228,6 +231,23 @@ try {
   // and hence safe.
   await txn.discard();
 }
+```
+
+### Debug mode
+Debug mode can be used to print helpful debug messages while performing alters,
+queries and mutations. It can be set using the`DgraphClient#setDebugMode(boolean?)`
+method.
+
+```js
+// Create a client.
+const dgraphClient = new dgraph.DgraphClient(...);
+
+// Enable debug mode.
+dgraphClient.setDebugMode(true);
+// OR simply dgraphClient.setDebugMode();
+
+// Disable debug mode.
+dgraphClient.setDebugMode(false);
 ```
 
 ## Development
