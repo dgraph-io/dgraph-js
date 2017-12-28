@@ -149,6 +149,11 @@ Sometimes, you only want to commit a mutation, without querying anything further
 In such cases, you can use `Mutation#setCommitNow(true)` to indicate that the
 mutation must be immediately committed.
 
+`Mutation#setIgnoreIndexConflict(true)` can be applied on a `Mutation` object to
+not run conflict detection over the index, which would decrease the number of
+transaction conflicts and aborts. However, this would come at the cost of potentially
+inconsistent upsert operations.
+
 ### Run a query
 You can run a query by calling `Txn#query(string)`. You will need to pass in a
 GraphQL+- query string. If you want to pass an additional map of any variables that
