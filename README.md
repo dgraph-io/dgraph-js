@@ -15,31 +15,37 @@ and understand how to run and work with Dgraph.
 [docs.dgraph.io]:https://docs.dgraph.io
 
 ## Table of contents
+
 - [Install](#install)
 - [Quickstart](#quickstart)
 - [Using a client](#using-a-client)
-  * [Create a client](#create-a-client)
-  * [Alter the database](#alter-the-database)
-  * [Create a transaction](#create-a-transaction)
-  * [Run a mutation](#run-a-mutation)
-  * [Run a query](#run-a-query)
-  * [Commit a transaction](#commit-a-transaction)
-  * [Debug mode](#debug-mode)
+  - [Create a client](#create-a-client)
+  - [Alter the database](#alter-the-database)
+  - [Create a transaction](#create-a-transaction)
+  - [Run a mutation](#run-a-mutation)
+  - [Run a query](#run-a-query)
+  - [Commit a transaction](#commit-a-transaction)
+  - [Debug mode](#debug-mode)
 - [Development](#development)
-  * [Building the source](#building-the-source)
-  * [Running tests](#running-tests)
+  - [Building the source](#building-the-source)
+  - [Running tests](#running-tests)
 
 ## Install
+
 Install using npm:
+
 ```sh
 npm install dgraph-js@0.9.4-beta.3 --save
 ```
+
 or yarn:
+
 ```sh
 yarn add dgraph-js@0.9.4-beta.3
 ```
 
 ## Quickstart
+
 Build and run the [simple] project in the `examples` folder, which
 contains an end-to-end example of using the Dgraph javascript client. Follow the
 instructions in the README of that project.
@@ -49,6 +55,7 @@ instructions in the README of that project.
 ## Using a client
 
 ### Create a client
+
 A `DgraphClient` object can be initialised by passing it a list of
 `DgraphClientStub` clients as variadic arguments. Connecting to multiple Dgraph
 servers in the same cluster allows for better distribution of workload.
@@ -71,6 +78,7 @@ const dgraphClient = new dgraph.DgraphClient(clientStub);
 To facilitate debugging, [debug mode](#debug-mode) can be enabled for a client.
 
 ### Alter the database
+
 To set the schema, create an `Operation` object, set the schema and pass it to
 `DgraphClient#alter(Operation)` method.
 
@@ -100,6 +108,7 @@ await dgraphClient.alter(op);
 ```
 
 ### Create a transaction
+
 To create a transaction, call `DgraphClient#newTxn()` method, which returns a
 new `Txn` object. This operation incurs no network overhead.
 
@@ -119,6 +128,7 @@ try {
 ```
 
 ### Run a mutation
+
 `Txn#mutate(Mutation)` runs a mutation. It takes in a `Mutation` object, which
 provides two main ways to set data: JSON and RDF N-Quad. You can choose whichever
 way is convenient.
@@ -155,6 +165,7 @@ transaction conflicts and aborts. However, this would come at the cost of potent
 inconsistent upsert operations.
 
 ### Run a query
+
 You can run a query by calling `Txn#query(string)`. You will need to pass in a
 GraphQL+- query string. If you want to pass an additional map of any variables that
 you might want to set in the query, call `Txn#queryWithVars(string, object)` with
@@ -167,7 +178,7 @@ with it.
 
 Let’s run the following query with a variable $a:
 
-```
+```console
 query all($a: string) {
   all(func: eq(name, $a))
   {
@@ -184,8 +195,8 @@ print it out:
 const query = `query all($a: string) {
   all(func: eq(name, $a))
   {
-    name 
-  } 
+    name
+  }
 }`;
 const vars = { $a: "Alice" };
 const res = await dgraphClient.newTxn().queryWithVars(query, vars);
@@ -201,14 +212,16 @@ const ppl = JSON.parse(jsonStr);
 console.log(`people found: ${ppl.all.length}`);
 ppl.all.forEach((person) => console.log(person.name));
 ```
+
 This should print:
 
-```
+```console
 people found: 1
 Alice
 ```
 
 ### Commit a transaction
+
 A transaction can be committed using the `Txn#commit()` method. If your transaction
 consisted solely of calls to `Txn#query` or `Txn#queryWithVars`, and no calls to
 `Txn#mutate`, then calling `Txn#commit()` is not necessary.
@@ -239,6 +252,7 @@ try {
 ```
 
 ### Debug mode
+
 Debug mode can be used to print helpful debug messages while performing alters,
 queries and mutations. It can be set using the`DgraphClient#setDebugMode(boolean?)`
 method.
@@ -275,6 +289,7 @@ npm run build:protos
 ```
 
 ### Running tests
+
 Make sure you have a Dgraph server running on localhost before you run this task.
 
 ```sh
