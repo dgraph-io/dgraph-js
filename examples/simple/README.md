@@ -8,6 +8,7 @@ for Dgraph.
 ## Running
 
 ### Start Dgraph server
+
 You will need to install [Dgraph v0.9.4 or above][releases] and run it.
 
 [releases]: https://github.com/dgraph-io/dgraph/releases
@@ -45,6 +46,7 @@ npm install
 ```
 
 ## Run the sample code
+
 For Node.js >= v7.6, run:
 
 ```sh
@@ -59,7 +61,7 @@ node index-pre-v7.6.js
 
 Your output should look something like this:
 
-```
+```console
 people found: 1
 { name: 'Alice',
   age: 26,
