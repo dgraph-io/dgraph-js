@@ -16,19 +16,49 @@ async function dropAll(dgraphClient) {
 
 // Set schema.
 async function setSchema(dgraphClient) {
-    const schema = "name: string @index(exact) .";
+    const schema = `
+        name: string @index(exact) .
+        age: int .
+        married: bool .
+        loc: geo .
+        dob: datetime .
+    `;
     const op = new dgraph.Operation();
     op.setSchema(schema);
     await dgraphClient.alter(op);
 }
 
-// Create a node for a person with name Alice.
-async function createAlice(dgraphClient) {
+// Create data using JSON.
+async function createData(dgraphClient) {
     // Create a new transaction.
     const txn = dgraphClient.newTxn();
     try {
         // Create data.
-        const p = { name: "Alice" };
+        const p = {
+            name: "Alice",
+            age: 26,
+            married: true,
+            loc: {
+                type: "Point",
+                coordinates: [1.1, 2],
+            },
+            dob: new Date(1980, 1, 1, 23, 0, 0, 0),
+            friend: [
+                {
+                    name: "Bob",
+                    age: 24,
+                },
+                {
+                    name: "Charlie",
+                    age: 29,
+                }
+            ],
+            school: [
+                {
+                    name: "Crown Public School",
+                }
+            ]
+        };
 
         // Serialize it.
         const json = JSON.stringify(p);
@@ -51,13 +81,23 @@ async function createAlice(dgraphClient) {
     }
 }
 
-// Query for a person with name Alice.
-async function queryAlice(dgraphClient) {
+// Query for data.
+async function queryData(dgraphClient) {
     // Run query.
     const query = `query all($a: string) {
-        all(func: eq(name, $a))
-        {
+        all(func: eq(name, $a)) {
             name
+            age
+            married
+            loc
+            dob
+            friend {
+                name
+                age
+            }
+            school {
+                name
+            }
         }
     }`;
     const vars = { $a: "Alice" };
@@ -72,15 +112,15 @@ async function queryAlice(dgraphClient) {
 
     // Print results.
     console.log(`people found: ${ppl.all.length}`);
-    ppl.all.forEach((person) => console.log(person.name));
+    ppl.all.forEach((person) => console.log(person));
 }
 
 async function main() {
     const dgraphClient = newClient();
     await dropAll(dgraphClient);
     await setSchema(dgraphClient);
-    await createAlice(dgraphClient);
-    await queryAlice(dgraphClient);
+    await createData(dgraphClient);
+    await queryData(dgraphClient);
 }
 
 main().then(() => {
