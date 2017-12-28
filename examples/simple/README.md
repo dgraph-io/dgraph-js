@@ -61,7 +61,13 @@ Your output should look something like this:
 
 ```
 people found: 1
-Alice
+{ name: 'Alice',
+  age: 26,
+  married: true,
+  loc: { type: 'Point', coordinates: [ 1.1, 2 ] },
+  dob: '1980-02-01T17:30:00Z',
+  friend: [ { name: 'Charlie', age: 29 }, { name: 'Bob', age: 24 } ],
+  school: [ { name: 'Crown Public School' } ] }
 
 DONE!
 ```
