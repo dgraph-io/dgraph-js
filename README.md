@@ -155,6 +155,9 @@ mu.setSetJson(serialized);
 await txn.mutate(mu);
 ```
 
+For a more complete example with multiple fields and relationships, look at the
+[simple] project in the `examples` folder.
+
 Sometimes, you only want to commit a mutation, without querying anything further.
 In such cases, you can use `Mutation#setCommitNow(true)` to indicate that the
 mutation must be immediately committed.
