@@ -2,7 +2,7 @@ import * as grpc from "grpc";
 
 import * as dgraph from "../src";
 // Non-exported functions.
-import { isAbortedError, isConflictError, mergeLinReads, promisify } from "../src/util";
+import { isAbortedError, isBase64, isConflictError, mergeLinReads, promisify } from "../src/util";
 
 import { areLinReadsEqual, createLinRead } from "./helper";
 
@@ -149,6 +149,23 @@ describe("util", () => {
             expect(isConflictError({ code: grpc.status.ABORTED })).toBe(true);
             expect(isConflictError({ code: grpc.status.FAILED_PRECONDITION })).toBe(true);
             expect(isConflictError({ code: grpc.status.OK })).toBe(false);
+        });
+    });
+
+    describe("isBase64", () => {
+        it("should return true for valid base64 strings", () => {
+            expect(isBase64("")).toBe(true);
+            expect(isBase64("yz==")).toBe(true);
+            expect(isBase64("uwAxyz==")).toBe(true);
+            expect(isBase64("uwAxyzp=")).toBe(true);
+            expect(isBase64("uwAxyzp5")).toBe(true);
+        });
+
+        it("should return false for invalid base64 strings", () => {
+            expect(isBase64("a")).toBe(false);
+            expect(isBase64("abcdef")).toBe(false);
+            expect(isBase64("sad$")).toBe(false);
+            expect(isBase64("dddddd=")).toBe(false);
         });
     });
 });

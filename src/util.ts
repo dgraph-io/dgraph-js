@@ -69,7 +69,7 @@ export function stringifyMessage(msg: jspb.Message): string {
     return JSON.stringify(msg.toObject());
 }
 
-const BASE64_REGEX = /^(data:\w+\/[a-zA-Z\+\-\.]+;base64,)?(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}(==)?|[A-Za-z0-9+\/]{3}=?)?$/gi;
+const BASE64_REGEX = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
 
 export function isBase64(str: string) {
     return BASE64_REGEX.test(str);
