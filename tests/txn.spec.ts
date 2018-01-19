@@ -99,26 +99,6 @@ describe("txn", () => {
             const p2 = txn.commit();
             await expect(p2).rejects.toBe(dgraph.ERR_FINISHED);
         });
-
-        it("should throw aborted error if there is a conflict and commitNow is true", async () => {
-            const txn1 = client.newTxn();
-            const txn2 = client.newTxn();
-
-            let mu = new dgraph.Mutation();
-            mu.setSetNquads(strToU8('_:alice <name> "Alice" .'));
-
-            await txn1.mutate(mu);
-            await txn2.mutate(mu);
-
-            mu = new dgraph.Mutation();
-            mu.setSetNquads(strToU8('_:bob <name> "Bob" .'));
-            mu.setCommitNow(true);
-
-            await txn1.commit();
-
-            const p = txn2.mutate(mu);
-            await expect(p).rejects.toBe(dgraph.ERR_ABORTED);
-        });
     });
 
     describe("commit", () => {
