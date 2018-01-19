@@ -71,9 +71,12 @@ function createData(dgraphClient) {
     // Run mutation.
     const mu = new dgraph.Mutation();
     mu.setSetJson(serialized);
-    return txn.mutate(mu).then(() => {
+    return txn.mutate(mu).then((assigned) => {
         // Commit transaction.
-        return txn.commit();
+        txn.commit();
+        console.log("Mutation is successful and here are the generated UIDs......");
+        assigned.getUidsMap().forEach((value, key) => console.log("UID for key: " + key + ", value: " + value));
+        return;
     }).catch((e) => {
         err = e;
     }).then(() => {
