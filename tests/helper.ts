@@ -38,16 +38,16 @@ export function createClient(): dgraph.DgraphClient {
     return new dgraph.DgraphClient(new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS));
 }
 
-export async function setSchema(c: dgraph.DgraphClient, schema: string): Promise<dgraph.Payload> {
+export function setSchema(c: dgraph.DgraphClient, schema: string): Promise<dgraph.Payload> {
     const op = new dgraph.Operation();
     op.setSchema(schema);
-    return await c.alter(op);
+    return c.alter(op);
 }
 
-export async function dropAll(c: dgraph.DgraphClient): Promise<dgraph.Payload> {
+export function dropAll(c: dgraph.DgraphClient): Promise<dgraph.Payload> {
     const op = new dgraph.Operation();
     op.setDropAll(true);
-    return await c.alter(op);
+    return c.alter(op);
 }
 
 export async function setup(): Promise<dgraph.DgraphClient> {
