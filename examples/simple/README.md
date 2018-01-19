@@ -59,16 +59,25 @@ For Node.js < v7.6 or if you don't want to use the async/await syntax, run:
 node index-pre-v7.6.js
 ```
 
-Your output should look something like this:
+Your output should look something like this (uid values may be different):
 
 ```console
-people found: 1
-{ name: 'Alice',
+Created person named "Alice" with uid = 0x7569
+
+All created nodes (map from blank node names to uids):
+blank-0: 0x7569
+blank-1: 0x756a
+blank-2: 0x756b
+blank-3: 0x756c
+
+Number of people named "Alice": 1
+{ uid: '0x7569',
+  name: 'Alice',
   age: 26,
   married: true,
   loc: { type: 'Point', coordinates: [ 1.1, 2 ] },
   dob: '1980-02-01T17:30:00Z',
-  friend: [ { name: 'Charlie', age: 29 }, { name: 'Bob', age: 24 } ],
+  friend: [ { name: 'Bob', age: 24 }, { name: 'Charlie', age: 29 } ],
   school: [ { name: 'Crown Public School' } ] }
 
 DONE!
