@@ -29,7 +29,7 @@ describe("txn", () => {
                 },
             );
             let resJson: {
-                me: { name: string }[],
+                me: { name: string }[];
             } = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
             expect(resJson.me).toHaveLength(1);
             expect(resJson.me[0].name).toEqual("Alice");
@@ -54,7 +54,7 @@ describe("txn", () => {
                 },
             );
             const resJson: {
-                me: { name: string }[],
+                me: { name: string }[];
             } = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
             expect(resJson.me).toHaveLength(0);
         });

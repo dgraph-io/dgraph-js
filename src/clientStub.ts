@@ -11,18 +11,20 @@ import { promisify } from "./util";
 export class DgraphClientStub {
     private stub: services.DgraphClient;
     private promisified: {
-        alter(op: messages.Operation): Promise<messages.Payload>,
-        query(req: messages.Request): Promise<messages.Response>,
-        mutate(mu: messages.Mutation): Promise<messages.Assigned>,
-        commitOrAbort(ctx: messages.TxnContext): Promise<messages.TxnContext>,
-        checkVersion(check: messages.Check): Promise<messages.Version>,
+        alter(op: messages.Operation): Promise<messages.Payload>;
+        query(req: messages.Request): Promise<messages.Response>;
+        mutate(mu: messages.Mutation): Promise<messages.Assigned>;
+        commitOrAbort(ctx: messages.TxnContext): Promise<messages.TxnContext>;
+        checkVersion(check: messages.Check): Promise<messages.Version>;
     };
 
     constructor(addr?: string | null, credentials?: grpc.ChannelCredentials | null) {
         if (addr == null) {
+            // tslint:disable-next-line no-parameter-reassignment
             addr = "localhost:9080";
         }
         if (credentials == null) {
+            // tslint:disable-next-line no-parameter-reassignment
             credentials = grpc.credentials.createInsecure();
         }
 
@@ -36,23 +38,23 @@ export class DgraphClientStub {
         };
     }
 
-    public async alter(op: messages.Operation): Promise<messages.Payload> {
-        return await this.promisified.alter(op);
+    public alter(op: messages.Operation): Promise<messages.Payload> {
+        return this.promisified.alter(op);
     }
 
-    public async query(req: messages.Request): Promise<messages.Response> {
-        return await this.promisified.query(req);
+    public query(req: messages.Request): Promise<messages.Response> {
+        return this.promisified.query(req);
     }
 
-    public async mutate(mu: messages.Mutation): Promise<messages.Assigned> {
-        return await this.promisified.mutate(mu);
+    public mutate(mu: messages.Mutation): Promise<messages.Assigned> {
+        return this.promisified.mutate(mu);
     }
 
-    public async commitOrAbort(ctx: messages.TxnContext): Promise<messages.TxnContext> {
-        return await this.promisified.commitOrAbort(ctx);
+    public commitOrAbort(ctx: messages.TxnContext): Promise<messages.TxnContext> {
+        return this.promisified.commitOrAbort(ctx);
     }
 
-    public async checkVersion(check: messages.Check): Promise<messages.Version> {
-        return await this.promisified.checkVersion(check);
+    public checkVersion(check: messages.Check): Promise<messages.Version> {
+        return this.promisified.checkVersion(check);
     }
 }

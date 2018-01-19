@@ -8,8 +8,8 @@ export function mergeLinReads(target: messages.LinRead, src?: messages.LinRead |
         return target;
     }
 
-    const srcIdsMap = <jspb.Map<number, number>>src.getIdsMap();
-    const targetIdsMap = <jspb.Map<number, number>>target.getIdsMap();
+    const srcIdsMap = src.getIdsMap();
+    const targetIdsMap = target.getIdsMap();
     srcIdsMap.forEach((value: number, key: number): void => {
         const targetVal = targetIdsMap.get(key);
         if (targetVal == null || value > targetVal) {
@@ -20,7 +20,7 @@ export function mergeLinReads(target: messages.LinRead, src?: messages.LinRead |
     return target;
 }
 
-export function errorCode(err: any): { valid: boolean, code: number } { // tslint:disable-line no-any
+export function errorCode(err: any): { valid: boolean; code: number } { // tslint:disable-line no-any
     if (
         err == null ||
         typeof err !== "object" ||

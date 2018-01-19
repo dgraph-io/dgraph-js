@@ -1,5 +1,3 @@
-import * as jspb from "google-protobuf";
-
 import * as messages from "../generated/api_pb";
 
 import { DgraphClient } from "./client";
@@ -38,8 +36,8 @@ export class Txn {
      * need to be made in the same transaction, it's convenient to chain the method,
      * e.g. client.newTxn().query("...").
      */
-    public async query(q: string): Promise<types.Response> {
-        return await this.queryWithVars(q);
+    public query(q: string): Promise<types.Response> {
+        return this.queryWithVars(q);
     }
 
     /**
@@ -60,7 +58,7 @@ export class Txn {
         req.setStartTs(this.ctx.getStartTs());
         req.setLinRead(this.ctx.getLinRead());
         if (vars != null) {
-            const varsMap = <jspb.Map<string, string>>req.getVarsMap();
+            const varsMap = req.getVarsMap();
             Object.keys(vars).forEach((key: string) => {
                 const value = vars[key];
                 if (typeof value === "string" || value instanceof String) {

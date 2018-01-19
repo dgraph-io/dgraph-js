@@ -1,5 +1,3 @@
-import * as jspb from "google-protobuf";
-
 import * as  messages from "../generated/api_pb";
 
 import { DgraphClientStub } from "./clientStub";
@@ -79,7 +77,7 @@ export class DgraphClient {
     public getLinRead(): messages.LinRead {
         const lr = new messages.LinRead();
         const idsMap = lr.getIdsMap();
-        (<jspb.Map<number, number>>this.linRead.getIdsMap()).forEach((value: number, key: number): void => {
+        this.linRead.getIdsMap().forEach((value: number, key: number): void => {
             idsMap.set(key, value);
         });
 

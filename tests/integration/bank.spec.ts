@@ -14,7 +14,7 @@ jest.setTimeout(timeout * 2);
 let client: dgraph.DgraphClient;
 
 type Account = {
-    bal: number,
+    bal: number;
 };
 
 const uids: string[] = [];
@@ -91,8 +91,8 @@ async function runTxn(): Promise<void> {
     try {
         const res = await txn.query(`{both(func: uid(${fromUid}, ${toUid})) { uid, bal }}`);
         const accountsWithUid: {
-            uid: string,
-            bal: number,
+            uid: string;
+            bal: number;
         }[] = JSON.parse(u8ToStr(res.getJson_asU8())).both; // tslint:disable-line no-unsafe-any
         expect(accountsWithUid).toHaveLength(2);
 

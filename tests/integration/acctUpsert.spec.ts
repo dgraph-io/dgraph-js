@@ -15,9 +15,9 @@ const lasts = ["Brown", "Smith", "Robinson", "Waters", "Taylor"];
 const ages = [20, 25, 30, 35];
 
 type Account = {
-    first: string,
-    last: string,
-    age: number,
+    first: string;
+    last: string;
+    age: number;
 };
 const accounts: Account[] = [];
 
@@ -41,7 +41,7 @@ async function tryUpsert(account: Account): Promise<void> {
     try {
         const res = await txn.query(q);
         const resJson: {
-            find: { uid: string }[],
+            find: { uid: string }[];
         } = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
         expect(resJson.find.length).toBeLessThanOrEqual(1);
 
@@ -140,7 +140,7 @@ async function checkIntegrity(): Promise<void> {
     }`);
 
     const data: {
-        all: Account[],
+        all: Account[];
     } = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
 
     const accountSet: { [key: string]: boolean } = {};
