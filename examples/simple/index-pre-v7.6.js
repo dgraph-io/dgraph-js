@@ -1,5 +1,5 @@
-const grpc = require("grpc");
 const dgraph = require("dgraph-js");
+const grpc = require("grpc");
 
 function newClient() {
     const clientStub = new dgraph.DgraphClientStub("localhost:9080", grpc.credentials.createInsecure());
@@ -66,14 +66,27 @@ function createData(dgraphClient) {
     // OR if you want to use base64
     // const serialized = new Buffer(json).toString("base64");
 
+    let assigned;
     let err;
 
     // Run mutation.
     const mu = new dgraph.Mutation();
     mu.setSetJson(serialized);
-    return txn.mutate(mu).then(() => {
+    return txn.mutate(mu).then((res) => {
+        assigned = res;
+
         // Commit transaction.
         return txn.commit();
+    }).then(() => {
+        // Get uid of the outermost object (person named "Alice").
+        // Assigned#getUidsMap() returns a map from blank node names to uids.
+        // For a json mutation, blank node names "blank-0", "blank-1", ... are used
+        // for all the created nodes.
+        console.log(`Created person named "Alice" with uid = ${assigned.getUidsMap().get("blank-0")}\n`);
+
+        console.log("All created nodes (map from blank node names to uids):");
+        assigned.getUidsMap().forEach((uid, key) => console.log(`${key}: ${uid}`));
+        console.log();
     }).catch((e) => {
         err = e;
     }).then(() => {
@@ -90,6 +103,7 @@ function queryData(dgraphClient) {
     // Run query.
     const query = `query all($a: string) {
         all(func: eq(name, $a)) {
+            uid
             name
             age
             married
@@ -115,7 +129,7 @@ function queryData(dgraphClient) {
         const ppl = JSON.parse(jsonStr);
 
         // Print results.
-        console.log(`people found: ${ppl.all.length}`);
+        console.log(`Number of people named "Alice": ${ppl.all.length}`);
         for (let i = 0; i < ppl.all.length; i += 1) {
             console.log(ppl.all[i]);
         }

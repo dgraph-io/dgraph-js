@@ -70,10 +70,20 @@ async function createData(dgraphClient) {
         // Run mutation.
         const mu = new dgraph.Mutation();
         mu.setSetJson(serialized);
-        await txn.mutate(mu);
+        const assigned = await txn.mutate(mu);
 
         // Commit transaction.
         await txn.commit();
+
+        // Get uid of the outermost object (person named "Alice").
+        // Assigned#getUidsMap() returns a map from blank node names to uids.
+        // For a json mutation, blank node names "blank-0", "blank-1", ... are used
+        // for all the created nodes.
+        console.log(`Created person named "Alice" with uid = ${assigned.getUidsMap().get("blank-0")}\n`);
+
+        console.log("All created nodes (map from blank node names to uids):");
+        assigned.getUidsMap().forEach((uid, key) => console.log(`${key} => ${uid}`));
+        console.log();
     } finally {
         // Clean up. Calling this after txn.commit() is a no-op
         // and hence safe.
@@ -86,6 +96,7 @@ async function queryData(dgraphClient) {
     // Run query.
     const query = `query all($a: string) {
         all(func: eq(name, $a)) {
+            uid
             name
             age
             married
@@ -111,7 +122,7 @@ async function queryData(dgraphClient) {
     const ppl = JSON.parse(jsonStr);
 
     // Print results.
-    console.log(`people found: ${ppl.all.length}`);
+    console.log(`Number of people named "Alice": ${ppl.all.length}`);
     ppl.all.forEach((person) => console.log(person));
 }
 
