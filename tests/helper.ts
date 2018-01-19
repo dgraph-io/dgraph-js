@@ -56,12 +56,18 @@ export async function setup(): Promise<dgraph.DgraphClient> {
     return c;
 }
 
-export function u8ToStr(arr: Uint8Array): string {
-    return new Buffer(arr).toString();
+export function strToU8(str: string): Uint8Array {
+    return new Uint8Array(Buffer.from(str, "utf8"));
 }
 
-export function strToU8(str: string): Uint8Array {
-    return new Uint8Array(new Buffer(str));
+export function u8ToStr(arr: Uint8Array): string {
+    let buf = Buffer.from(arr.buffer).toString();
+    if (arr.byteLength !== arr.buffer.byteLength) {
+        // Respect the "view", i.e. byteOffset and byteLength, without doing a copy.
+        buf = buf.slice(arr.byteOffset, arr.byteOffset + arr.byteLength);
+    }
+
+    return buf.toString();
 }
 
 export function wait(time: number): Promise<void> {

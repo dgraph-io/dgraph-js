@@ -68,3 +68,31 @@ export function promisify<A, T>(
 export function stringifyMessage(msg: jspb.Message): string {
     return JSON.stringify(msg.toObject());
 }
+
+const BASE64_REGEX = /^(data:\w+\/[a-zA-Z\+\-\.]+;base64,)?(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}(==)?|[A-Za-z0-9+\/]{3}=?)?$/gi;
+
+export function isBase64(str: string) {
+    return BASE64_REGEX.test(str);
+}
+
+export function strToB64(str: string): string {
+    return Buffer.from(str, "utf8").toString("base64");
+}
+
+export function strToU8(str: string): Uint8Array {
+    return new Uint8Array(Buffer.from(str, "utf8"));
+}
+
+export function b64ToStr(b64Str: string): string {
+    return Buffer.from(b64Str, "base64").toString();
+}
+
+export function u8ToStr(arr: Uint8Array): string {
+    let buf = Buffer.from(arr.buffer).toString();
+    if (arr.byteLength !== arr.buffer.byteLength) {
+        // Respect the "view", i.e. byteOffset and byteLength, without doing a copy.
+        buf = buf.slice(arr.byteOffset, arr.byteOffset + arr.byteLength);
+    }
+
+    return buf.toString();
+}

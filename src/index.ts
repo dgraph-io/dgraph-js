@@ -1,5 +1,19 @@
-// Export all the message types.
-export * from "../generated/api_pb";
+// Export all the required message types.
+export * from "./types";
+export {
+    Operation,
+    Request,
+    Assigned,
+    TxnContext,
+    Check,
+    Version,
+    NQuad,
+    Value,
+    Facet,
+    SchemaNode,
+    LinRead,
+    Latency,
+} from "../generated/api_pb";
 
 // Export DgraphClient class and deleteEdges function.
 export * from "./client";

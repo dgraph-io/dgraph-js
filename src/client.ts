@@ -5,6 +5,7 @@ import * as  messages from "../generated/api_pb";
 import { DgraphClientStub } from "./clientStub";
 import { ERR_NO_CLIENTS } from "./errors";
 import { Txn } from "./txn";
+import * as types from "./types";
 import { mergeLinReads, stringifyMessage } from "./util";
 
 /**
@@ -40,11 +41,11 @@ export class DgraphClient {
      *
      * 3. Drop the database.
      */
-    public async alter(op: messages.Operation): Promise<messages.Payload> {
+    public async alter(op: messages.Operation): Promise<types.Payload> {
         this.debug(`Alter request:\n${stringifyMessage(op)}`);
 
         const c = this.anyClient();
-        const pl = await c.alter(op);
+        const pl = <types.Payload>(await c.alter(op));
         this.debug(`Alter response:\n${stringifyMessage(pl)}`);
 
         return pl;
@@ -101,7 +102,7 @@ export class DgraphClient {
  * This helper function doesn't run the mutation on the server. It must be done
  * by the user after the function returns.
  */
-export function deleteEdges(mu: messages.Mutation, uid: string, ...predicates: string[]): void {
+export function deleteEdges(mu: types.Mutation, uid: string, ...predicates: string[]): void {
     for (const predicate of predicates) {
         const nquad = new messages.NQuad();
         nquad.setSubject(uid);

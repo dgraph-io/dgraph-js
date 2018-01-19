@@ -2,6 +2,11 @@ import * as dgraph from "../src";
 
 import { setSchema, setup, strToU8, u8ToStr } from "./helper";
 
+const timeout = 1 * 60 * 1000; // 1 minute in milliseconds
+
+// tslint:disable-next-line no-string-based-set-timeout
+jest.setTimeout(timeout * 2);
+
 let client: dgraph.DgraphClient;
 
 describe("txn", () => {

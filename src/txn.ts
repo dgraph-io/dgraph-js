@@ -4,6 +4,7 @@ import * as messages from "../generated/api_pb";
 
 import { DgraphClient } from "./client";
 import { ERR_ABORTED, ERR_FINISHED } from "./errors";
+import * as types from "./types";
 import { isAbortedError, isConflictError, mergeLinReads, stringifyMessage } from "./util";
 
 /**
@@ -37,7 +38,7 @@ export class Txn {
      * need to be made in the same transaction, it's convenient to chain the method,
      * e.g. client.newTxn().query("...").
      */
-    public async query(q: string): Promise<messages.Response> {
+    public async query(q: string): Promise<types.Response> {
         return await this.queryWithVars(q);
     }
 
@@ -48,7 +49,7 @@ export class Txn {
     public async queryWithVars(
         q: string,
         vars?: { [k: string]: any } | null, // tslint:disable-line no-any
-    ): Promise<messages.Response> {
+    ): Promise<types.Response> {
         if (this.finished) {
             this.dc.debug(`Query request (ERR_FINISHED):\nquery = ${q}\nvars = ${vars}`);
             throw ERR_FINISHED;
@@ -70,7 +71,7 @@ export class Txn {
         this.dc.debug(`Query request:\n${stringifyMessage(req)}`);
 
         const c = this.dc.anyClient();
-        const res = await c.query(req);
+        const res = <types.Response>(await c.query(req));
         this.mergeContext(res.getTxn());
         this.dc.debug(`Query response:\n${stringifyMessage(res)}`);
 
@@ -89,7 +90,7 @@ export class Txn {
      * If the mutation fails, then the transaction is discarded and all future
      * operations on it will fail.
      */
-    public async mutate(mu: messages.Mutation): Promise<messages.Assigned> {
+    public async mutate(mu: types.Mutation): Promise<messages.Assigned> {
         if (this.finished) {
             this.dc.debug(`Mutate request (ERR_FINISHED):\nmutation = ${stringifyMessage(mu)}`);
             throw ERR_FINISHED;
@@ -102,7 +103,7 @@ export class Txn {
         let ag: messages.Assigned;
         const c = this.dc.anyClient();
         try {
-            ag = await c.mutate(mu);
+            ag = await c.mutate(<messages.Mutation>mu);
         } catch (e) {
             // Since a mutation error occurred, the txn should no longer be used (some
             // mutations could have applied but not others, but we don't know which ones).
