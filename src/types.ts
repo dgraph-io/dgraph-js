@@ -57,6 +57,13 @@ export class Payload extends messages.Payload {
     }
 }
 
+export function createPayload(oldPayload: messages.Payload): Payload {
+    return messages.Payload.deserializeBinaryFromReader(
+        new Payload(),
+        new jspb.BinaryReader(oldPayload.serializeBinary()),
+    );
+}
+
 // Query classes.
 
 /**
@@ -106,6 +113,13 @@ export class Response extends messages.Response {
         const jsonStr = JSON.stringify(value);
         super.setJson(strToU8(jsonStr));
     }
+}
+
+export function createResponse(oldResponse: messages.Response): Response {
+    return messages.Response.deserializeBinaryFromReader(
+        new Response(),
+        new jspb.BinaryReader(oldResponse.serializeBinary()),
+    );
 }
 
 // Mutate classes.

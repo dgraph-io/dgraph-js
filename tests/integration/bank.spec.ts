@@ -1,5 +1,4 @@
 import * as dgraph from "../../src";
-import { strToU8, u8ToStr } from "../../src/util";
 
 import { setSchema, setup, wait } from "../helper";
 
@@ -32,7 +31,7 @@ async function createAccounts(): Promise<void> {
 
     const txn = client.newTxn();
     const mu = new dgraph.Mutation();
-    mu.setSetJson(strToU8(JSON.stringify(accounts)));
+    mu.setSetJson(accounts);
     const ag = await txn.mutate(mu);
     await txn.commit();
 
@@ -58,7 +57,7 @@ async function runTotal(): Promise<void> {
         }
     }`);
     // tslint:disable-next-line no-unsafe-any
-    expect(JSON.parse(u8ToStr(res.getJson_asU8())).total[0].bal).toBe(uids.length * initialBalance);
+    expect(res.getJson().total[0].bal).toBe(uids.length * initialBalance);
 
     // tslint:disable-next-line no-console
     console.log(`Runs: ${runs}, Aborts: ${aborts}, Total Time: ${new Date().getTime() - startStatus} ms`);
@@ -94,14 +93,14 @@ async function runTxn(): Promise<void> {
         const accountsWithUid: {
             uid: string;
             bal: number;
-        }[] = JSON.parse(u8ToStr(res.getJson_asU8())).both; // tslint:disable-line no-unsafe-any
+        }[] = res.getJson().both; // tslint:disable-line no-unsafe-any
         expect(accountsWithUid).toHaveLength(2);
 
         accountsWithUid[0].bal += 5;
         accountsWithUid[1].bal -= 5;
 
         const mu = new dgraph.Mutation();
-        mu.setSetJson(strToU8(JSON.stringify(accountsWithUid)));
+        mu.setSetJson(accountsWithUid);
         await txn.mutate(mu);
         await txn.commit();
     } finally {

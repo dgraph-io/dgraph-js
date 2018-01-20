@@ -2,7 +2,7 @@ import * as dgraph from "../src";
 import { b64ToStr, strToB64, strToU8, u8ToStr } from "../src/util";
 
 const obj = { k1: "v1" };
-const setNquads = "_:alice <name> \"Alice\"";
+const setNquads = '_:alice <name> "Alice"';
 const delNquads = "<0x7569> * * .";
 
 describe("types", () => {

@@ -1,5 +1,4 @@
 import * as dgraph from "../src";
-import { strToU8, u8ToStr } from "../src/util";
 
 import { setSchema, setup } from "./helper";
 
@@ -18,7 +17,7 @@ describe("txn", () => {
 
             const mu = new dgraph.Mutation();
             mu.setCommitNow(true);
-            mu.setSetNquads(strToU8('_:alice <name> "Alice" .'));
+            mu.setSetNquads('_:alice <name> "Alice" .');
             await client.newTxn().mutate(mu);
         });
 
@@ -31,7 +30,7 @@ describe("txn", () => {
             );
             let resJson: {
                 me: { name: string }[];
-            } = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
+            } = res.getJson(); // tslint:disable-line no-unsafe-any
             expect(resJson.me).toHaveLength(1);
             expect(resJson.me[0].name).toEqual("Alice");
 
@@ -42,7 +41,7 @@ describe("txn", () => {
                     $b: true, // non-string properties are ignored
                 },
             );
-            resJson = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
+            resJson = res.getJson(); // tslint:disable-line no-unsafe-any
             expect(resJson.me).toHaveLength(1);
             expect(resJson.me[0].name).toEqual("Alice");
         });
@@ -56,7 +55,7 @@ describe("txn", () => {
             );
             const resJson: {
                 me: { name: string }[];
-            } = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
+            } = res.getJson(); // tslint:disable-line no-unsafe-any
             expect(resJson.me).toHaveLength(0);
         });
 
@@ -83,7 +82,7 @@ describe("txn", () => {
             await txn.commit();
 
             const mu = new dgraph.Mutation();
-            mu.setSetNquads(strToU8('_:alice <name> "Alice" .'));
+            mu.setSetNquads('_:alice <name> "Alice" .');
             const p = txn.mutate(mu);
             await expect(p).rejects.toBe(dgraph.ERR_FINISHED);
         });
@@ -93,7 +92,7 @@ describe("txn", () => {
 
             const mu = new dgraph.Mutation();
             // There is an error in the mutation NQuad.
-            mu.setSetNquads(strToU8('alice <name> "Alice" .'));
+            mu.setSetNquads('alice <name> "Alice" .');
             const p1 = txn.mutate(mu);
             await expect(p1).rejects.toBeDefined();
 
@@ -120,7 +119,7 @@ describe("txn", () => {
             const txn = client.newTxn();
 
             const mu = new dgraph.Mutation();
-            mu.setSetNquads(strToU8('_:alice <name> "Alice" .'));
+            mu.setSetNquads('_:alice <name> "Alice" .');
             mu.setCommitNow(true);
             await txn.mutate(mu);
 
@@ -147,7 +146,7 @@ describe("txn", () => {
             const txn = client.newTxn();
 
             const mu = new dgraph.Mutation();
-            mu.setSetNquads(strToU8('_:alice <name> "Alice" .'));
+            mu.setSetNquads('_:alice <name> "Alice" .');
             mu.setCommitNow(true);
             await txn.mutate(mu);
 

@@ -43,7 +43,7 @@ export class DgraphClient {
         this.debug(`Alter request:\n${stringifyMessage(op)}`);
 
         const c = this.anyClient();
-        const pl = <types.Payload>(await c.alter(op));
+        const pl = types.createPayload(await c.alter(op));
         this.debug(`Alter response:\n${stringifyMessage(pl)}`);
 
         return pl;

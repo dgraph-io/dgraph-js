@@ -1,5 +1,4 @@
 import * as dgraph from "../../src";
-import { strToU8, u8ToStr } from "../../src/util";
 
 import { setSchema, setup } from "../helper";
 
@@ -43,7 +42,7 @@ async function tryUpsert(account: Account): Promise<void> {
         const res = await txn.query(q);
         const resJson: {
             find: { uid: string }[];
-        } = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
+        } = res.getJson(); // tslint:disable-line no-unsafe-any
         expect(resJson.find.length).toBeLessThanOrEqual(1);
 
         let mu: dgraph.Mutation;
@@ -52,11 +51,11 @@ async function tryUpsert(account: Account): Promise<void> {
             uid = resJson.find[0].uid;
         } else {
             mu = new dgraph.Mutation();
-            mu.setSetNquads(strToU8(`
+            mu.setSetNquads(`
                 _:acct <first> "${account.first}" .
                 _:acct <last>  "${account.last}" .
                 _:acct <age>   "${account.age}"^^<xs:int> .
-            `));
+            `);
 
             const ag = await txn.mutate(mu);
             uid = ag.getUidsMap().get("acct");
@@ -65,7 +64,7 @@ async function tryUpsert(account: Account): Promise<void> {
 
         mu = new dgraph.Mutation();
         // Time used here is in milliseconds.
-        mu.setSetNquads(strToU8(`<${uid}> <when> "${new Date().getTime()}"^^<xs:int> .`));
+        mu.setSetNquads(`<${uid}> <when> "${new Date().getTime()}"^^<xs:int> .`);
         await txn.mutate(mu);
 
         await txn.commit();
@@ -142,7 +141,7 @@ async function checkIntegrity(): Promise<void> {
 
     const data: {
         all: Account[];
-    } = JSON.parse(u8ToStr(res.getJson_asU8())); // tslint:disable-line no-unsafe-any
+    } = res.getJson(); // tslint:disable-line no-unsafe-any
 
     const accountSet: { [key: string]: boolean } = {};
     for (const account of data.all) {

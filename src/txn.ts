@@ -3,7 +3,12 @@ import * as messages from "../generated/api_pb";
 import { DgraphClient } from "./client";
 import { ERR_ABORTED, ERR_FINISHED } from "./errors";
 import * as types from "./types";
-import { isAbortedError, isConflictError, mergeLinReads, stringifyMessage } from "./util";
+import {
+    isAbortedError,
+    isConflictError,
+    mergeLinReads,
+    stringifyMessage,
+} from "./util";
 
 /**
  * Txn is a single atomic transaction.
@@ -69,7 +74,7 @@ export class Txn {
         this.dc.debug(`Query request:\n${stringifyMessage(req)}`);
 
         const c = this.dc.anyClient();
-        const res = <types.Response>(await c.query(req));
+        const res = types.createResponse(await c.query(req));
         this.mergeContext(res.getTxn());
         this.dc.debug(`Query response:\n${stringifyMessage(res)}`);
 

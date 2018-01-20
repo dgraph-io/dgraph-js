@@ -1,5 +1,4 @@
 import * as dgraph from "../../src";
-import { u8ToStr } from "../../src/util";
 
 import { setSchema, setup } from "../helper";
 
@@ -39,6 +38,6 @@ describe("mutate", () => {
         const res = await txn.query(query);
         await txn.commit();
 
-        expect(u8ToStr(res.getJson_asU8())).toEqual('{"me":[{"name":"ok 200"},{"name":"ok 300"},{"name":"ok 400"}]}');
+        expect(res.getJson()).toEqual({ me: [{ name: "ok 200" }, { name: "ok 300" }, { name: "ok 400" }] });
     });
 });
