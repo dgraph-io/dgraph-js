@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Wrapper classes for certain proto classes to simplify the api and avoid repetitive
   serialization/deserialization code
 
-## [1.0.0] - 2017-06-20
+## [1.0.0] - 2017-12-20
 
 - Fully compatible with Dgraph v1.0
 
