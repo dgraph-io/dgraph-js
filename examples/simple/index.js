@@ -60,16 +60,9 @@ async function createData(dgraphClient) {
             ]
         };
 
-        // Serialize it.
-        const json = JSON.stringify(p);
-
-        const serialized = new Uint8Array(new Buffer(json));
-        // OR if you want to use base64
-        // const serialized = new Buffer(json).toString("base64");
-
         // Run mutation.
         const mu = new dgraph.Mutation();
-        mu.setSetJson(serialized);
+        mu.setSetJson(p);
         const assigned = await txn.mutate(mu);
 
         // Commit transaction.
@@ -113,13 +106,7 @@ async function queryData(dgraphClient) {
     }`;
     const vars = { $a: "Alice" };
     const res = await dgraphClient.newTxn().queryWithVars(query, vars);
-
-    // Deserialize result.
-    const jsonStr = new Buffer(res.getJson_asU8()).toString();
-    // OR if you want to use base64
-    // const jsonStr = new Buffer(res.getJson_asB64(), "base64").toString();
-
-    const ppl = JSON.parse(jsonStr);
+    const ppl = res.getJson();
 
     // Print results.
     console.log(`Number of people named "Alice": ${ppl.all.length}`);
