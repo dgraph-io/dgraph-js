@@ -13,4 +13,7 @@ This document contains instructions to publish dgraph-js to [npm].
 
 - Build and test the code that needs to be published
 - Bump version by modifying the `version` field in `package.json` file
+- Run `npm install` to update the version in `package-lock.json` file
+- If necessary, Update the `CHANGELOG.md` file to reflect new changes
+- Commit the changes
 - Run `npm publish` (for a next release run `npm publish --tag next`)
