@@ -1,6 +1,7 @@
 import * as dgraph from "../../src";
+import { strToU8, u8ToStr } from "../../src/util";
 
-import { setSchema, setup, strToU8, u8ToStr, wait } from "../helper";
+import { setSchema, setup, wait } from "../helper";
 
 const concurrency = 5;
 const totalAccounts = 100;

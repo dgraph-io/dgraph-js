@@ -1,6 +1,7 @@
 import * as dgraph from "../../src";
+import { strToU8 } from "../../src/util";
 
-import { setup, strToU8 } from "../helper";
+import { setup } from "../helper";
 
 describe("conflict", () => {
     it("should abort on commit conflict", async () => {

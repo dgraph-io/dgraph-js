@@ -1,6 +1,7 @@
 import * as dgraph from "../../src";
+import { u8ToStr } from "../../src/util";
 
-import { setSchema, setup, u8ToStr } from "../helper";
+import { setSchema, setup } from "../helper";
 
 const data = ["200", "300", "400"];
 

@@ -1,6 +1,7 @@
 import * as dgraph from "../src";
+import { strToU8, u8ToStr } from "../src/util";
 
-import { setSchema, setup, strToU8, u8ToStr } from "./helper";
+import { setSchema, setup } from "./helper";
 
 const timeout = 1 * 60 * 1000; // 1 minute in milliseconds
 
