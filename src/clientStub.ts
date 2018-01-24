@@ -57,4 +57,12 @@ export class DgraphClientStub {
     public checkVersion(check: messages.Check): Promise<messages.Version> {
         return this.promisified.checkVersion(check);
     }
+
+    public close(): void {
+        return this.stub.close();
+    }
+
+    public grpcClient(): grpc.Client {
+        return this.stub;
+    }
 }

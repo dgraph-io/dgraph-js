@@ -23,4 +23,14 @@ describe("clientStub", () => {
             await checkVersion(client.anyClient());
         });
     });
+
+    describe("close", () => {
+        it("should close channel", async () => {
+            const client = await setup();
+            const clientStub = await client.anyClient();
+            clientStub.close();
+            const p = clientStub.checkVersion(new dgraph.Check());
+            await expect(p).rejects.toBeDefined();
+        });
+    });
 });
