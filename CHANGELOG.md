@@ -7,18 +7,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.0.2] - 2018-01-24
+
+### Added
+- Method `DgraphClientStub#close` to close the grpc client associated with `DgraphClientStub`
+- Method `DgraphClientStub#grpcClient` to return the grpc client associated with
+  `DgraphClientStub`
+- Method `DgraphClientStub#waitForReady` to provide a promisified version of
+  `grpc.Client#waitForReady`
+
+## [v1.0.1] - 2018-01-20
+
 ### Added
 - Wrapper classes for certain proto classes to simplify the api and avoid repetitive
   serialization/deserialization code
-- Add `DgraphClientStub#close` to close the grpc client associated with `DgraphClientStub`
-- Add `DgraphClientStub#grpcClient` to return the grpc client associated with
-  `DgraphClientStub`
-- Add `DgraphClientStub#waitForReady` to provide a promisified version of
-  `grpc.Client#waitForReady`
 
-## [1.0.0] - 2017-12-20
+## [v1.0.0] - 2017-12-20
 
-- Fully compatible with Dgraph v1.0
+### Added
+- Full compatibility with Dgraph v1.0.0
 
-[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/dgraph-io/dgraph-js/tree/v1.0.0
+[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.2...HEAD
+[v1.0.2]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.1...v1.0.2
+[v1.0.1]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.0...v1.0.1
+[v1.0.0]: https://github.com/dgraph-io/dgraph-js/tree/v1.0.0
