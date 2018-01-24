@@ -16,6 +16,7 @@ export class DgraphClientStub {
         mutate(mu: messages.Mutation): Promise<messages.Assigned>;
         commitOrAbort(ctx: messages.TxnContext): Promise<messages.TxnContext>;
         checkVersion(check: messages.Check): Promise<messages.Version>;
+        waitForReady(deadline: grpc.Deadline): Promise<void>;
     };
 
     constructor(addr?: string | null, credentials?: grpc.ChannelCredentials | null) {
@@ -35,6 +36,7 @@ export class DgraphClientStub {
             mutate: promisify(this.stub.mutate, this.stub),
             commitOrAbort: promisify(this.stub.commitOrAbort, this.stub),
             checkVersion: promisify(this.stub.checkVersion, this.stub),
+            waitForReady: promisify(this.stub.waitForReady, this.stub),
         };
     }
 
@@ -56,6 +58,10 @@ export class DgraphClientStub {
 
     public checkVersion(check: messages.Check): Promise<messages.Version> {
         return this.promisified.checkVersion(check);
+    }
+
+    public waitForReady(deadline: grpc.Deadline): Promise<void> {
+        return this.promisified.waitForReady(deadline);
     }
 
     public close(): void {

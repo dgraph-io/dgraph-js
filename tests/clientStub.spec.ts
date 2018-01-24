@@ -1,6 +1,6 @@
 import * as dgraph from "../src";
 
-import { setup } from "./helper";
+import { SERVER_ADDR, SERVER_CREDENTIALS, setup } from "./helper";
 
 async function checkVersion(stub: dgraph.DgraphClientStub): Promise<void> {
     const v = await stub.checkVersion(new dgraph.Check());
@@ -24,10 +24,17 @@ describe("clientStub", () => {
         });
     });
 
+    describe("waitForReady", () => {
+        it("should provide a promisified version of grpc.Client#waitForReady", async () => {
+            const clientStub = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
+            await clientStub.waitForReady(Date.now() + 500);
+            await checkVersion(clientStub);
+        });
+    });
+
     describe("close", () => {
         it("should close channel", async () => {
-            const client = await setup();
-            const clientStub = await client.anyClient();
+            const clientStub = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
             clientStub.close();
             const p = clientStub.checkVersion(new dgraph.Check());
             await expect(p).rejects.toBeDefined();
