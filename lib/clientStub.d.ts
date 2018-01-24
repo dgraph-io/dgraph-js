@@ -9,4 +9,7 @@ export declare class DgraphClientStub {
     mutate(mu: messages.Mutation): Promise<messages.Assigned>;
     commitOrAbort(ctx: messages.TxnContext): Promise<messages.TxnContext>;
     checkVersion(check: messages.Check): Promise<messages.Version>;
+    waitForReady(deadline: grpc.Deadline): Promise<void>;
+    close(): void;
+    grpcClient(): grpc.Client;
 }

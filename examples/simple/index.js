@@ -1,9 +1,13 @@
 const dgraph = require("dgraph-js");
 const grpc = require("grpc");
 
+// Create a client stub.
+function newClientStub() {
+    return new dgraph.DgraphClientStub("localhost:9080", grpc.credentials.createInsecure());
+}
+
 // Create a client.
-function newClient() {
-    const clientStub = new dgraph.DgraphClientStub("localhost:9080", grpc.credentials.createInsecure());
+function newClient(clientStub) {
     return new dgraph.DgraphClient(clientStub);
 }
 
@@ -114,11 +118,15 @@ async function queryData(dgraphClient) {
 }
 
 async function main() {
-    const dgraphClient = newClient();
+    const dgraphClientStub = newClientStub();
+    const dgraphClient = newClient(dgraphClientStub);
     await dropAll(dgraphClient);
     await setSchema(dgraphClient);
     await createData(dgraphClient);
     await queryData(dgraphClient);
+
+    // Close the client stub.
+    dgraphClientStub.close();
 }
 
 main().then(() => {

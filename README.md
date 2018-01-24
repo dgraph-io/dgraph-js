@@ -259,7 +259,7 @@ const dgraphClient = new dgraph.DgraphClient(stub1, stub2);
 // Use dgraphClient
 // ...
 
-// Cleanup resources.
+// Cleanup resources by closing all client stubs.
 stub1.close();
 stub2.close();
 ```
