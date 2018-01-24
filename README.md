@@ -25,6 +25,7 @@ and understand how to run and work with Dgraph.
   - [Run a mutation](#run-a-mutation)
   - [Run a query](#run-a-query)
   - [Commit a transaction](#commit-a-transaction)
+  - [Cleanup Resources](#cleanup-resources)
   - [Debug mode](#debug-mode)
 - [Development](#development)
   - [Building the source](#building-the-source)
@@ -236,6 +237,31 @@ try {
   // and hence safe.
   await txn.discard();
 }
+```
+
+### Cleanup Resources
+
+To cleanup resources, you have to call `DgraphClientStub#close()` individually for
+all the instances of `DgraphClientStub`.
+
+```js
+const SERVER_ADDR = "localhost:9080";
+const SERVER_CREDENTIALS = grpc.credentials.createInsecure();
+
+// Create instances of DgraphClientStub.
+const stub1 = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
+const stub2 = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
+
+// Create an instance of DgraphClient.
+const dgraphClient = new dgraph.DgraphClient(stub1, stub2);
+
+// ...
+// Use dgraphClient
+// ...
+
+// Cleanup resources.
+stub1.close();
+stub2.close();
 ```
 
 ### Debug mode
