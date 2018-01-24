@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Wrapper classes for certain proto classes to simplify the api and avoid repetitive
   serialization/deserialization code
+- Add `DgraphClientStub#close` to close the grpc client associated with `DgraphClientStub`
+- Add `DgraphClientStub#grpcClient` to return the grpc client associated with
+  `DgraphClientStub`
+- Add `DgraphClientStub#waitForReady` to provide a promisified version of
+  `grpc.Client#waitForReady`
 
 ## [1.0.0] - 2017-12-20
 
