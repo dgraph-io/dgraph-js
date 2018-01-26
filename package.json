@@ -1,6 +1,6 @@
 {
   "name": "dgraph-js",
-  "version": "1.0.3-beta.1",
+  "version": "1.0.3",
   "description": "Official javascript client for Dgraph",
   "license": "Apache-2.0",
   "repository": {
@@ -51,6 +51,6 @@
     "google-protobuf": "^3.5.0"
   },
   "peerDependencies": {
-    "grpc": ">=1.7.0 <1.9.0"
+    "grpc": ">=1.7.0 <2.0.0"
   }
 }

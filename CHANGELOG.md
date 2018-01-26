@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.0.3] - 2018-01-26
+
+### Changed
+- `grpc` is now a peer dependency
+
 ## [v1.0.2] - 2018-01-24
 
 ### Added
@@ -27,7 +32,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Full compatibility with Dgraph v1.0.0
 
-[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.3...HEAD
+[v1.0.3]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.2...v1.0.3
 [v1.0.2]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.1...v1.0.2
 [v1.0.1]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.0...v1.0.1
 [v1.0.0]: https://github.com/dgraph-io/dgraph-js/tree/v1.0.0

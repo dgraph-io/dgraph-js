@@ -36,13 +36,13 @@ and understand how to run and work with Dgraph.
 Install using npm:
 
 ```sh
-npm install dgraph-js --save
+npm install dgraph-js grpc --save
 ```
 
 or yarn:
 
 ```sh
-yarn add dgraph-js
+yarn add dgraph-js grpc
 ```
 
 ## Quickstart
