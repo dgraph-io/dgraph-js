@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Optional `options` parameter of type `object` to the `DgraphClientStub` constructor
+- Optional `options` parameter of type `grpc.CallOptions` to the `DgraphClientStub`
+  methods
+
 ## [v1.0.3] - 2018-01-26
 
 ### Changed
