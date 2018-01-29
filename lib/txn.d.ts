@@ -1,3 +1,4 @@
+import * as grpc from "grpc";
 import * as messages from "../generated/api_pb";
 import { DgraphClient } from "./client";
 import * as types from "./types";
@@ -7,12 +8,12 @@ export declare class Txn {
     private finished;
     private mutated;
     constructor(dc: DgraphClient);
-    query(q: string): Promise<types.Response>;
+    query(q: string, options?: grpc.CallOptions | null): Promise<types.Response>;
     queryWithVars(q: string, vars?: {
         [k: string]: any;
-    } | null): Promise<types.Response>;
-    mutate(mu: types.Mutation): Promise<messages.Assigned>;
-    commit(): Promise<void>;
-    discard(): Promise<void>;
+    } | null, options?: grpc.CallOptions | null): Promise<types.Response>;
+    mutate(mu: types.Mutation, options?: grpc.CallOptions | null): Promise<messages.Assigned>;
+    commit(options?: grpc.CallOptions | null): Promise<void>;
+    discard(options?: grpc.CallOptions | null): Promise<void>;
     private mergeContext(src?);
 }

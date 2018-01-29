@@ -24,9 +24,7 @@ describe("clientStub", () => {
             const client = await setup();
             await checkVersion(client.anyClient());
         });
-    });
 
-    describe("checkVersion with call options", () => {
         it("should check version with call options", async () => {
             const clientStub = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
             const p = clientStub.checkVersion(new dgraph.Check(), {
@@ -51,6 +49,15 @@ describe("clientStub", () => {
         it("should close channel", async () => {
             const clientStub = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
             clientStub.close();
+            const p = clientStub.checkVersion(new dgraph.Check());
+            await expect(p).rejects.toBeDefined();
+        });
+    });
+
+    describe("grpcClient", () => {
+        it("should close channel if grpc client is closed", async () => {
+            const clientStub = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
+            clientStub.grpcClient().close();
             const p = clientStub.checkVersion(new dgraph.Check());
             await expect(p).rejects.toBeDefined();
         });
