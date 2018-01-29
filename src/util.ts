@@ -49,7 +49,7 @@ export function isConflictError(err: any): boolean { // tslint:disable-line no-a
     return ec.valid && (ec.code === grpc.status.ABORTED || ec.code === grpc.status.FAILED_PRECONDITION);
 }
 
-export function promisify<A, T>(
+export function promisify1<A, T>(
     f: (arg: A, cb: (err?: Error | null, res?: T) => void) => void,
     thisContext?: any, // tslint:disable-line no-any
 ): (arg: A) => Promise<T> {
@@ -59,6 +59,24 @@ export function promisify<A, T>(
             f.call(
                 thisContext,
                 arg,
+                (err?: Error | null, result?: T): void => (err != null) ? reject(err) : resolve(result),
+            );
+        });
+    };
+}
+
+export function promisify3<A, B, C, T>(
+    f: (argA: A, argB: B, argC: C, cb: (err?: Error | null, res?: T) => void) => void,
+    thisContext?: any, // tslint:disable-line no-any
+): (argA: A, argB: B, argC: C) => Promise<T> {
+    return (argA: A, argB: B, argC: C) => {
+        // tslint:disable-next-line no-any
+        return new Promise((resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void): void => {
+            f.call(
+                thisContext,
+                argA,
+                argB,
+                argC,
                 (err?: Error | null, result?: T): void => (err != null) ? reject(err) : resolve(result),
             );
         });

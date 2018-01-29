@@ -1,3 +1,5 @@
+import * as grpc from "grpc";
+
 import * as dgraph from "../src";
 
 import { SERVER_ADDR, SERVER_CREDENTIALS, setup } from "./helper";
@@ -21,6 +23,19 @@ describe("clientStub", () => {
         it("should check version", async () => {
             const client = await setup();
             await checkVersion(client.anyClient());
+        });
+    });
+
+    describe("checkVersion with call options", () => {
+        it("should check version with call options", async () => {
+            const clientStub = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
+            const p = clientStub.checkVersion(new dgraph.Check(), {
+                deadline: 0,
+                propagate_flags: grpc.propagate.DEFAULTS,
+                credentials: null,
+            });
+
+            await expect(p).rejects.toBeDefined();
         });
     });
 

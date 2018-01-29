@@ -2,13 +2,18 @@ import * as grpc from "grpc";
 
 import * as dgraph from "../src";
 // Non-exported functions.
-import { isAbortedError, isBase64, isConflictError, mergeLinReads, promisify } from "../src/util";
+import { isAbortedError, isBase64, isConflictError, mergeLinReads, promisify1, promisify3 } from "../src/util";
 
 import { areLinReadsEqual, createLinRead } from "./helper";
 
-function fnAddThisVal(a: number, cb: (err?: Error | null, res?: number) => void): void {
+function fnAddThisVal1(a: number, cb: (err?: Error | null, res?: number) => void): void {
     // tslint:disable-next-line no-invalid-this
     cb(null, (<{ val: number }>this).val + a);
+}
+
+function fnAddThisVal3(a: number, b: number, c: number, cb: (err?: Error | null, res?: number) => void): void {
+    // tslint:disable-next-line no-invalid-this
+    cb(null, (<{ val: number }>this).val + a + b + c);
 }
 
 describe("util", () => {
@@ -70,13 +75,13 @@ describe("util", () => {
         });
     });
 
-    describe("promisify", () => {
+    describe("promisify1", () => {
         it("should handle valid response in callback", async () => {
             const f = (_: number, cb: (err?: Error | null, res?: number) => void) => {
                 cb(null, 2);
             };
 
-            await expect(promisify(f, null)(1)).resolves.toBe(2);
+            await expect(promisify1(f, null)(1)).resolves.toBe(2);
         });
 
         it("should handle error in callback", async () => {
@@ -85,7 +90,7 @@ describe("util", () => {
                 cb(e);
             };
 
-            await expect(promisify(f, null)(1)).rejects.toBe(e);
+            await expect(promisify1(f, null)(1)).rejects.toBe(e);
         });
 
         it("should handle error if valid response is also present in callback", async () => {
@@ -94,7 +99,7 @@ describe("util", () => {
                 cb(e, 2);
             };
 
-            await expect(promisify(f, null)(1)).rejects.toBe(e);
+            await expect(promisify1(f, null)(1)).rejects.toBe(e);
         });
 
         it("should handle callback called without arguments", async () => {
@@ -102,7 +107,7 @@ describe("util", () => {
                 cb();
             };
 
-            await expect(promisify(f, null)(1)).resolves.toBeUndefined();
+            await expect(promisify1(f, null)(1)).resolves.toBeUndefined();
         });
 
         it("should handle thisContext argument", async () => {
@@ -110,7 +115,51 @@ describe("util", () => {
                 val: 45,
             };
 
-            await expect(promisify(fnAddThisVal, o)(5)).resolves.toEqual(50);
+            await expect(promisify1(fnAddThisVal1, o)(5)).resolves.toEqual(50);
+        });
+    });
+
+    describe("promisify3", () => {
+        it("should handle valid response in callback", async () => {
+            const f = (a: number, b: number, c: number, cb: (err?: Error | null, res?: number) => void) => {
+                cb(null, 2);
+            };
+
+            await expect(promisify3(f, null)(1, 2, 3)).resolves.toBe(2);
+        });
+
+        it("should handle error in callback", async () => {
+            const e = new Error();
+            const f = (a: number , b: number, c: number, cb: (err?: Error | null, res?: number) => void) => {
+                cb(e);
+            };
+
+            await expect(promisify3(f, null)(1, 2, 3)).rejects.toBe(e);
+        });
+
+        it("should handle error if valid response is also present in callback", async () => {
+            const e = new Error();
+            const f = (a: number, b: number, c: number, cb: (err?: Error | null, res?: number) => void) => {
+                cb(e, 2);
+            };
+
+            await expect(promisify3(f, null)(1, 2, 3)).rejects.toBe(e);
+        });
+
+        it("should handle callback called without arguments", async () => {
+            const f = (a: number, b: number, c: number, cb: (err?: Error | null, res?: number) => void) => {
+                cb();
+            };
+
+            await expect(promisify3(f, null)(1, 2, 3)).resolves.toBeUndefined();
+        });
+
+        it("should handle thisContext argument", async () => {
+            const o = {
+                val: 45,
+            };
+
+            await expect(promisify3(fnAddThisVal3, o)(5, 10, 15)).resolves.toEqual(75);
         });
     });
 
