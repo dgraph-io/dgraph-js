@@ -1,3 +1,5 @@
+import * as grpc from "grpc";
+
 import * as messages from "../generated/api_pb";
 
 import { DgraphClient } from "./client";
@@ -41,8 +43,8 @@ export class Txn {
      * need to be made in the same transaction, it's convenient to chain the method,
      * e.g. client.newTxn().query("...").
      */
-    public query(q: string): Promise<types.Response> {
-        return this.queryWithVars(q);
+    public query(q: string, options?: grpc.CallOptions | null): Promise<types.Response> {
+        return this.queryWithVars(q, null, options);
     }
 
     /**
@@ -52,6 +54,7 @@ export class Txn {
     public async queryWithVars(
         q: string,
         vars?: { [k: string]: any } | null, // tslint:disable-line no-any
+        options?: grpc.CallOptions | null,
     ): Promise<types.Response> {
         if (this.finished) {
             this.dc.debug(`Query request (ERR_FINISHED):\nquery = ${q}\nvars = ${vars}`);
@@ -74,7 +77,7 @@ export class Txn {
         this.dc.debug(`Query request:\n${stringifyMessage(req)}`);
 
         const c = this.dc.anyClient();
-        const res = types.createResponse(await c.query(req));
+        const res = types.createResponse(await c.query(req, options));
         this.mergeContext(res.getTxn());
         this.dc.debug(`Query response:\n${stringifyMessage(res)}`);
 
@@ -93,7 +96,7 @@ export class Txn {
      * If the mutation fails, then the transaction is discarded and all future
      * operations on it will fail.
      */
-    public async mutate(mu: types.Mutation): Promise<messages.Assigned> {
+    public async mutate(mu: types.Mutation, options?: grpc.CallOptions | null): Promise<messages.Assigned> {
         if (this.finished) {
             this.dc.debug(`Mutate request (ERR_FINISHED):\nmutation = ${stringifyMessage(mu)}`);
             throw ERR_FINISHED;
@@ -106,7 +109,7 @@ export class Txn {
         let ag: messages.Assigned;
         const c = this.dc.anyClient();
         try {
-            ag = await c.mutate(<messages.Mutation>mu);
+            ag = await c.mutate(<messages.Mutation>mu, options);
         } catch (e) {
             // Since a mutation error occurred, the txn should no longer be used (some
             // mutations could have applied but not others, but we don't know which ones).
@@ -142,7 +145,7 @@ export class Txn {
      * It's up to the user to decide if they wish to retry. In this case, the user
      * should create a new transaction.
      */
-    public async commit(): Promise<void> {
+    public async commit(options?: grpc.CallOptions | null): Promise<void> {
         if (this.finished) {
             throw ERR_FINISHED;
         }
@@ -154,7 +157,7 @@ export class Txn {
 
         const c = this.dc.anyClient();
         try {
-            await c.commitOrAbort(this.ctx);
+            await c.commitOrAbort(this.ctx, options);
         } catch (e) {
             throw isAbortedError(e) ? ERR_ABORTED : e;
         }
@@ -170,7 +173,7 @@ export class Txn {
      * is unavailable. In these cases, the server will eventually do the transaction
      * clean up.
      */
-    public async discard(): Promise<void> {
+    public async discard(options?: grpc.CallOptions | null): Promise<void> {
         if (this.finished) {
             return;
         }
@@ -182,7 +185,7 @@ export class Txn {
 
         this.ctx.setAborted(true);
         const c = this.dc.anyClient();
-        await c.commitOrAbort(this.ctx);
+        await c.commitOrAbort(this.ctx, options);
     }
 
     private mergeContext(src?: messages.TxnContext | null): void {
