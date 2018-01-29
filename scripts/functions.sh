@@ -34,9 +34,9 @@ function start {
 
 function startZero {
     echo -e "Starting Dgraph zero.\n"
-    dgraph zero -w data/wz --port_offset -2000 > data/zero.log 2>&1 &
+    dgraph zero -w data/wz > data/zero.log 2>&1 &
     # To ensure Dgraph doesn't start before Dgraph zero.
-    # It takes time for zero to start on travis(mac).
+    # It takes time for zero to start on travis mac.
     sleep $sleepTime
 }
 
