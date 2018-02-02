@@ -15,11 +15,14 @@ export {
     Latency,
 } from "../generated/api_pb";
 
+// Export DgraphClientStub class.
+export * from "./clientStub";
+
 // Export DgraphClient class and deleteEdges function.
 export * from "./client";
 
-// Export DgraphClientStub class.
-export * from "./clientStub";
+// Export Txn class.
+export * from "./txn";
 
 // Export error constants.
 export * from "./errors";
