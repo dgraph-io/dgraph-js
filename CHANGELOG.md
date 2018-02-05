@@ -7,13 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [v1.1.0] - 2017-02-05
+## [v1.1.0] - 2017-02-06
 
 ### Added
 - Full compatibility with Dgraph v1.0.2
 
-### Removes
-- startTs field from proto message type `Operation`
+### Removed
+- `startTs` field from proto message type `Operation`
 
 ## [v1.0.4] - 2018-02-02
 
