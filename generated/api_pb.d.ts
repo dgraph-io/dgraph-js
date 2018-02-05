@@ -199,9 +199,6 @@ export class Operation extends jspb.Message {
   getDropAll(): boolean;
   setDropAll(value: boolean): void;
 
-  getStartts(): number;
-  setStartts(value: number): void;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Operation.AsObject;
   static toObject(includeInstance: boolean, msg: Operation): Operation.AsObject;
@@ -217,7 +214,6 @@ export namespace Operation {
     schema: string,
     dropAttr: string,
     dropAll: boolean,
-    startts: number,
   }
 }
 

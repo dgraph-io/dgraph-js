@@ -203,7 +203,7 @@ proto.api.Request.prototype.getQuery = function() {
 
 /** @param {string} value */
 proto.api.Request.prototype.setQuery = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -236,7 +236,7 @@ proto.api.Request.prototype.getStartTs = function() {
 
 /** @param {number} value */
 proto.api.Request.prototype.setStartTs = function(value) {
-  jspb.Message.setField(this, 13, value);
+  jspb.Message.setProto3IntField(this, 13, value);
 };
 
 
@@ -482,7 +482,7 @@ proto.api.Response.prototype.getJson_asU8 = function() {
 
 /** @param {!(string|Uint8Array)} value */
 proto.api.Response.prototype.setJson = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 
@@ -1036,7 +1036,7 @@ proto.api.Mutation.prototype.getSetJson_asU8 = function() {
 
 /** @param {!(string|Uint8Array)} value */
 proto.api.Mutation.prototype.setSetJson = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 
@@ -1075,7 +1075,7 @@ proto.api.Mutation.prototype.getDeleteJson_asU8 = function() {
 
 /** @param {!(string|Uint8Array)} value */
 proto.api.Mutation.prototype.setDeleteJson = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3BytesField(this, 2, value);
 };
 
 
@@ -1114,7 +1114,7 @@ proto.api.Mutation.prototype.getSetNquads_asU8 = function() {
 
 /** @param {!(string|Uint8Array)} value */
 proto.api.Mutation.prototype.setSetNquads = function(value) {
-  jspb.Message.setField(this, 3, value);
+  jspb.Message.setProto3BytesField(this, 3, value);
 };
 
 
@@ -1153,7 +1153,7 @@ proto.api.Mutation.prototype.getDelNquads_asU8 = function() {
 
 /** @param {!(string|Uint8Array)} value */
 proto.api.Mutation.prototype.setDelNquads = function(value) {
-  jspb.Message.setField(this, 4, value);
+  jspb.Message.setProto3BytesField(this, 4, value);
 };
 
 
@@ -1230,7 +1230,7 @@ proto.api.Mutation.prototype.getStartTs = function() {
 
 /** @param {number} value */
 proto.api.Mutation.prototype.setStartTs = function(value) {
-  jspb.Message.setField(this, 13, value);
+  jspb.Message.setProto3IntField(this, 13, value);
 };
 
 
@@ -1247,7 +1247,7 @@ proto.api.Mutation.prototype.getCommitNow = function() {
 
 /** @param {boolean} value */
 proto.api.Mutation.prototype.setCommitNow = function(value) {
-  jspb.Message.setField(this, 14, value);
+  jspb.Message.setProto3BooleanField(this, 14, value);
 };
 
 
@@ -1264,7 +1264,7 @@ proto.api.Mutation.prototype.getIgnoreIndexConflict = function() {
 
 /** @param {boolean} value */
 proto.api.Mutation.prototype.setIgnoreIndexConflict = function(value) {
-  jspb.Message.setField(this, 15, value);
+  jspb.Message.setProto3BooleanField(this, 15, value);
 };
 
 
@@ -1418,7 +1418,7 @@ proto.api.AssignedIds.prototype.getStartid = function() {
 
 /** @param {number} value */
 proto.api.AssignedIds.prototype.setStartid = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -1433,7 +1433,7 @@ proto.api.AssignedIds.prototype.getEndid = function() {
 
 /** @param {number} value */
 proto.api.AssignedIds.prototype.setEndid = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
@@ -1486,8 +1486,7 @@ proto.api.Operation.toObject = function(includeInstance, msg) {
   var f, obj = {
     schema: jspb.Message.getFieldWithDefault(msg, 1, ""),
     dropAttr: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    dropAll: jspb.Message.getFieldWithDefault(msg, 3, false),
-    startts: jspb.Message.getFieldWithDefault(msg, 4, 0)
+    dropAll: jspb.Message.getFieldWithDefault(msg, 3, false)
   };
 
   if (includeInstance) {
@@ -1535,10 +1534,6 @@ proto.api.Operation.deserializeBinaryFromReader = function(msg, reader) {
     case 3:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setDropAll(value);
-      break;
-    case 4:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setStartts(value);
       break;
     default:
       reader.skipField();
@@ -1590,13 +1585,6 @@ proto.api.Operation.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getStartts();
-  if (f !== 0) {
-    writer.writeUint64(
-      4,
-      f
-    );
-  }
 };
 
 
@@ -1611,7 +1599,7 @@ proto.api.Operation.prototype.getSchema = function() {
 
 /** @param {string} value */
 proto.api.Operation.prototype.setSchema = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1626,7 +1614,7 @@ proto.api.Operation.prototype.getDropAttr = function() {
 
 /** @param {string} value */
 proto.api.Operation.prototype.setDropAttr = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -1643,22 +1631,7 @@ proto.api.Operation.prototype.getDropAll = function() {
 
 /** @param {boolean} value */
 proto.api.Operation.prototype.setDropAll = function(value) {
-  jspb.Message.setField(this, 3, value);
-};
-
-
-/**
- * optional uint64 startTs = 4;
- * @return {number}
- */
-proto.api.Operation.prototype.getStartts = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
-};
-
-
-/** @param {number} value */
-proto.api.Operation.prototype.setStartts = function(value) {
-  jspb.Message.setField(this, 4, value);
+  jspb.Message.setProto3BooleanField(this, 3, value);
 };
 
 
@@ -1824,7 +1797,7 @@ proto.api.Payload.prototype.getData_asU8 = function() {
 
 /** @param {!(string|Uint8Array)} value */
 proto.api.Payload.prototype.setData = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 
@@ -2023,7 +1996,7 @@ proto.api.TxnContext.prototype.getStartTs = function() {
 
 /** @param {number} value */
 proto.api.TxnContext.prototype.setStartTs = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -2038,7 +2011,7 @@ proto.api.TxnContext.prototype.getCommitTs = function() {
 
 /** @param {number} value */
 proto.api.TxnContext.prototype.setCommitTs = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
@@ -2055,7 +2028,7 @@ proto.api.TxnContext.prototype.getAborted = function() {
 
 /** @param {boolean} value */
 proto.api.TxnContext.prototype.setAborted = function(value) {
-  jspb.Message.setField(this, 3, value);
+  jspb.Message.setProto3BooleanField(this, 3, value);
 };
 
 
@@ -2372,7 +2345,7 @@ proto.api.Version.prototype.getTag = function() {
 
 /** @param {string} value */
 proto.api.Version.prototype.setTag = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -2682,7 +2655,7 @@ proto.api.Latency.prototype.getParsingNs = function() {
 
 /** @param {number} value */
 proto.api.Latency.prototype.setParsingNs = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -2697,7 +2670,7 @@ proto.api.Latency.prototype.getProcessingNs = function() {
 
 /** @param {number} value */
 proto.api.Latency.prototype.setProcessingNs = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
@@ -2712,7 +2685,7 @@ proto.api.Latency.prototype.getEncodingNs = function() {
 
 /** @param {number} value */
 proto.api.Latency.prototype.setEncodingNs = function(value) {
-  jspb.Message.setField(this, 3, value);
+  jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
@@ -2938,7 +2911,7 @@ proto.api.NQuad.prototype.getSubject = function() {
 
 /** @param {string} value */
 proto.api.NQuad.prototype.setSubject = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -2953,7 +2926,7 @@ proto.api.NQuad.prototype.getPredicate = function() {
 
 /** @param {string} value */
 proto.api.NQuad.prototype.setPredicate = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -2968,7 +2941,7 @@ proto.api.NQuad.prototype.getObjectId = function() {
 
 /** @param {string} value */
 proto.api.NQuad.prototype.setObjectId = function(value) {
-  jspb.Message.setField(this, 3, value);
+  jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -3013,7 +2986,7 @@ proto.api.NQuad.prototype.getLabel = function() {
 
 /** @param {string} value */
 proto.api.NQuad.prototype.setLabel = function(value) {
-  jspb.Message.setField(this, 5, value);
+  jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -3028,7 +3001,7 @@ proto.api.NQuad.prototype.getLang = function() {
 
 /** @param {string} value */
 proto.api.NQuad.prototype.setLang = function(value) {
-  jspb.Message.setField(this, 6, value);
+  jspb.Message.setProto3StringField(this, 6, value);
 };
 
 
@@ -3966,7 +3939,7 @@ proto.api.Facet.prototype.getKey = function() {
 
 /** @param {string} value */
 proto.api.Facet.prototype.setKey = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -4005,7 +3978,7 @@ proto.api.Facet.prototype.getValue_asU8 = function() {
 
 /** @param {!(string|Uint8Array)} value */
 proto.api.Facet.prototype.setValue = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3BytesField(this, 2, value);
 };
 
 
@@ -4020,7 +3993,7 @@ proto.api.Facet.prototype.getValType = function() {
 
 /** @param {!proto.api.Facet.ValType} value */
 proto.api.Facet.prototype.setValType = function(value) {
-  jspb.Message.setField(this, 3, value);
+  jspb.Message.setProto3EnumField(this, 3, value);
 };
 
 
@@ -4064,7 +4037,7 @@ proto.api.Facet.prototype.getAlias = function() {
 
 /** @param {string} value */
 proto.api.Facet.prototype.setAlias = function(value) {
-  jspb.Message.setField(this, 5, value);
+  jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -4285,7 +4258,7 @@ proto.api.SchemaNode.prototype.getPredicate = function() {
 
 /** @param {string} value */
 proto.api.SchemaNode.prototype.setPredicate = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -4300,7 +4273,7 @@ proto.api.SchemaNode.prototype.getType = function() {
 
 /** @param {string} value */
 proto.api.SchemaNode.prototype.setType = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -4317,7 +4290,7 @@ proto.api.SchemaNode.prototype.getIndex = function() {
 
 /** @param {boolean} value */
 proto.api.SchemaNode.prototype.setIndex = function(value) {
-  jspb.Message.setField(this, 3, value);
+  jspb.Message.setProto3BooleanField(this, 3, value);
 };
 
 
@@ -4363,7 +4336,7 @@ proto.api.SchemaNode.prototype.getReverse = function() {
 
 /** @param {boolean} value */
 proto.api.SchemaNode.prototype.setReverse = function(value) {
-  jspb.Message.setField(this, 5, value);
+  jspb.Message.setProto3BooleanField(this, 5, value);
 };
 
 
@@ -4380,7 +4353,7 @@ proto.api.SchemaNode.prototype.getCount = function() {
 
 /** @param {boolean} value */
 proto.api.SchemaNode.prototype.setCount = function(value) {
-  jspb.Message.setField(this, 6, value);
+  jspb.Message.setProto3BooleanField(this, 6, value);
 };
 
 
@@ -4397,7 +4370,7 @@ proto.api.SchemaNode.prototype.getList = function() {
 
 /** @param {boolean} value */
 proto.api.SchemaNode.prototype.setList = function(value) {
-  jspb.Message.setField(this, 7, value);
+  jspb.Message.setProto3BooleanField(this, 7, value);
 };
 
 

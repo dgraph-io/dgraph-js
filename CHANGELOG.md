@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.1.0] - 2017-02-05
+
+### Added
+- Full compatibility with Dgraph v1.0.2
+
+### Removes
+- startTs field from proto message type `Operation`
+
 ## [v1.0.4] - 2018-02-02
 
 ### Added
@@ -40,7 +48,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Full compatibility with Dgraph v1.0.0
 
-[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.0...HEAD
+[v1.1.0]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.4...v1.1.0
 [v1.0.4]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.3...v1.0.4
 [v1.0.3]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.2...v1.0.3
 [v1.0.2]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.1...v1.0.2
