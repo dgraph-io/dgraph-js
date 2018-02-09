@@ -106,7 +106,7 @@ export function b64ToStr(b64Str: string): string {
 }
 
 export function u8ToStr(arr: Uint8Array): string {
-    let buf = Buffer.from(arr.buffer).toString();
+    let buf = Buffer.from(arr.buffer);
     if (arr.byteLength !== arr.buffer.byteLength) {
         // Respect the "view", i.e. byteOffset and byteLength, without doing a copy.
         buf = buf.slice(arr.byteOffset, arr.byteOffset + arr.byteLength);
