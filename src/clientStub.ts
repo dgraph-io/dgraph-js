@@ -66,23 +66,23 @@ export class DgraphClientStub {
     }
 
     public alter(op: messages.Operation, options?: grpc.CallOptions | null): Promise<messages.Payload> {
-        return this.promisified.alter(op, undefined, options);
+        return this.promisified.alter(op, new grpc.Metadata(), ensureCallOptions(options));
     }
 
     public query(req: messages.Request, options?: grpc.CallOptions | null): Promise<messages.Response> {
-        return this.promisified.query(req, undefined, options);
+        return this.promisified.query(req, new grpc.Metadata(), ensureCallOptions(options));
     }
 
     public mutate(mu: messages.Mutation, options?: grpc.CallOptions | null): Promise<messages.Assigned> {
-        return this.promisified.mutate(mu, undefined, options);
+        return this.promisified.mutate(mu, new grpc.Metadata(), ensureCallOptions(options));
     }
 
     public commitOrAbort(ctx: messages.TxnContext, options?: grpc.CallOptions | null): Promise<messages.TxnContext> {
-        return this.promisified.commitOrAbort(ctx, undefined, options);
+        return this.promisified.commitOrAbort(ctx, new grpc.Metadata(), ensureCallOptions(options));
     }
 
     public checkVersion(check: messages.Check, options?: grpc.CallOptions | null): Promise<messages.Version> {
-        return this.promisified.checkVersion(check, undefined, options);
+        return this.promisified.checkVersion(check, new grpc.Metadata(), ensureCallOptions(options));
     }
 
     public waitForReady(deadline: grpc.Deadline): Promise<void> {
@@ -96,4 +96,15 @@ export class DgraphClientStub {
     public grpcClient(): grpc.Client {
         return this.stub;
     }
+}
+
+function ensureCallOptions(options?: grpc.CallOptions | null): grpc.CallOptions {
+    if (options != null) {
+        return options;
+    }
+
+    return {
+        propagate_flags: grpc.propagate.DEFAULTS,
+        credentials: null,
+    };
 }
