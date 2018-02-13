@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.1.1] - 2017-02-13
+
+### Added
+- Compatibility with grpc v1.9
+
+### Fixed
+- Function `u8ToStr` which was leading to json parse errors
+  ([#17](https://github.com/dgraph-io/dgraph-js/issues/17))
+
 ## [v1.1.0] - 2017-02-06
 
 ### Added
@@ -48,7 +57,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Full compatibility with Dgraph v1.0.0
 
-[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.1...HEAD
+[v1.1.0]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.4...v1.1.0
 [v1.0.4]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.3...v1.0.4
 [v1.0.3]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.2...v1.0.3
