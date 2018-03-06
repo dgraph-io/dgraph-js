@@ -84,6 +84,11 @@ export class Assigned extends jspb.Message {
   getContext(): TxnContext | undefined;
   setContext(value?: TxnContext): void;
 
+  hasLatency(): boolean;
+  clearLatency(): void;
+  getLatency(): Latency | undefined;
+  setLatency(value?: Latency): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Assigned.AsObject;
   static toObject(includeInstance: boolean, msg: Assigned): Assigned.AsObject;
@@ -98,6 +103,7 @@ export namespace Assigned {
   export type AsObject = {
     uidsMap: Array<[string, string]>,
     context?: TxnContext.AsObject,
+    latency?: Latency.AsObject,
   }
 }
 

@@ -625,7 +625,8 @@ proto.api.Assigned.prototype.toObject = function(opt_includeInstance) {
 proto.api.Assigned.toObject = function(includeInstance, msg) {
   var f, obj = {
     uidsMap: (f = msg.getUidsMap()) ? f.toObject(includeInstance, undefined) : [],
-    context: (f = msg.getContext()) && proto.api.TxnContext.toObject(includeInstance, f)
+    context: (f = msg.getContext()) && proto.api.TxnContext.toObject(includeInstance, f),
+    latency: (f = msg.getLatency()) && proto.api.Latency.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -673,6 +674,11 @@ proto.api.Assigned.deserializeBinaryFromReader = function(msg, reader) {
       reader.readMessage(value,proto.api.TxnContext.deserializeBinaryFromReader);
       msg.setContext(value);
       break;
+    case 12:
+      var value = new proto.api.Latency;
+      reader.readMessage(value,proto.api.Latency.deserializeBinaryFromReader);
+      msg.setLatency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -712,6 +718,14 @@ proto.api.Assigned.serializeBinaryToWriter = function(message, writer) {
       2,
       f,
       proto.api.TxnContext.serializeBinaryToWriter
+    );
+  }
+  f = message.getLatency();
+  if (f != null) {
+    writer.writeMessage(
+      12,
+      f,
+      proto.api.Latency.serializeBinaryToWriter
     );
   }
 };
@@ -762,6 +776,36 @@ proto.api.Assigned.prototype.clearContext = function() {
  */
 proto.api.Assigned.prototype.hasContext = function() {
   return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional Latency latency = 12;
+ * @return {?proto.api.Latency}
+ */
+proto.api.Assigned.prototype.getLatency = function() {
+  return /** @type{?proto.api.Latency} */ (
+    jspb.Message.getWrapperField(this, proto.api.Latency, 12));
+};
+
+
+/** @param {?proto.api.Latency|undefined} value */
+proto.api.Assigned.prototype.setLatency = function(value) {
+  jspb.Message.setWrapperField(this, 12, value);
+};
+
+
+proto.api.Assigned.prototype.clearLatency = function() {
+  this.setLatency(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.api.Assigned.prototype.hasLatency = function() {
+  return jspb.Message.getField(this, 12) != null;
 };
 
 
