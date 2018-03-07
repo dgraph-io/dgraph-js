@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [v1.1.1] - 2017-02-13
+## [v1.1.2] - 2018-03-07
+
+### Added
+- `latency` field to proto message type `Assigned`
+
+## [v1.1.1] - 2018-02-13
 
 ### Added
 - Compatibility with grpc v1.9
@@ -16,7 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Function `u8ToStr` which was leading to json parse errors
   ([#17](https://github.com/dgraph-io/dgraph-js/issues/17))
 
-## [v1.1.0] - 2017-02-06
+## [v1.1.0] - 2018-02-06
 
 ### Added
 - Full compatibility with Dgraph v1.0.2
@@ -57,7 +62,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Full compatibility with Dgraph v1.0.0
 
-[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.2...HEAD
+[v1.1.2]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.4...v1.1.0
 [v1.0.4]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.3...v1.0.4
