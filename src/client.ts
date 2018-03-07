@@ -41,11 +41,11 @@ export class DgraphClient {
      *
      * 3. Drop the database.
      */
-    public async alter(op: messages.Operation, options?: grpc.CallOptions | null): Promise<types.Payload> {
+    public async alter(op: messages.Operation, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<types.Payload> {
         this.debug(`Alter request:\n${stringifyMessage(op)}`);
 
         const c = this.anyClient();
-        const pl = types.createPayload(await c.alter(op, options));
+        const pl = types.createPayload(await c.alter(op, metadata, options));
         this.debug(`Alter response:\n${stringifyMessage(pl)}`);
 
         return pl;

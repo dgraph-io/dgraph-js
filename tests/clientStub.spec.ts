@@ -4,11 +4,14 @@ import * as dgraph from "../src";
 
 import { SERVER_ADDR, SERVER_CREDENTIALS, setup } from "./helper";
 
-async function checkVersion(stub: dgraph.DgraphClientStub): Promise<void> {
-    const v = await stub.checkVersion(new dgraph.Check());
-    const tag = v.getTag();
+function validateVersionObject(version: dgraph.Version) {
+    const tag = version.getTag();
     expect(typeof tag).toEqual("string");
     expect(tag).toBeDefined();
+}
+
+async function checkVersion(stub: dgraph.DgraphClientStub): Promise<void> {
+    validateVersionObject(await stub.checkVersion(new dgraph.Check()));
 }
 
 describe("clientStub", () => {
@@ -25,9 +28,14 @@ describe("clientStub", () => {
             await checkVersion(client.anyClient());
         });
 
+        it("should check version with metadata", async () => {
+            const clientStub = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
+            validateVersionObject(await clientStub.checkVersion(new dgraph.Check(), new grpc.Metadata()));
+        });
+
         it("should check version with call options", async () => {
             const clientStub = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
-            const p = clientStub.checkVersion(new dgraph.Check(), {
+            const p = clientStub.checkVersion(new dgraph.Check(), null, {
                 deadline: 0,
                 propagate_flags: grpc.propagate.DEFAULTS,
                 credentials: null,

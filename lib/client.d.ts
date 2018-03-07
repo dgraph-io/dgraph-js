@@ -8,7 +8,7 @@ export declare class DgraphClient {
     private linRead;
     private debugMode;
     constructor(...clients: DgraphClientStub[]);
-    alter(op: messages.Operation, options?: grpc.CallOptions | null): Promise<types.Payload>;
+    alter(op: messages.Operation, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<types.Payload>;
     newTxn(): Txn;
     setDebugMode(mode?: boolean): void;
     debug(msg: string): void;

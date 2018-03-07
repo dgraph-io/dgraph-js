@@ -65,24 +65,26 @@ export class DgraphClientStub {
         };
     }
 
-    public alter(op: messages.Operation, options?: grpc.CallOptions | null): Promise<messages.Payload> {
-        return this.promisified.alter(op, new grpc.Metadata(), ensureCallOptions(options));
+    public alter(op: messages.Operation, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<messages.Payload> {
+        return this.promisified.alter(op, ensureMetadata(metadata), ensureCallOptions(options));
     }
 
-    public query(req: messages.Request, options?: grpc.CallOptions | null): Promise<messages.Response> {
-        return this.promisified.query(req, new grpc.Metadata(), ensureCallOptions(options));
+    public query(req: messages.Request, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<messages.Response> {
+        return this.promisified.query(req, ensureMetadata(metadata), ensureCallOptions(options));
     }
 
-    public mutate(mu: messages.Mutation, options?: grpc.CallOptions | null): Promise<messages.Assigned> {
-        return this.promisified.mutate(mu, new grpc.Metadata(), ensureCallOptions(options));
+    public mutate(mu: messages.Mutation, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<messages.Assigned> {
+        return this.promisified.mutate(mu, ensureMetadata(metadata), ensureCallOptions(options));
     }
 
-    public commitOrAbort(ctx: messages.TxnContext, options?: grpc.CallOptions | null): Promise<messages.TxnContext> {
-        return this.promisified.commitOrAbort(ctx, new grpc.Metadata(), ensureCallOptions(options));
+    public commitOrAbort(
+        ctx: messages.TxnContext, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<messages.TxnContext> {
+        return this.promisified.commitOrAbort(ctx, ensureMetadata(metadata), ensureCallOptions(options));
     }
 
-    public checkVersion(check: messages.Check, options?: grpc.CallOptions | null): Promise<messages.Version> {
-        return this.promisified.checkVersion(check, new grpc.Metadata(), ensureCallOptions(options));
+    public checkVersion(
+        check: messages.Check, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<messages.Version> {
+        return this.promisified.checkVersion(check, ensureMetadata(metadata), ensureCallOptions(options));
     }
 
     public waitForReady(deadline: grpc.Deadline): Promise<void> {
@@ -98,13 +100,13 @@ export class DgraphClientStub {
     }
 }
 
-function ensureCallOptions(options?: grpc.CallOptions | null): grpc.CallOptions {
-    if (options != null) {
-        return options;
-    }
+function ensureMetadata(metadata?: grpc.Metadata | null): grpc.Metadata {
+    return (metadata == null) ? new grpc.Metadata() : metadata;
+}
 
-    return {
+function ensureCallOptions(options?: grpc.CallOptions | null): grpc.CallOptions {
+    return (options == null) ? {
         propagate_flags: grpc.propagate.DEFAULTS,
         credentials: null,
-    };
+    } : options;
 }
