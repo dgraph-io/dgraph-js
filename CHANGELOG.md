@@ -12,9 +12,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - **[BREAKING]** Optional `metadata` parameter of type `grpc.Metadata` to the
   `DgraphClientStub` methods. `options` parameter moved to the third position
-  to conform with the `grpc` package API. Methods affected -
-  `DgraphClient#alter`, `Txn#query`, `Txn#queryWithVars`, `Txn#mutate`,
-  `Txn#commit` and `Txn#discard`.
+  to conform with the `grpc` package API.
+  
+  Methods affected - `DgraphClient#alter`, `Txn#query`, `Txn#queryWithVars`,
+  `Txn#mutate`, `Txn#commit` and `Txn#discard`.
+  
+  To upgrade to this version, if using any of these methods with the `options`
+  parameter, simply add a `null` argument before the `options` argument. For 
+  example, `client.alter(options)` becomes `client.alter(null, options)`
 
 ## [v1.1.2] - 2018-03-07
 
