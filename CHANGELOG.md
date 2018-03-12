@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.2.0] - 2018-03-12
+
+### Added
+- **[BREAKING]** Optional `metadata` parameter of type `grpc.Metadata` to the
+  `DgraphClientStub` methods. `options` parameter moved to the third position
+  to conform with the `grpc` package API. Methods affected -
+  `DgraphClient#alter`, `Txn#query`, `Txn#queryWithVars`, `Txn#mutate`,
+  `Txn#commit` and `Txn#discard`.
+
 ## [v1.1.2] - 2018-03-07
 
 ### Added
+- Full compatibility with Dgraph v1.0.4
 - `latency` field to proto message type `Assigned`
 
 ## [v1.1.1] - 2018-02-13
@@ -62,7 +72,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Full compatibility with Dgraph v1.0.0
 
-[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.2.0...HEAD
+[v1.2.0]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.2...v1.2.0
 [v1.1.2]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/dgraph-io/dgraph-js/compare/v1.0.4...v1.1.0
