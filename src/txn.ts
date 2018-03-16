@@ -117,7 +117,7 @@ export class Txn {
             // mutations could have applied but not others, but we don't know which ones).
             // Discarding the transaction enforces that the user cannot use the txn further.
             try {
-                await this.discard();
+                await this.discard(metadata, options);
             } catch (e) {
                 // Ignore error - user should see the original error.
             }
