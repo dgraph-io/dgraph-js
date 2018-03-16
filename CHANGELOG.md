@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.2.1] - 2018-03-16
+
+### Fixed
+- Pass `metadata` and `options` arguments to `Txn#discard` in `Txn#mutate`
+
 ## [v1.2.0] - 2018-03-12
 
 ### Added
@@ -77,7 +82,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Full compatibility with Dgraph v1.0.0
 
-[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.2.1...HEAD
+[v1.2.1]: https://github.com/dgraph-io/dgraph-js/compare/v1.2.0...v1.2.1
 [v1.2.0]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.2...v1.2.0
 [v1.1.2]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.0...v1.1.1
