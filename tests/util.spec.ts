@@ -18,7 +18,7 @@ function fnAddThisVal3(a: number, b: number, c: number, cb: (err?: Error | null,
 
 describe("util", () => {
     describe("mergeLinReads", () => {
-        it("should merge two differnt linReads", () => {
+        it("should merge two different linReads", () => {
             const lr1 = createLinRead([1, 1]);
             const lr2 = createLinRead([2, 2], [3, 3]);
             const res = createLinRead([1, 1], [2, 2], [3, 3]);
