@@ -75,7 +75,7 @@ describe("delete", () => {
                 }
                 schools {
                     uid
-                    name@en
+                    name
                 }
             }
         }`;
