@@ -19,11 +19,11 @@ import {
  *
  * 1. Created using Client.newTxn.
  *
- * 2. Various query and qutate calls made.
+ * 2. Various query and mutate calls made.
  *
  * 3. commit or discard used. If any mutations have been made, It's important
  * that at least one of these methods is called to clean up resources. discard
- * is a no-op if dommit has already been called, so it's safe to call discard
+ * is a no-op if commit has already been called, so it's safe to call discard
  * after calling commit.
  */
 export class Txn {
