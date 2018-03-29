@@ -45,6 +45,21 @@ or yarn:
 yarn add dgraph-js grpc
 ```
 
+If you are using TypeScript, you might also need to install the following
+typings.
+
+If you use npm:
+
+```sh
+npm install @types/google-protobuf @types/protobufjs --save-dev
+```
+
+or if you use yarn:
+
+```sh
+yarn add @types/google-protobuf @types/protobufjs --dev
+```
+
 ## Quickstart
 
 Build and run the [simple] project in the `examples` folder, which
