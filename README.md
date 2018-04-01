@@ -37,27 +37,16 @@ Install using npm:
 
 ```sh
 npm install dgraph-js grpc --save
+# If you are using Typescript, you might also need:
+# npm install @types/google-protobuf @types/protobufjs --save-dev
 ```
 
 or yarn:
 
 ```sh
 yarn add dgraph-js grpc
-```
-
-If you are using TypeScript, you might also need to install the following
-typings.
-
-If you use npm:
-
-```sh
-npm install @types/google-protobuf @types/protobufjs --save-dev
-```
-
-or if you use yarn:
-
-```sh
-yarn add @types/google-protobuf @types/protobufjs --dev
+# If you are using Typescript, you might also need:
+# yarn add @types/google-protobuf @types/protobufjs --dev
 ```
 
 ## Quickstart
