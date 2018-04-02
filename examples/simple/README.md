@@ -13,7 +13,7 @@ You will need to install [Dgraph v0.9.4 or above][releases] and run it.
 
 [releases]: https://github.com/dgraph-io/dgraph/releases
 
-You can run the commands below to start a clean Dgraph server everytime, for testing
+You can run the commands below to start a clean Dgraph server every time, for testing
 and exploration.
 
 First, create two separate directories for `dgraph zero` and `dgraph server`.
@@ -26,7 +26,9 @@ Then start `dgraph zero`:
 
 ```sh
 cd dgraphdata/zero
-rm -r zw; dgraph zero --port_offset -2000
+rm -r zw; dgraph zero
+# If running Dgraph version <= 1.0.2, use the following command instead:
+# rm -r zw; dgraph zero --port_offset -2000
 ```
 
 Finally, start the `dgraph server`:
