@@ -7,7 +7,7 @@ using [grpc].
 
 This client follows the [Dgraph Go client][goclient] closely.
 
-[goclient]: https://github.com/dgraph-io/dgraph/tree/master/client
+[goclient]: https://github.com/dgraph-io/dgo
 
 Before using this client, we highly recommend that you go through [docs.dgraph.io],
 and understand how to run and work with Dgraph.
