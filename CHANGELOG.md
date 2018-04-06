@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- `upsert` and `lang` fields to proto message type SchemaNode
+- Option for server-side sequencing
+
 ## [v1.2.1] - 2018-03-16
 
 ### Fixed
