@@ -324,6 +324,9 @@ export namespace Version {
 export class LinRead extends jspb.Message {
   getIdsMap(): jspb.Map<number, number>;
   clearIdsMap(): void;
+  getSequencing(): LinRead.Sequencing;
+  setSequencing(value: LinRead.Sequencing): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): LinRead.AsObject;
   static toObject(includeInstance: boolean, msg: LinRead): LinRead.AsObject;
@@ -337,6 +340,12 @@ export class LinRead extends jspb.Message {
 export namespace LinRead {
   export type AsObject = {
     idsMap: Array<[number, number]>,
+    sequencing: LinRead.Sequencing,
+  }
+
+  export enum Sequencing {
+    CLIENT_SIDE = 0,
+    SERVER_SIDE = 1,
   }
 }
 

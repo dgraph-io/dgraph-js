@@ -18,6 +18,7 @@ goog.exportSymbol('proto.api.Facet', null, global);
 goog.exportSymbol('proto.api.Facet.ValType', null, global);
 goog.exportSymbol('proto.api.Latency', null, global);
 goog.exportSymbol('proto.api.LinRead', null, global);
+goog.exportSymbol('proto.api.LinRead.Sequencing', null, global);
 goog.exportSymbol('proto.api.Mutation', null, global);
 goog.exportSymbol('proto.api.NQuad', null, global);
 goog.exportSymbol('proto.api.Operation', null, global);
@@ -2440,7 +2441,8 @@ proto.api.LinRead.prototype.toObject = function(opt_includeInstance) {
  */
 proto.api.LinRead.toObject = function(includeInstance, msg) {
   var f, obj = {
-    idsMap: (f = msg.getIdsMap()) ? f.toObject(includeInstance, undefined) : []
+    idsMap: (f = msg.getIdsMap()) ? f.toObject(includeInstance, undefined) : [],
+    sequencing: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -2483,6 +2485,10 @@ proto.api.LinRead.deserializeBinaryFromReader = function(msg, reader) {
         jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readUint32, jspb.BinaryReader.prototype.readUint64);
          });
       break;
+    case 2:
+      var value = /** @type {!proto.api.LinRead.Sequencing} */ (reader.readEnum());
+      msg.setSequencing(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -2516,8 +2522,23 @@ proto.api.LinRead.serializeBinaryToWriter = function(message, writer) {
   if (f && f.getLength() > 0) {
     f.serializeBinary(1, writer, jspb.BinaryWriter.prototype.writeUint32, jspb.BinaryWriter.prototype.writeUint64);
   }
+  f = message.getSequencing();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
 };
 
+
+/**
+ * @enum {number}
+ */
+proto.api.LinRead.Sequencing = {
+  CLIENT_SIDE: 0,
+  SERVER_SIDE: 1
+};
 
 /**
  * map<uint32, uint64> ids = 1;
@@ -2534,6 +2555,21 @@ proto.api.LinRead.prototype.getIdsMap = function(opt_noLazyCreate) {
 
 proto.api.LinRead.prototype.clearIdsMap = function() {
   this.getIdsMap().clear();
+};
+
+
+/**
+ * optional Sequencing sequencing = 2;
+ * @return {!proto.api.LinRead.Sequencing}
+ */
+proto.api.LinRead.prototype.getSequencing = function() {
+  return /** @type {!proto.api.LinRead.Sequencing} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {!proto.api.LinRead.Sequencing} value */
+proto.api.LinRead.prototype.setSequencing = function(value) {
+  jspb.Message.setProto3EnumField(this, 2, value);
 };
 
 

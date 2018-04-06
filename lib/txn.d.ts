@@ -7,7 +7,9 @@ export declare class Txn {
     private ctx;
     private finished;
     private mutated;
+    private sequencingProp;
     constructor(dc: DgraphClient);
+    sequencing(sequencing: messages.LinRead.Sequencing): void;
     query(q: string, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<types.Response>;
     queryWithVars(q: string, vars?: {
         [k: string]: any;

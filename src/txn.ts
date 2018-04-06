@@ -31,11 +31,17 @@ export class Txn {
     private ctx: messages.TxnContext;
     private finished: boolean = false;
     private mutated: boolean = false;
+    private sequencingProp: messages.LinRead.Sequencing;
 
     constructor(dc: DgraphClient) {
         this.dc = dc;
         this.ctx = new messages.TxnContext();
         this.ctx.setLinRead(this.dc.getLinRead());
+        this.sequencingProp = messages.LinRead.Sequencing.CLIENT_SIDE;
+    }
+
+    public sequencing(sequencing: messages.LinRead.Sequencing): void {
+        this.sequencingProp = sequencing;
     }
 
     /**
@@ -65,7 +71,11 @@ export class Txn {
         const req = new messages.Request();
         req.setQuery(q);
         req.setStartTs(this.ctx.getStartTs());
+
+        const linRead = this.ctx.getLinRead();
+        linRead.setSequencing(this.sequencingProp);
         req.setLinRead(this.ctx.getLinRead());
+
         if (vars != null) {
             const varsMap = req.getVarsMap();
             Object.keys(vars).forEach((key: string) => {
