@@ -4145,7 +4145,9 @@ proto.api.SchemaNode.toObject = function(includeInstance, msg) {
     tokenizerList: jspb.Message.getRepeatedField(msg, 4),
     reverse: jspb.Message.getFieldWithDefault(msg, 5, false),
     count: jspb.Message.getFieldWithDefault(msg, 6, false),
-    list: jspb.Message.getFieldWithDefault(msg, 7, false)
+    list: jspb.Message.getFieldWithDefault(msg, 7, false),
+    upsert: jspb.Message.getFieldWithDefault(msg, 8, false),
+    lang: jspb.Message.getFieldWithDefault(msg, 9, false)
   };
 
   if (includeInstance) {
@@ -4209,6 +4211,14 @@ proto.api.SchemaNode.deserializeBinaryFromReader = function(msg, reader) {
     case 7:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setList(value);
+      break;
+    case 8:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setUpsert(value);
+      break;
+    case 9:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setLang(value);
       break;
     default:
       reader.skipField();
@@ -4285,6 +4295,20 @@ proto.api.SchemaNode.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       7,
+      f
+    );
+  }
+  f = message.getUpsert();
+  if (f) {
+    writer.writeBool(
+      8,
+      f
+    );
+  }
+  f = message.getLang();
+  if (f) {
+    writer.writeBool(
+      9,
       f
     );
   }
@@ -4415,6 +4439,40 @@ proto.api.SchemaNode.prototype.getList = function() {
 /** @param {boolean} value */
 proto.api.SchemaNode.prototype.setList = function(value) {
   jspb.Message.setProto3BooleanField(this, 7, value);
+};
+
+
+/**
+ * optional bool upsert = 8;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
+ */
+proto.api.SchemaNode.prototype.getUpsert = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 8, false));
+};
+
+
+/** @param {boolean} value */
+proto.api.SchemaNode.prototype.setUpsert = function(value) {
+  jspb.Message.setProto3BooleanField(this, 8, value);
+};
+
+
+/**
+ * optional bool lang = 9;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
+ */
+proto.api.SchemaNode.prototype.getLang = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 9, false));
+};
+
+
+/** @param {boolean} value */
+proto.api.SchemaNode.prototype.setLang = function(value) {
+  jspb.Message.setProto3BooleanField(this, 9, value);
 };
 
 

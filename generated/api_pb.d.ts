@@ -594,6 +594,12 @@ export class SchemaNode extends jspb.Message {
   getList(): boolean;
   setList(value: boolean): void;
 
+  getUpsert(): boolean;
+  setUpsert(value: boolean): void;
+
+  getLang(): boolean;
+  setLang(value: boolean): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SchemaNode.AsObject;
   static toObject(includeInstance: boolean, msg: SchemaNode): SchemaNode.AsObject;
@@ -613,6 +619,8 @@ export namespace SchemaNode {
     reverse: boolean,
     count: boolean,
     list: boolean,
+    upsert: boolean,
+    lang: boolean,
   }
 }
 
