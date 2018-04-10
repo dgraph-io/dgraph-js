@@ -1,7 +1,7 @@
 import * as grpc from "grpc";
 import * as messages from "../generated/api_pb";
 export declare class DgraphClientStub {
-    private stub;
+    private readonly stub;
     private promisified;
     constructor(addr?: string | null, credentials?: grpc.ChannelCredentials | null, options?: object | null);
     alter(op: messages.Operation, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<messages.Payload>;

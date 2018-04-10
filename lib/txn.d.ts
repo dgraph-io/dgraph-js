@@ -3,8 +3,8 @@ import * as messages from "../generated/api_pb";
 import { DgraphClient } from "./client";
 import * as types from "./types";
 export declare class Txn {
-    private dc;
-    private ctx;
+    private readonly dc;
+    private readonly ctx;
     private finished;
     private mutated;
     private sequencingProp;

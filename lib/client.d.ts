@@ -4,8 +4,8 @@ import { DgraphClientStub } from "./clientStub";
 import { Txn } from "./txn";
 import * as types from "./types";
 export declare class DgraphClient {
-    private clients;
-    private linRead;
+    private readonly clients;
+    private readonly linRead;
     private debugMode;
     constructor(...clients: DgraphClientStub[]);
     alter(op: messages.Operation, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<types.Payload>;
