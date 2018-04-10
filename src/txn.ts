@@ -74,7 +74,7 @@ export class Txn {
 
         const linRead = this.ctx.getLinRead();
         linRead.setSequencing(this.sequencingProp);
-        req.setLinRead(this.ctx.getLinRead());
+        req.setLinRead(linRead);
 
         if (vars != null) {
             const varsMap = req.getVarsMap();
