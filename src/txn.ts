@@ -27,8 +27,8 @@ import {
  * after calling commit.
  */
 export class Txn {
-    private dc: DgraphClient;
-    private ctx: messages.TxnContext;
+    private readonly dc: DgraphClient;
+    private readonly ctx: messages.TxnContext;
     private finished: boolean = false;
     private mutated: boolean = false;
     private sequencingProp: messages.LinRead.Sequencing;

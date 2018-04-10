@@ -9,7 +9,7 @@ import { promisify1, promisify3 } from "./util";
  * Stub is a stub/client connecting to a single dgraph server instance.
  */
 export class DgraphClientStub {
-    private stub: services.DgraphClient;
+    private readonly stub: services.DgraphClient;
     private promisified: {
         alter(
             op: messages.Operation,
