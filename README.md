@@ -27,6 +27,7 @@ and understand how to run and work with Dgraph.
   - [Commit a transaction](#commit-a-transaction)
   - [Cleanup Resources](#cleanup-resources)
   - [Debug mode](#debug-mode)
+- [Examples](#examples)
 - [Development](#development)
   - [Building the source](#building-the-source)
   - [Running tests](#running-tests)
@@ -51,11 +52,9 @@ yarn add dgraph-js grpc
 
 ## Quickstart
 
-Build and run the [simple] project in the `examples` folder, which
-contains an end-to-end example of using the Dgraph javascript client. Follow the
+Build and run the [simple][] project in the `examples` folder, which
+contains an end-to-end example of using the Dgraph JavaScript client. Follow the
 instructions in the README of that project.
-
-[simple]: https://github.com/dgraph-io/dgraph-js/tree/master/examples/simple
 
 ## Using a client
 
@@ -285,6 +284,15 @@ dgraphClient.setDebugMode(true);
 // Disable debug mode.
 dgraphClient.setDebugMode(false);
 ```
+
+
+## Examples
+
+- [simple][]: Quickstart example of using dgraph-js.
+- [tls][]: Example of using dgraph-js with a Dgraph cluster secured with TLS.
+
+[simple]: ./examples/simple
+[tls]: ./examples/tls
 
 ## Development
 
