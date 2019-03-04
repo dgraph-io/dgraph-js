@@ -95,8 +95,12 @@ await dgraphClient.alter(op);
 
 > NOTE: Many of the examples here use the `await` keyword which requires
 > `async/await` support which is available on Node.js >= v7.6.0. For prior versions,
-> the expressions following `await` can be used just like normal `Promise`
-> instances.
+> the expressions following `await` can be used just like normal `Promise`:
+> 
+> ```js
+> dgraphClient.alter(op)
+>     .then(function(result) { ... }, function(err) { ... })
+> ```
 
 `Operation` contains other fields as well, including drop predicate and drop all.
 Drop all is useful if you wish to discard all the data, and start from a clean
