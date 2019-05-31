@@ -1,9 +1,12 @@
 # dgraph-js [![npm version](https://img.shields.io/npm/v/dgraph-js.svg?style=flat)](https://www.npmjs.com/package/dgraph-js) [![Build Status](https://img.shields.io/travis/dgraph-io/dgraph-js/master.svg?style=flat)](https://travis-ci.org/dgraph-io/dgraph-js) [![Coverage Status](https://img.shields.io/coveralls/github/dgraph-io/dgraph-js/master.svg?style=flat)](https://coveralls.io/github/dgraph-io/dgraph-js?branch=master)
 
-Official Dgraph client implementation for javascript (Node.js v6 and above),
-using [grpc].
+Official Dgraph client implementation for JavaScript (Node.js v6 and above),
+using [gRPC].
+
+**Looking for browser support? Check out [dgraph-js-http].**
 
 [grpc]: https://grpc.io/
+[dgraph-js-http]: https://github.com/dgraph-io/dgraph-js-http
 
 This client follows the [Dgraph Go client][goclient] closely.
 
