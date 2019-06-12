@@ -24,7 +24,7 @@ function serialize_api_Assigned(arg) {
   if (!(arg instanceof api_pb.Assigned)) {
     throw new Error('Expected argument of type api.Assigned');
   }
-  return new Buffer(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary());
 }
 
 function deserialize_api_Assigned(buffer_arg) {
@@ -35,18 +35,29 @@ function serialize_api_Check(arg) {
   if (!(arg instanceof api_pb.Check)) {
     throw new Error('Expected argument of type api.Check');
   }
-  return new Buffer(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary());
 }
 
 function deserialize_api_Check(buffer_arg) {
   return api_pb.Check.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_api_LoginRequest(arg) {
+  if (!(arg instanceof api_pb.LoginRequest)) {
+    throw new Error('Expected argument of type api.LoginRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_api_LoginRequest(buffer_arg) {
+  return api_pb.LoginRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_api_Mutation(arg) {
   if (!(arg instanceof api_pb.Mutation)) {
     throw new Error('Expected argument of type api.Mutation');
   }
-  return new Buffer(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary());
 }
 
 function deserialize_api_Mutation(buffer_arg) {
@@ -57,7 +68,7 @@ function serialize_api_Operation(arg) {
   if (!(arg instanceof api_pb.Operation)) {
     throw new Error('Expected argument of type api.Operation');
   }
-  return new Buffer(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary());
 }
 
 function deserialize_api_Operation(buffer_arg) {
@@ -68,7 +79,7 @@ function serialize_api_Payload(arg) {
   if (!(arg instanceof api_pb.Payload)) {
     throw new Error('Expected argument of type api.Payload');
   }
-  return new Buffer(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary());
 }
 
 function deserialize_api_Payload(buffer_arg) {
@@ -79,7 +90,7 @@ function serialize_api_Request(arg) {
   if (!(arg instanceof api_pb.Request)) {
     throw new Error('Expected argument of type api.Request');
   }
-  return new Buffer(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary());
 }
 
 function deserialize_api_Request(buffer_arg) {
@@ -90,7 +101,7 @@ function serialize_api_Response(arg) {
   if (!(arg instanceof api_pb.Response)) {
     throw new Error('Expected argument of type api.Response');
   }
-  return new Buffer(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary());
 }
 
 function deserialize_api_Response(buffer_arg) {
@@ -101,7 +112,7 @@ function serialize_api_TxnContext(arg) {
   if (!(arg instanceof api_pb.TxnContext)) {
     throw new Error('Expected argument of type api.TxnContext');
   }
-  return new Buffer(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary());
 }
 
 function deserialize_api_TxnContext(buffer_arg) {
@@ -112,7 +123,7 @@ function serialize_api_Version(arg) {
   if (!(arg instanceof api_pb.Version)) {
     throw new Error('Expected argument of type api.Version');
   }
-  return new Buffer(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary());
 }
 
 function deserialize_api_Version(buffer_arg) {
@@ -122,6 +133,17 @@ function deserialize_api_Version(buffer_arg) {
 
 // Graph response.
 var DgraphService = exports.DgraphService = {
+  login: {
+    path: '/api.Dgraph/Login',
+    requestStream: false,
+    responseStream: false,
+    requestType: api_pb.LoginRequest,
+    responseType: api_pb.Response,
+    requestSerialize: serialize_api_LoginRequest,
+    requestDeserialize: deserialize_api_LoginRequest,
+    responseSerialize: serialize_api_Response,
+    responseDeserialize: deserialize_api_Response,
+  },
   query: {
     path: '/api.Dgraph/Query',
     requestStream: false,

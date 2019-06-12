@@ -51,7 +51,11 @@ export function dropAll(c: dgraph.DgraphClient): Promise<dgraph.Payload> {
 }
 
 export async function setup(): Promise<dgraph.DgraphClient> {
-    const c = createClient();
+    const stub = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
+    await stub.login("groot", "password");
+
+    const c = new dgraph.DgraphClient(stub);
+
     await dropAll(c);
     return c;
 }

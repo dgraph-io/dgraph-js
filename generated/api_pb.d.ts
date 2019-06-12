@@ -17,6 +17,12 @@ export class Request extends jspb.Message {
   getLinRead(): LinRead | undefined;
   setLinRead(value?: LinRead): void;
 
+  getReadOnly(): boolean;
+  setReadOnly(value: boolean): void;
+
+  getBestEffort(): boolean;
+  setBestEffort(value: boolean): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Request.AsObject;
   static toObject(includeInstance: boolean, msg: Request): Request.AsObject;
@@ -33,6 +39,8 @@ export namespace Request {
     varsMap: Array<[string, string]>,
     startTs: number,
     linRead?: LinRead.AsObject,
+    readOnly: boolean,
+    bestEffort: boolean,
   }
 }
 
@@ -128,6 +136,9 @@ export class Mutation extends jspb.Message {
   getDelNquads_asB64(): string;
   setDelNquads(value: Uint8Array | string): void;
 
+  getQuery(): string;
+  setQuery(value: string): void;
+
   clearSetList(): void;
   getSetList(): Array<NQuad>;
   setSetList(value: Array<NQuad>): void;
@@ -163,35 +174,12 @@ export namespace Mutation {
     deleteJson: Uint8Array | string,
     setNquads: Uint8Array | string,
     delNquads: Uint8Array | string,
+    query: string,
     setList: Array<NQuad.AsObject>,
     delList: Array<NQuad.AsObject>,
     startTs: number,
     commitNow: boolean,
     ignoreIndexConflict: boolean,
-  }
-}
-
-export class AssignedIds extends jspb.Message {
-  getStartid(): number;
-  setStartid(value: number): void;
-
-  getEndid(): number;
-  setEndid(value: number): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): AssignedIds.AsObject;
-  static toObject(includeInstance: boolean, msg: AssignedIds): AssignedIds.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: AssignedIds, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): AssignedIds;
-  static deserializeBinaryFromReader(message: AssignedIds, reader: jspb.BinaryReader): AssignedIds;
-}
-
-export namespace AssignedIds {
-  export type AsObject = {
-    startid: number,
-    endid: number,
   }
 }
 
@@ -204,6 +192,12 @@ export class Operation extends jspb.Message {
 
   getDropAll(): boolean;
   setDropAll(value: boolean): void;
+
+  getDropOp(): Operation.DropOpMap[keyof Operation.DropOpMap];
+  setDropOp(value: Operation.DropOpMap[keyof Operation.DropOpMap]): void;
+
+  getDropValue(): string;
+  setDropValue(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Operation.AsObject;
@@ -220,7 +214,19 @@ export namespace Operation {
     schema: string,
     dropAttr: string,
     dropAll: boolean,
+    dropOp: Operation.DropOpMap[keyof Operation.DropOpMap],
+    dropValue: string,
   }
+
+  export interface DropOpMap {
+    NONE: 0;
+    ALL: 1;
+    DATA: 2;
+    ATTR: 3;
+    TYPE: 4;
+  }
+
+  export const DropOp: DropOpMap;
 }
 
 export class Payload extends jspb.Message {
@@ -260,6 +266,11 @@ export class TxnContext extends jspb.Message {
   setKeysList(value: Array<string>): void;
   addKeys(value: string, index?: number): string;
 
+  clearPredsList(): void;
+  getPredsList(): Array<string>;
+  setPredsList(value: Array<string>): void;
+  addPreds(value: string, index?: number): string;
+
   hasLinRead(): boolean;
   clearLinRead(): void;
   getLinRead(): LinRead | undefined;
@@ -281,6 +292,7 @@ export namespace TxnContext {
     commitTs: number,
     aborted: boolean,
     keysList: Array<string>,
+    predsList: Array<string>,
     linRead?: LinRead.AsObject,
   }
 }
@@ -324,8 +336,8 @@ export namespace Version {
 export class LinRead extends jspb.Message {
   getIdsMap(): jspb.Map<number, number>;
   clearIdsMap(): void;
-  getSequencing(): LinRead.Sequencing;
-  setSequencing(value: LinRead.Sequencing): void;
+  getSequencing(): LinRead.SequencingMap[keyof LinRead.SequencingMap];
+  setSequencing(value: LinRead.SequencingMap[keyof LinRead.SequencingMap]): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): LinRead.AsObject;
@@ -340,13 +352,15 @@ export class LinRead extends jspb.Message {
 export namespace LinRead {
   export type AsObject = {
     idsMap: Array<[number, number]>,
-    sequencing: LinRead.Sequencing,
+    sequencing: LinRead.SequencingMap[keyof LinRead.SequencingMap],
   }
 
-  export enum Sequencing {
-    CLIENT_SIDE = 0,
-    SERVER_SIDE = 1,
+  export interface SequencingMap {
+    CLIENT_SIDE: 0;
+    SERVER_SIDE: 1;
   }
+
+  export const Sequencing: SequencingMap;
 }
 
 export class Latency extends jspb.Message {
@@ -540,8 +554,8 @@ export class Facet extends jspb.Message {
   getValue_asB64(): string;
   setValue(value: Uint8Array | string): void;
 
-  getValType(): Facet.ValType;
-  setValType(value: Facet.ValType): void;
+  getValType(): Facet.ValTypeMap[keyof Facet.ValTypeMap];
+  setValType(value: Facet.ValTypeMap[keyof Facet.ValTypeMap]): void;
 
   clearTokensList(): void;
   getTokensList(): Array<string>;
@@ -565,18 +579,20 @@ export namespace Facet {
   export type AsObject = {
     key: string,
     value: Uint8Array | string,
-    valType: Facet.ValType,
+    valType: Facet.ValTypeMap[keyof Facet.ValTypeMap],
     tokensList: Array<string>,
     alias: string,
   }
 
-  export enum ValType {
-    STRING = 0,
-    INT = 1,
-    FLOAT = 2,
-    BOOL = 3,
-    DATETIME = 4,
+  export interface ValTypeMap {
+    STRING: 0;
+    INT: 1;
+    FLOAT: 2;
+    BOOL: 3;
+    DATETIME: 4;
   }
+
+  export const ValType: ValTypeMap;
 }
 
 export class SchemaNode extends jspb.Message {
@@ -630,6 +646,58 @@ export namespace SchemaNode {
     list: boolean,
     upsert: boolean,
     lang: boolean,
+  }
+}
+
+export class LoginRequest extends jspb.Message {
+  getUserid(): string;
+  setUserid(value: string): void;
+
+  getPassword(): string;
+  setPassword(value: string): void;
+
+  getRefreshToken(): string;
+  setRefreshToken(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): LoginRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: LoginRequest): LoginRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: LoginRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): LoginRequest;
+  static deserializeBinaryFromReader(message: LoginRequest, reader: jspb.BinaryReader): LoginRequest;
+}
+
+export namespace LoginRequest {
+  export type AsObject = {
+    userid: string,
+    password: string,
+    refreshToken: string,
+  }
+}
+
+export class Jwt extends jspb.Message {
+  getAccessJwt(): string;
+  setAccessJwt(value: string): void;
+
+  getRefreshJwt(): string;
+  setRefreshJwt(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Jwt.AsObject;
+  static toObject(includeInstance: boolean, msg: Jwt): Jwt.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Jwt, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Jwt;
+  static deserializeBinaryFromReader(message: Jwt, reader: jspb.BinaryReader): Jwt;
+}
+
+export namespace Jwt {
+  export type AsObject = {
+    accessJwt: string,
+    refreshJwt: string,
   }
 }
 

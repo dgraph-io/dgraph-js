@@ -16,9 +16,16 @@ async function checkVersion(stub: dgraph.DgraphClientStub): Promise<void> {
 
 describe("clientStub", () => {
     describe("constructor", () => {
-        it("should accept undefined and null arguments", async () => {
+        it("should accept undefined arguments", async () => {
             await checkVersion(new dgraph.DgraphClientStub());
-            await checkVersion(new dgraph.DgraphClientStub(null, null));
+        });
+    });
+
+    describe("login", () => {
+        it("Really should login", async () => {
+          const stub = new dgraph.DgraphClientStub();
+
+          await expect(stub.login("groot", "password")).resolves.toBeDefined();
         });
     });
 
@@ -35,10 +42,10 @@ describe("clientStub", () => {
 
         it("should check version with call options", async () => {
             const clientStub = new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
-            const p = clientStub.checkVersion(new dgraph.Check(), null, {
+            const p = clientStub.checkVersion(new dgraph.Check(), undefined, {
+                credentials: undefined,
                 deadline: 0,
                 propagate_flags: grpc.propagate.DEFAULTS,
-                credentials: null,
             });
 
             await expect(p).rejects.toBeDefined();

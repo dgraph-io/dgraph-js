@@ -63,10 +63,7 @@ describe("txn", () => {
             const txn = client.newTxn();
             await txn.commit();
 
-            const p = txn.queryWithVars(
-                '{ me(func: eq(name, "Alice")) { name }}',
-                null,
-            );
+            const p = txn.query('{ me(func: eq(name, "Alice")) { name }}');
             await expect(p).rejects.toBe(dgraph.ERR_FINISHED);
         });
     });

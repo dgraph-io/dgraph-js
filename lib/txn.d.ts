@@ -9,13 +9,13 @@ export declare class Txn {
     private mutated;
     private sequencingProp;
     constructor(dc: DgraphClient);
-    sequencing(sequencing: messages.LinRead.Sequencing): void;
-    query(q: string, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<types.Response>;
+    sequencing(sequencing: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap]): void;
+    query(q: string, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
     queryWithVars(q: string, vars?: {
         [k: string]: any;
-    } | null, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<types.Response>;
-    mutate(mu: types.Mutation, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<messages.Assigned>;
-    commit(metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<void>;
-    discard(metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<void>;
-    private mergeContext(src?);
+    }, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
+    mutate(mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Assigned>;
+    commit(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void>;
+    discard(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void>;
+    private mergeContext;
 }

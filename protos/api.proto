@@ -23,6 +23,7 @@ option java_outer_classname = "DgraphProto";
 
 // Graph response.
 service Dgraph {
+	rpc Login (LoginRequest)       returns (Response) {}
 	rpc Query (Request)            returns (Response) {}
 	rpc Mutate (Mutation)          returns (Assigned) {}
 	rpc Alter (Operation)          returns (Payload) {}
@@ -36,11 +37,13 @@ message Request {
 
 	uint64 start_ts = 13;
 	LinRead lin_read = 14;
+	bool read_only = 15;
+	bool best_effort = 16;
 }
 
 message Response {
 	bytes json = 1;
-	repeated SchemaNode schema = 2;
+	repeated SchemaNode schema = 2 [deprecated=true];
 	TxnContext txn = 3;
 	Latency latency = 12;
 }
@@ -56,24 +59,32 @@ message Mutation {
 	bytes delete_json = 2;
 	bytes set_nquads = 3;
 	bytes del_nquads = 4;
+	string query = 5;
 
 	repeated NQuad set = 10;
 	repeated NQuad del = 11;
 	uint64 start_ts = 13;
 	bool commit_now = 14;
-	bool ignore_index_conflict = 15;
-}
-
-
-message AssignedIds {
-	uint64 startId = 1;
-	uint64 endId = 2;
+	bool ignore_index_conflict = 15; // this field is not parsed and used by the server anymore.
 }
 
 message Operation {
 	string schema = 1;
 	string drop_attr = 2;
 	bool drop_all = 3;
+
+	enum DropOp {
+		NONE = 0;
+		ALL = 1;
+		DATA = 2;
+		ATTR = 3;
+		TYPE = 4;
+	}
+	DropOp drop_op = 4;
+
+	// If drop_op is ATTR or TYPE, drop_value holds the name of the predicate or
+	// type to delete.
+	string drop_value = 5;
 }
 
 // Worker services.
@@ -85,7 +96,8 @@ message TxnContext {
 	uint64 start_ts = 1;
 	uint64 commit_ts = 2;
 	bool aborted = 3;
-	repeated string keys = 4;
+	repeated string keys = 4;  // List of keys to be used for conflict detection.
+	repeated string preds = 5; // List of predicates involved in this transaction.
 	LinRead lin_read = 13;
 }
 
@@ -163,6 +175,17 @@ message SchemaNode {
 	bool list = 7;
 	bool upsert = 8;
 	bool lang = 9;
+}
+
+message LoginRequest {
+	string userid = 1;
+	string password = 2;
+	string refresh_token = 3;
+}
+
+message Jwt {
+	string access_jwt = 1;
+	string refresh_jwt = 2;
 }
 
 // vim: noexpandtab sw=2 ts=2

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.3.0-rc1] - 2019-06-12
+
+### Added
+- Support for ACL features in Dgraph v1.1 - login & jwt refresh
+- Updated protobufs to latest version
+- Upgraded all typescript dev libraries to latest version
+- Removed support for null values where appropriate (because typescript barks at those)
+
 ### Added
 - `upsert` and `lang` fields to proto message type SchemaNode
 - Option for server-side sequencing
@@ -22,12 +30,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **[BREAKING]** Optional `metadata` parameter of type `grpc.Metadata` to the
   `DgraphClientStub` methods. `options` parameter moved to the third position
   to conform to the `grpc` package API.
-  
+
   Methods affected - `DgraphClient#alter`, `Txn#query`, `Txn#queryWithVars`,
   `Txn#mutate`, `Txn#commit` and `Txn#discard`.
-  
+
   To upgrade to this version, if using any of these methods with the `options`
-  parameter, simply add a `null` argument before the `options` argument. For 
+  parameter, simply add a `null` argument before the `options` argument. For
   example, `client.alter(options)` becomes `client.alter(null, options)`
 
 ## [v1.1.2] - 2018-03-07

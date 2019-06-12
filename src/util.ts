@@ -3,8 +3,8 @@ import * as grpc from "grpc";
 
 import * as messages from "../generated/api_pb";
 
-export function mergeLinReads(target: messages.LinRead, src?: messages.LinRead | null): messages.LinRead {
-    if (src == null) {
+export function mergeLinReads(target: messages.LinRead, src?: messages.LinRead): messages.LinRead {
+    if (src === undefined) {
         return target;
     }
 
@@ -12,7 +12,7 @@ export function mergeLinReads(target: messages.LinRead, src?: messages.LinRead |
     const targetIdsMap = target.getIdsMap();
     srcIdsMap.forEach((value: number, key: number): void => {
         const targetVal = targetIdsMap.get(key);
-        if (targetVal == null || value > targetVal) {
+        if (targetVal === undefined || value > targetVal) {
             targetIdsMap.set(key, value);
         }
     });
@@ -22,7 +22,7 @@ export function mergeLinReads(target: messages.LinRead, src?: messages.LinRead |
 
 export function errorCode(err: any): { valid: boolean; code: number } { // tslint:disable-line no-any
     if (
-        err == null ||
+        err === undefined ||
         typeof err !== "object" ||
         !err.hasOwnProperty("code") || // tslint:disable-line no-unsafe-any
         typeof err.code !== "number"   // tslint:disable-line no-unsafe-any
@@ -50,7 +50,7 @@ export function isConflictError(err: any): boolean { // tslint:disable-line no-a
 }
 
 export function promisify1<A, T>(
-    f: (arg: A, cb: (err?: Error | null, res?: T) => void) => void,
+    f: (arg: A, cb: (err?: Error, res?: T) => void) => void,
     thisContext?: any, // tslint:disable-line no-any
 ): (arg: A) => Promise<T> {
     return (arg: A) => {
@@ -59,14 +59,14 @@ export function promisify1<A, T>(
             f.call(
                 thisContext,
                 arg,
-                (err?: Error | null, result?: T): void => (err != null) ? reject(err) : resolve(result),
+                (err?: Error, result?: T): void => (err !== undefined && err !== null) ? reject(err) : resolve(result),
             );
         });
     };
 }
 
 export function promisify3<A, B, C, T>(
-    f: (argA: A, argB: B, argC: C, cb: (err?: Error | null, res?: T) => void) => void,
+    f: (argA: A, argB: B, argC: C, cb: (err?: Error, res?: T) => void) => void,
     thisContext?: any, // tslint:disable-line no-any
 ): (argA: A, argB: B, argC: C) => Promise<T> {
     return (argA: A, argB: B, argC: C) => {
@@ -77,7 +77,7 @@ export function promisify3<A, B, C, T>(
                 argA,
                 argB,
                 argC,
-                (err?: Error | null, result?: T): void => (err != null) ? reject(err) : resolve(result),
+                (err?: Error, result?: T): void => (err !== undefined && err !== null) ? reject(err) : resolve(result),
             );
         });
     };
@@ -87,11 +87,7 @@ export function stringifyMessage(msg: jspb.Message): string {
     return JSON.stringify(msg.toObject());
 }
 
-const BASE64_REGEX = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
-
-export function isBase64(str: string) {
-    return BASE64_REGEX.test(str);
-}
+export { isBase64 } from "is-base64";
 
 export function strToB64(str: string): string {
     return Buffer.from(str, "utf8").toString("base64");

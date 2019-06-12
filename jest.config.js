@@ -17,5 +17,4 @@ module.exports = {
       "!src/generated/**/*.{ts,tsx,js,jsx}",
       "!src/**/*.d.ts",
     ],
-    mapCoverage: true,
 };

@@ -22,7 +22,7 @@ describe("delete", () => {
         expect(res.getJson().find_bob[0].name).toEqual("Alice");
 
         mu = new dgraph.Mutation();
-        mu.setDelNquads(`<${uid}> * * .`);
+        mu.setDelNquads(`<${uid}> <name> * .`);
         mu.setCommitNow(true);
         await client.newTxn().mutate(mu);
 

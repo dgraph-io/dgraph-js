@@ -3,7 +3,6 @@
     "tslint-microsoft-contrib"
   ],
   "rules": {
-    "mocha-no-side-effect-code": false,
     "missing-jsdoc": false,
     "no-relative-imports": false,
     "import-name": false,
@@ -15,6 +14,7 @@
     "no-single-line-block-comment": false,
     "insecure-random": false,
     "no-multiline-string": false,
+    "newline-per-chained-call": false,
     "trailing-comma": [
       true,
       {

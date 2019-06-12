@@ -5,6 +5,13 @@ import * as grpc from "grpc";
 import * as api_pb from "./api_pb";
 
 export class DgraphClient extends grpc.Client {
+    public login(
+        request: api_pb.LoginRequest,
+        metadata: grpc.Metadata | null,
+        options: grpc.CallOptions | null,
+        callback: (err?: Error | null, res?: api_pb.Response) => void,
+    ): void;
+
     public alter(
         operation: api_pb.Operation,
         metadata: grpc.Metadata | null,

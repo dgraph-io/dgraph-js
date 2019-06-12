@@ -31,7 +31,7 @@ export class Txn {
     private readonly ctx: messages.TxnContext;
     private finished: boolean = false;
     private mutated: boolean = false;
-    private sequencingProp: messages.LinRead.Sequencing;
+    private sequencingProp: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap];
 
     constructor(dc: DgraphClient) {
         this.dc = dc;
@@ -40,7 +40,7 @@ export class Txn {
         this.sequencingProp = messages.LinRead.Sequencing.CLIENT_SIDE;
     }
 
-    public sequencing(sequencing: messages.LinRead.Sequencing): void {
+    public sequencing(sequencing: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap]): void {
         this.sequencingProp = sequencing;
     }
 
@@ -49,8 +49,8 @@ export class Txn {
      * need to be made in the same transaction, it's convenient to chain the method,
      * e.g. client.newTxn().query("...").
      */
-    public query(q: string, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<types.Response> {
-        return this.queryWithVars(q, null, metadata, options);
+    public query(q: string, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response> {
+        return this.queryWithVars(q, undefined, metadata, options);
     }
 
     /**
@@ -59,9 +59,9 @@ export class Txn {
      */
     public async queryWithVars(
         q: string,
-        vars?: { [k: string]: any } | null, // tslint:disable-line no-any
-        metadata?: grpc.Metadata | null,
-        options?: grpc.CallOptions | null,
+        vars?: { [k: string]: any }, // tslint:disable-line no-any
+        metadata?: grpc.Metadata,
+        options?: grpc.CallOptions,
     ): Promise<types.Response> {
         if (this.finished) {
             this.dc.debug(`Query request (ERR_FINISHED):\nquery = ${q}\nvars = ${vars}`);
@@ -73,10 +73,11 @@ export class Txn {
         req.setStartTs(this.ctx.getStartTs());
 
         const linRead = this.ctx.getLinRead();
+        // tslint:disable-next-line no-unsafe-any
         linRead.setSequencing(this.sequencingProp);
         req.setLinRead(linRead);
 
-        if (vars != null) {
+        if (vars !== undefined) {
             const varsMap = req.getVarsMap();
             Object.keys(vars).forEach((key: string) => {
                 const value = vars[key];
@@ -108,7 +109,7 @@ export class Txn {
      * operations on it will fail.
      */
     public async mutate(
-        mu: types.Mutation, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<messages.Assigned> {
+        mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Assigned> {
         if (this.finished) {
             this.dc.debug(`Mutate request (ERR_FINISHED):\nmutation = ${stringifyMessage(mu)}`);
             throw ERR_FINISHED;
@@ -157,7 +158,7 @@ export class Txn {
      * It's up to the user to decide if they wish to retry. In this case, the user
      * should create a new transaction.
      */
-    public async commit(metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<void> {
+    public async commit(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void> {
         if (this.finished) {
             throw ERR_FINISHED;
         }
@@ -185,7 +186,7 @@ export class Txn {
      * is unavailable. In these cases, the server will eventually do the transaction
      * clean up.
      */
-    public async discard(metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<void> {
+    public async discard(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void> {
         if (this.finished) {
             return;
         }
@@ -200,8 +201,8 @@ export class Txn {
         await c.commitOrAbort(this.ctx, metadata, options);
     }
 
-    private mergeContext(src?: messages.TxnContext | null): void {
-        if (src == null) {
+    private mergeContext(src?: messages.TxnContext): void {
+        if (src === undefined) {
             // This condition will be true only if the server doesn't return a txn context after a query or mutation.
             return;
         }

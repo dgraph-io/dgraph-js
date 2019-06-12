@@ -35,9 +35,10 @@ async function createAccounts(): Promise<void> {
     const ag = await txn.mutate(mu);
     await txn.commit();
 
-    ag.getUidsMap().forEach((value: string): void => {
-        uids.push(value);
-    });
+    ag.getUidsMap()
+      .forEach((value: string): void => {
+          uids.push(value);
+      });
 }
 
 let startStatus = 0; // set before Promise.all
@@ -48,14 +49,15 @@ let runs = 0;
 let aborts = 0;
 
 async function runTotal(): Promise<void> {
-    const res = await client.newTxn().query(`{
+    const res = await client.newTxn()
+      .query(`{
         var(func: uid(${uids.join(",")})) {
             b as bal
         }
         total() {
             bal: sum(val(b))
         }
-    }`);
+      }`);
     // tslint:disable-next-line no-unsafe-any
     expect(res.getJson().total[0].bal).toBe(uids.length * initialBalance);
 
@@ -78,7 +80,8 @@ async function runTotalInLoop(): Promise<void> {
 async function runTxn(): Promise<void> {
     let fromUid: string;
     let toUid: string;
-    for (;;) {
+    // tslint:disable-next-line no-constant-condition
+    while (true) {
         fromUid = uids[Math.floor(Math.random() * uids.length)];
         toUid = uids[Math.floor(Math.random() * uids.length)];
 

@@ -2,6 +2,7 @@ import * as dgraph from "../src";
 
 import { createClient } from "./helper";
 
+// tslint:disable no-console
 describe("client", () => {
     describe("constructor", () => {
         it("should throw no clients error if no client stubs are passed", () => {

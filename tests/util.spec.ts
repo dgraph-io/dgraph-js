@@ -6,14 +6,14 @@ import { isAbortedError, isBase64, isConflictError, mergeLinReads, promisify1, p
 
 import { areLinReadsEqual, createLinRead } from "./helper";
 
-function fnAddThisVal1(a: number, cb: (err?: Error | null, res?: number) => void): void {
+function fnAddThisVal1(a: number, cb: (err?: Error, res?: number) => void): void {
     // tslint:disable-next-line no-invalid-this
-    cb(null, (<{ val: number }>this).val + a);
+    cb(undefined, (<{ val: number }>this).val + a);
 }
 
-function fnAddThisVal3(a: number, b: number, c: number, cb: (err?: Error | null, res?: number) => void): void {
+function fnAddThisVal3(a: number, b: number, c: number, cb: (err?: Error, res?: number) => void): void {
     // tslint:disable-next-line no-invalid-this
-    cb(null, (<{ val: number }>this).val + a + b + c);
+    cb(undefined, (<{ val: number }>this).val + a + b + c);
 }
 
 describe("util", () => {
@@ -52,7 +52,7 @@ describe("util", () => {
 
         it("should merge if src linRead is null", () => {
             const lr1 = createLinRead([1, 1], [2, 2]);
-            const lr2: dgraph.LinRead | null = null;
+            const lr2: dgraph.LinRead = undefined;
             const res = createLinRead([1, 1], [2, 2]);
             expect(areLinReadsEqual(mergeLinReads(lr1, lr2), res)).toBe(true);
             expect(areLinReadsEqual(lr1, res)).toBe(true);
@@ -77,37 +77,37 @@ describe("util", () => {
 
     describe("promisify1", () => {
         it("should handle valid response in callback", async () => {
-            const f = (_: number, cb: (err?: Error | null, res?: number) => void) => {
-                cb(null, 2);
+            const f = (_: number, cb: (err?: Error, res?: number) => void) => {
+                cb(undefined, 2);
             };
 
-            await expect(promisify1(f, null)(1)).resolves.toBe(2);
+            await expect(promisify1(f, undefined)(1)).resolves.toBe(2);
         });
 
         it("should handle error in callback", async () => {
             const e = new Error();
-            const f = (_: number, cb: (err?: Error | null, res?: number) => void) => {
+            const f = (_: number, cb: (err?: Error, res?: number) => void) => {
                 cb(e);
             };
 
-            await expect(promisify1(f, null)(1)).rejects.toBe(e);
+            await expect(promisify1(f, undefined)(1)).rejects.toBe(e);
         });
 
         it("should handle error if valid response is also present in callback", async () => {
             const e = new Error();
-            const f = (_: number, cb: (err?: Error | null, res?: number) => void) => {
+            const f = (_: number, cb: (err?: Error, res?: number) => void) => {
                 cb(e, 2);
             };
 
-            await expect(promisify1(f, null)(1)).rejects.toBe(e);
+            await expect(promisify1(f, undefined)(1)).rejects.toBe(e);
         });
 
         it("should handle callback called without arguments", async () => {
-            const f = (_: number, cb: (err?: Error | null, res?: number) => void) => {
+            const f = (_: number, cb: (err?: Error, res?: number) => void) => {
                 cb();
             };
 
-            await expect(promisify1(f, null)(1)).resolves.toBeUndefined();
+            await expect(promisify1(f, undefined)(1)).resolves.toBeUndefined();
         });
 
         it("should handle thisContext argument", async () => {
@@ -121,37 +121,42 @@ describe("util", () => {
 
     describe("promisify3", () => {
         it("should handle valid response in callback", async () => {
-            const f = (a: number, b: number, c: number, cb: (err?: Error | null, res?: number) => void) => {
-                cb(null, 2);
+          // tslint:disable-next-line variable-name
+            const f = (_a: number, b: number, _c: number, cb: (err?: Error, res?: number) => void) => {
+                cb(undefined, b);
             };
 
-            await expect(promisify3(f, null)(1, 2, 3)).resolves.toBe(2);
+            await expect(promisify3(f, undefined)(1, 2, 3)).resolves.toBe(2);
+            await expect(promisify3(f, undefined)(1, 22, 3)).resolves.toBe(22);
         });
 
         it("should handle error in callback", async () => {
             const e = new Error();
-            const f = (a: number , b: number, c: number, cb: (err?: Error | null, res?: number) => void) => {
+            // tslint:disable-next-line variable-name
+            const f = (_a: number , _b: number, _c: number, cb: (err?: Error, res?: number) => void) => {
                 cb(e);
             };
 
-            await expect(promisify3(f, null)(1, 2, 3)).rejects.toBe(e);
+            await expect(promisify3(f, undefined)(1, 2, 3)).rejects.toBe(e);
         });
 
         it("should handle error if valid response is also present in callback", async () => {
             const e = new Error();
-            const f = (a: number, b: number, c: number, cb: (err?: Error | null, res?: number) => void) => {
-                cb(e, 2);
+            // tslint:disable-next-line variable-name
+            const f = (_a: number, b: number, _c: number, cb: (err?: Error, res?: number) => void) => {
+                cb(e, b);
             };
 
-            await expect(promisify3(f, null)(1, 2, 3)).rejects.toBe(e);
+            await expect(promisify3(f, undefined)(1, 2, 3)).rejects.toBe(e);
         });
 
         it("should handle callback called without arguments", async () => {
-            const f = (a: number, b: number, c: number, cb: (err?: Error | null, res?: number) => void) => {
+            // tslint:disable-next-line variable-name
+            const f = (_a: number, _b: number, _c: number, cb: (err?: Error, res?: number) => void) => {
                 cb();
             };
 
-            await expect(promisify3(f, null)(1, 2, 3)).resolves.toBeUndefined();
+            await expect(promisify3(f, undefined)(1, 2, 3)).resolves.toBeUndefined();
         });
 
         it("should handle thisContext argument", async () => {
@@ -166,7 +171,6 @@ describe("util", () => {
     describe("isAbortedError", () => {
         it("should return false for undefined and null", () => {
             expect(isAbortedError(undefined)).toBe(false);
-            expect(isAbortedError(null)).toBe(false);
         });
 
         it("should return false for objects not having code property", () => {
@@ -183,9 +187,8 @@ describe("util", () => {
     });
 
     describe("isConflictError", () => {
-        it("should return false for undefined and null", () => {
+        it("should return false for undefined", () => {
             expect(isConflictError(undefined)).toBe(false);
-            expect(isConflictError(null)).toBe(false);
         });
 
         it("should return false for objects not having code property", () => {
