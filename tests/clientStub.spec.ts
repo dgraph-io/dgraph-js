@@ -15,15 +15,10 @@ async function checkVersion(stub: dgraph.DgraphClientStub): Promise<void> {
 }
 
 describe("clientStub", () => {
-    describe("constructor", () => {
-        it("should accept undefined arguments", async () => {
-            await checkVersion(new dgraph.DgraphClientStub());
-        });
-    });
-
     describe("login", () => {
         it("Really should login", async () => {
-          const stub = new dgraph.DgraphClientStub();
+          const client = await setup();
+          const stub = client.anyClient();
 
           await expect(stub.login("groot", "password")).resolves.toBeDefined();
         });

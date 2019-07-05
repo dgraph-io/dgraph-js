@@ -31,7 +31,8 @@ export function areLinReadsEqual(a: dgraph.LinRead, b: dgraph.LinRead): boolean 
     return ans;
 }
 
-export const SERVER_ADDR = "localhost:9080";
+// tslint:disable-next-line strict-boolean-expressions
+export const SERVER_ADDR = process.env.DGRAPH_SERVER_ADDR || "localhost:9080";
 export const SERVER_CREDENTIALS = grpc.credentials.createInsecure();
 
 export function createClient(): dgraph.DgraphClient {
