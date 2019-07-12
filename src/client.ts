@@ -59,6 +59,14 @@ export class DgraphClient {
     }
 
     /**
+     * newReadOnlyTxn creates a new transaction and passes down the readOnly flag
+     * If you pass in bestEffort = true, then it doesn't wait for all alphas to have latest maxTs
+     */
+    public newReadOnlyTxn(): Txn {
+        return new Txn(this, { readOnly: true });
+    }
+
+    /**
      * setDebugMode switches on/off the debug mode which prints helpful debug messages
      * while performing alters, queries and mutations.
      */

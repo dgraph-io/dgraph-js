@@ -31,13 +31,21 @@ export class Txn {
     private readonly ctx: messages.TxnContext;
     private finished: boolean = false;
     private mutated: boolean = false;
+    private readonly readOnly: boolean = false;
+    private useBestEffort: boolean = false;
     private sequencingProp: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap];
 
-    constructor(dc: DgraphClient) {
+    constructor(dc: DgraphClient, txnOpts?: { readOnly?: boolean; } | null) {
         this.dc = dc;
         this.ctx = new messages.TxnContext();
         this.ctx.setLinRead(this.dc.getLinRead());
         this.sequencingProp = messages.LinRead.Sequencing.CLIENT_SIDE;
+        this.readOnly = txnOpts != null && txnOpts.readOnly ? txnOpts.readOnly : false;
+    }
+
+    public bestEffort(): this {
+        this.useBestEffort = true;
+        return this;
     }
 
     public sequencing(sequencing: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap]): void {
@@ -71,6 +79,8 @@ export class Txn {
         const req = new messages.Request();
         req.setQuery(q);
         req.setStartTs(this.ctx.getStartTs());
+        req.setReadOnly(this.readOnly);
+        req.setBestEffort(this.useBestEffort);
 
         const linRead = this.ctx.getLinRead();
         // tslint:disable-next-line no-unsafe-any
