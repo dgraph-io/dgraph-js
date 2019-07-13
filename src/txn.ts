@@ -35,12 +35,12 @@ export class Txn {
     private useBestEffort: boolean = false;
     private sequencingProp: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap];
 
-    constructor(dc: DgraphClient, txnOpts?: { readOnly?: boolean; } | null) {
+    constructor(dc: DgraphClient, txnOpts?: { readOnly: boolean } | null) {
         this.dc = dc;
         this.ctx = new messages.TxnContext();
         this.ctx.setLinRead(this.dc.getLinRead());
         this.sequencingProp = messages.LinRead.Sequencing.CLIENT_SIDE;
-        this.readOnly = txnOpts != null && txnOpts.readOnly ? txnOpts.readOnly : false;
+        this.readOnly = txnOpts !== undefined ? txnOpts.readOnly : false;
     }
 
     public bestEffort(): this {
