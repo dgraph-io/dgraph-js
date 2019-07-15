@@ -3,7 +3,7 @@ import * as grpc from "grpc";
 import * as messages from "../generated/api_pb";
 
 import { DgraphClient } from "./client";
-import { ERR_ABORTED, ERR_FINISHED } from "./errors";
+import { ERR_ABORTED, ERR_FINISHED, ERR_BEST_EFFORT_REQUIRED_READ_ONLY } from "./errors";
 import * as types from "./types";
 import {
     isAbortedError,
@@ -48,6 +48,10 @@ export class Txn {
         const defaultedTxnOpts = {readOnly: false, bestEffort: false, ...txnOpts};
         this.useReadOnly = defaultedTxnOpts.readOnly;
         this.useBestEffort = defaultedTxnOpts.bestEffort;
+        if (this.useBestEffort && !this.useReadOnly) {
+            this.dc.debug(`Client attempted to query using best-effort without setting the transaction to read-only`);
+            throw ERR_BEST_EFFORT_REQUIRED_READ_ONLY;
+        }
     }
 
     public sequencing(sequencing: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap]): void {
