@@ -66,6 +66,31 @@ describe("txn", () => {
             const p = txn.query('{ me(func: eq(name, "Alice")) { name }}');
             await expect(p).rejects.toBe(dgraph.ERR_FINISHED);
         });
+
+        it("should succeed without increasing startTs (readOnly=true)", async () => {
+            const res = await client.newTxn().query('{ me(func: eq(name, "Alice")) { name }}');
+            const startTs = res.getTxn().getStartTs();
+            const res2 = await client.newTxn({ readOnly: true }).query('{ me(func: eq(name, "Alice")) { name }}');
+            const startTs2 = res2.getTxn().getStartTs();
+            expect(startTs).not.toBe(startTs2); // we expect these to be different, the first query increases startTs
+            const res3 = await client.newTxn({ readOnly: true }).query('{ me(func: eq(name, "Alice")) { name }}');
+            const startTs3 = res3.getTxn().getStartTs();
+            expect(startTs2).toBe(startTs3); // we expect these to be same, because readOnly doesn't increase startTs
+        });
+
+        it("should succeed without error (readOnly=true, bestEffort=true)", async () => {
+            const res = await client.newTxn().query('{ me(func: eq(name, "Alice")) { name }}');
+            const startTs = res.getTxn().getStartTs();
+            const res2 = await client.newTxn({ readOnly: true, bestEffort: true }).query('{ me(func: eq(name, "Alice")) { name }}');
+            const startTs2 = res2.getTxn().getStartTs();
+            expect(startTs2).toBeGreaterThanOrEqual(startTs);
+        });
+
+        it("should throw error (readOnly=false, bestEffort=true)", () => {
+            const test = () => client.newTxn({ bestEffort: true });
+            expect(test).toThrow(dgraph.ERR_BEST_EFFORT_REQUIRED_READ_ONLY);
+        });
+
     });
 
     describe("mutate", () => {

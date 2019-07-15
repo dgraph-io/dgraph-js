@@ -3,7 +3,7 @@ import * as grpc from "grpc";
 import * as messages from "../generated/api_pb";
 
 import { DgraphClient } from "./client";
-import { ERR_ABORTED, ERR_FINISHED } from "./errors";
+import { ERR_ABORTED, ERR_BEST_EFFORT_REQUIRED_READ_ONLY, ERR_FINISHED } from "./errors";
 import * as types from "./types";
 import {
     isAbortedError,
@@ -11,6 +11,11 @@ import {
     mergeLinReads,
     stringifyMessage,
 } from "./util";
+
+export type TxnOptions = {
+    readOnly?: boolean;
+    bestEffort?: boolean;
+};
 
 /**
  * Txn is a single atomic transaction.
@@ -31,13 +36,22 @@ export class Txn {
     private readonly ctx: messages.TxnContext;
     private finished: boolean = false;
     private mutated: boolean = false;
+    private readonly useReadOnly: boolean = false;
+    private readonly useBestEffort: boolean = false;
     private sequencingProp: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap];
 
-    constructor(dc: DgraphClient) {
+    constructor(dc: DgraphClient, txnOpts?: TxnOptions) {
         this.dc = dc;
         this.ctx = new messages.TxnContext();
         this.ctx.setLinRead(this.dc.getLinRead());
         this.sequencingProp = messages.LinRead.Sequencing.CLIENT_SIDE;
+        const defaultedTxnOpts = {readOnly: false, bestEffort: false, ...txnOpts};
+        this.useReadOnly = defaultedTxnOpts.readOnly;
+        this.useBestEffort = defaultedTxnOpts.bestEffort;
+        if (this.useBestEffort && !this.useReadOnly) {
+            this.dc.debug(`Client attempted to query using best-effort without setting the transaction to read-only`);
+            throw ERR_BEST_EFFORT_REQUIRED_READ_ONLY;
+        }
     }
 
     public sequencing(sequencing: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap]): void {
@@ -71,6 +85,8 @@ export class Txn {
         const req = new messages.Request();
         req.setQuery(q);
         req.setStartTs(this.ctx.getStartTs());
+        req.setReadOnly(this.useReadOnly);
+        req.setBestEffort(this.useBestEffort);
 
         const linRead = this.ctx.getLinRead();
         // tslint:disable-next-line no-unsafe-any
