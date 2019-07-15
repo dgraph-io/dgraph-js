@@ -3,13 +3,11 @@
 set -e
 set -x
 
-source scripts/functions.sh
-
-init
-startZero
-start
-
 npm run build
 npm test
 
-quit 0
+echo "Shutting down dgraph via Docker"
+docker stop zero && docker container rm zero
+docker stop alpha && docker container rm alpha
+
+exit 0
