@@ -3,7 +3,7 @@ import * as grpc from "grpc";
 import * as messages from "../generated/api_pb";
 
 import { DgraphClient } from "./client";
-import { ERR_ABORTED, ERR_FINISHED, ERR_BEST_EFFORT_REQUIRED_READ_ONLY } from "./errors";
+import { ERR_ABORTED, ERR_BEST_EFFORT_REQUIRED_READ_ONLY, ERR_FINISHED } from "./errors";
 import * as types from "./types";
 import {
     isAbortedError,
