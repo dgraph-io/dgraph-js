@@ -4,7 +4,7 @@ import * as messages from "../generated/api_pb";
 
 import { DgraphClientStub } from "./clientStub";
 import { ERR_NO_CLIENTS } from "./errors";
-import { Txn } from "./txn";
+import { Txn, TxnOptions } from "./txn";
 import * as types from "./types";
 import { mergeLinReads, stringifyMessage } from "./util";
 
@@ -54,16 +54,8 @@ export class DgraphClient {
     /**
      * newTxn creates a new transaction.
      */
-    public newTxn(): Txn {
-        return new Txn(this);
-    }
-
-    /**
-     * newReadOnlyTxn creates a new transaction and passes down the readOnly flag
-     * If you pass in bestEffort = true, then it doesn't wait for all alphas to have latest maxTs
-     */
-    public newReadOnlyTxn(): Txn {
-        return new Txn(this, { readOnly: true });
+    public newTxn(txnOpts?: TxnOptions): Txn {
+        return new Txn(this, txnOpts);
     }
 
     /**

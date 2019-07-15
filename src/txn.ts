@@ -12,6 +12,11 @@ import {
     stringifyMessage,
 } from "./util";
 
+export type TxnOptions = {
+    readOnly?: boolean;
+    bestEffort?: boolean;
+};
+
 /**
  * Txn is a single atomic transaction.
  *
@@ -31,21 +36,18 @@ export class Txn {
     private readonly ctx: messages.TxnContext;
     private finished: boolean = false;
     private mutated: boolean = false;
-    private readonly readOnly: boolean = false;
-    private useBestEffort: boolean = false;
+    private readonly useReadOnly: boolean = false;
+    private readonly useBestEffort: boolean = false;
     private sequencingProp: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap];
 
-    constructor(dc: DgraphClient, txnOpts?: { readOnly: boolean } | null) {
+    constructor(dc: DgraphClient, txnOpts?: TxnOptions) {
         this.dc = dc;
         this.ctx = new messages.TxnContext();
         this.ctx.setLinRead(this.dc.getLinRead());
         this.sequencingProp = messages.LinRead.Sequencing.CLIENT_SIDE;
-        this.readOnly = txnOpts !== undefined ? txnOpts.readOnly : false;
-    }
-
-    public bestEffort(): this {
-        this.useBestEffort = true;
-        return this;
+        const defaultedTxnOpts = {readOnly: false, bestEffort: false, ...txnOpts};
+        this.useReadOnly = defaultedTxnOpts.readOnly;
+        this.useBestEffort = defaultedTxnOpts.bestEffort;
     }
 
     public sequencing(sequencing: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap]): void {
@@ -79,7 +81,7 @@ export class Txn {
         const req = new messages.Request();
         req.setQuery(q);
         req.setStartTs(this.ctx.getStartTs());
-        req.setReadOnly(this.readOnly);
+        req.setReadOnly(this.useReadOnly);
         req.setBestEffort(this.useBestEffort);
 
         const linRead = this.ctx.getLinRead();
