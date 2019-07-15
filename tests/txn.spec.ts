@@ -86,10 +86,9 @@ describe("txn", () => {
             expect(startTs2).toBeGreaterThanOrEqual(startTs);
         });
 
-         it("should throw error (readOnly=false, bestEffort=true)", async () => {
-             expect(() => {
-                 client.newTxn({ bestEffort: true });
-             }).toThrow(dgraph.ERR_BEST_EFFORT_REQUIRED_READ_ONLY);
+        it("should throw error (readOnly=false, bestEffort=true)", () => {
+            const test = () => client.newTxn({ bestEffort: true });
+            expect(test).toThrow(dgraph.ERR_BEST_EFFORT_REQUIRED_READ_ONLY);
         });
 
     });
