@@ -4,24 +4,27 @@
 import * as jspb from "google-protobuf";
 
 export class Request extends jspb.Message {
+  getStartTs(): number;
+  setStartTs(value: number): void;
+
   getQuery(): string;
   setQuery(value: string): void;
 
   getVarsMap(): jspb.Map<string, string>;
   clearVarsMap(): void;
-  getStartTs(): number;
-  setStartTs(value: number): void;
-
-  hasLinRead(): boolean;
-  clearLinRead(): void;
-  getLinRead(): LinRead | undefined;
-  setLinRead(value?: LinRead): void;
-
   getReadOnly(): boolean;
   setReadOnly(value: boolean): void;
 
   getBestEffort(): boolean;
   setBestEffort(value: boolean): void;
+
+  clearMutationsList(): void;
+  getMutationsList(): Array<Mutation>;
+  setMutationsList(value: Array<Mutation>): void;
+  addMutations(value?: Mutation, index?: number): Mutation;
+
+  getCommitNow(): boolean;
+  setCommitNow(value: boolean): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Request.AsObject;
@@ -35,12 +38,13 @@ export class Request extends jspb.Message {
 
 export namespace Request {
   export type AsObject = {
+    startTs: number,
     query: string,
     varsMap: Array<[string, string]>,
-    startTs: number,
-    linRead?: LinRead.AsObject,
     readOnly: boolean,
     bestEffort: boolean,
+    mutationsList: Array<Mutation.AsObject>,
+    commitNow: boolean,
   }
 }
 
@@ -49,11 +53,6 @@ export class Response extends jspb.Message {
   getJson_asU8(): Uint8Array;
   getJson_asB64(): string;
   setJson(value: Uint8Array | string): void;
-
-  clearSchemaList(): void;
-  getSchemaList(): Array<SchemaNode>;
-  setSchemaList(value: Array<SchemaNode>): void;
-  addSchema(value?: SchemaNode, index?: number): SchemaNode;
 
   hasTxn(): boolean;
   clearTxn(): void;
@@ -65,6 +64,8 @@ export class Response extends jspb.Message {
   getLatency(): Latency | undefined;
   setLatency(value?: Latency): void;
 
+  getUidsMap(): jspb.Map<string, string>;
+  clearUidsMap(): void;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Response.AsObject;
   static toObject(includeInstance: boolean, msg: Response): Response.AsObject;
@@ -78,40 +79,9 @@ export class Response extends jspb.Message {
 export namespace Response {
   export type AsObject = {
     json: Uint8Array | string,
-    schemaList: Array<SchemaNode.AsObject>,
     txn?: TxnContext.AsObject,
     latency?: Latency.AsObject,
-  }
-}
-
-export class Assigned extends jspb.Message {
-  getUidsMap(): jspb.Map<string, string>;
-  clearUidsMap(): void;
-  hasContext(): boolean;
-  clearContext(): void;
-  getContext(): TxnContext | undefined;
-  setContext(value?: TxnContext): void;
-
-  hasLatency(): boolean;
-  clearLatency(): void;
-  getLatency(): Latency | undefined;
-  setLatency(value?: Latency): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Assigned.AsObject;
-  static toObject(includeInstance: boolean, msg: Assigned): Assigned.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: Assigned, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Assigned;
-  static deserializeBinaryFromReader(message: Assigned, reader: jspb.BinaryReader): Assigned;
-}
-
-export namespace Assigned {
-  export type AsObject = {
     uidsMap: Array<[string, string]>,
-    context?: TxnContext.AsObject,
-    latency?: Latency.AsObject,
   }
 }
 
@@ -136,9 +106,6 @@ export class Mutation extends jspb.Message {
   getDelNquads_asB64(): string;
   setDelNquads(value: Uint8Array | string): void;
 
-  getQuery(): string;
-  setQuery(value: string): void;
-
   clearSetList(): void;
   getSetList(): Array<NQuad>;
   setSetList(value: Array<NQuad>): void;
@@ -149,14 +116,11 @@ export class Mutation extends jspb.Message {
   setDelList(value: Array<NQuad>): void;
   addDel(value?: NQuad, index?: number): NQuad;
 
-  getStartTs(): number;
-  setStartTs(value: number): void;
+  getCond(): string;
+  setCond(value: string): void;
 
   getCommitNow(): boolean;
   setCommitNow(value: boolean): void;
-
-  getIgnoreIndexConflict(): boolean;
-  setIgnoreIndexConflict(value: boolean): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Mutation.AsObject;
@@ -174,12 +138,10 @@ export namespace Mutation {
     deleteJson: Uint8Array | string,
     setNquads: Uint8Array | string,
     delNquads: Uint8Array | string,
-    query: string,
     setList: Array<NQuad.AsObject>,
     delList: Array<NQuad.AsObject>,
-    startTs: number,
+    cond: string,
     commitNow: boolean,
-    ignoreIndexConflict: boolean,
   }
 }
 
@@ -271,11 +233,6 @@ export class TxnContext extends jspb.Message {
   setPredsList(value: Array<string>): void;
   addPreds(value: string, index?: number): string;
 
-  hasLinRead(): boolean;
-  clearLinRead(): void;
-  getLinRead(): LinRead | undefined;
-  setLinRead(value?: LinRead): void;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TxnContext.AsObject;
   static toObject(includeInstance: boolean, msg: TxnContext): TxnContext.AsObject;
@@ -293,7 +250,6 @@ export namespace TxnContext {
     aborted: boolean,
     keysList: Array<string>,
     predsList: Array<string>,
-    linRead?: LinRead.AsObject,
   }
 }
 
@@ -333,36 +289,6 @@ export namespace Version {
   }
 }
 
-export class LinRead extends jspb.Message {
-  getIdsMap(): jspb.Map<number, number>;
-  clearIdsMap(): void;
-  getSequencing(): LinRead.SequencingMap[keyof LinRead.SequencingMap];
-  setSequencing(value: LinRead.SequencingMap[keyof LinRead.SequencingMap]): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): LinRead.AsObject;
-  static toObject(includeInstance: boolean, msg: LinRead): LinRead.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: LinRead, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): LinRead;
-  static deserializeBinaryFromReader(message: LinRead, reader: jspb.BinaryReader): LinRead;
-}
-
-export namespace LinRead {
-  export type AsObject = {
-    idsMap: Array<[number, number]>,
-    sequencing: LinRead.SequencingMap[keyof LinRead.SequencingMap],
-  }
-
-  export interface SequencingMap {
-    CLIENT_SIDE: 0;
-    SERVER_SIDE: 1;
-  }
-
-  export const Sequencing: SequencingMap;
-}
-
 export class Latency extends jspb.Message {
   getParsingNs(): number;
   setParsingNs(value: number): void;
@@ -372,6 +298,9 @@ export class Latency extends jspb.Message {
 
   getEncodingNs(): number;
   setEncodingNs(value: number): void;
+
+  getAssignTimestampNs(): number;
+  setAssignTimestampNs(value: number): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Latency.AsObject;
@@ -388,6 +317,7 @@ export namespace Latency {
     parsingNs: number,
     processingNs: number,
     encodingNs: number,
+    assignTimestampNs: number,
   }
 }
 
@@ -593,60 +523,6 @@ export namespace Facet {
   }
 
   export const ValType: ValTypeMap;
-}
-
-export class SchemaNode extends jspb.Message {
-  getPredicate(): string;
-  setPredicate(value: string): void;
-
-  getType(): string;
-  setType(value: string): void;
-
-  getIndex(): boolean;
-  setIndex(value: boolean): void;
-
-  clearTokenizerList(): void;
-  getTokenizerList(): Array<string>;
-  setTokenizerList(value: Array<string>): void;
-  addTokenizer(value: string, index?: number): string;
-
-  getReverse(): boolean;
-  setReverse(value: boolean): void;
-
-  getCount(): boolean;
-  setCount(value: boolean): void;
-
-  getList(): boolean;
-  setList(value: boolean): void;
-
-  getUpsert(): boolean;
-  setUpsert(value: boolean): void;
-
-  getLang(): boolean;
-  setLang(value: boolean): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): SchemaNode.AsObject;
-  static toObject(includeInstance: boolean, msg: SchemaNode): SchemaNode.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: SchemaNode, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): SchemaNode;
-  static deserializeBinaryFromReader(message: SchemaNode, reader: jspb.BinaryReader): SchemaNode;
-}
-
-export namespace SchemaNode {
-  export type AsObject = {
-    predicate: string,
-    type: string,
-    index: boolean,
-    tokenizerList: Array<string>,
-    reverse: boolean,
-    count: boolean,
-    list: boolean,
-    upsert: boolean,
-    lang: boolean,
-  }
 }
 
 export class LoginRequest extends jspb.Message {

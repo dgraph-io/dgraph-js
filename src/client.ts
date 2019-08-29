@@ -6,14 +6,13 @@ import { DgraphClientStub } from "./clientStub";
 import { ERR_NO_CLIENTS } from "./errors";
 import { Txn, TxnOptions } from "./txn";
 import * as types from "./types";
-import { mergeLinReads, stringifyMessage } from "./util";
+import { stringifyMessage } from "./util";
 
 /**
  * Client is a transaction aware client to a set of Dgraph server instances.
  */
 export class DgraphClient {
     private readonly clients: DgraphClientStub[];
-    private readonly linRead: messages.LinRead;
     private debugMode: boolean = false;
 
     /**
@@ -28,7 +27,6 @@ export class DgraphClient {
         }
 
         this.clients = clients;
-        this.linRead = new messages.LinRead();
     }
 
     /**
@@ -74,20 +72,6 @@ export class DgraphClient {
             // tslint:disable-next-line no-console
             console.log(msg);
         }
-    }
-
-    public getLinRead(): messages.LinRead {
-        const lr = new messages.LinRead();
-        const idsMap = lr.getIdsMap();
-        this.linRead.getIdsMap().forEach((value: number, key: number): void => {
-            idsMap.set(key, value);
-        });
-
-        return lr;
-    }
-
-    public mergeLinReads(src?: messages.LinRead | null): void {
-        mergeLinReads(this.linRead, src);
     }
 
     public anyClient(): DgraphClientStub {

@@ -30,7 +30,7 @@ export class DgraphClient extends grpc.Client {
         request: api_pb.Mutation,
         metadata: grpc.Metadata | null,
         options: grpc.CallOptions | null,
-        callback: (err?: Error | null, res?: api_pb.Assigned) => void,
+        callback: (err?: Error | null, res?: api_pb.Response) => void,
     ): void;
 
     public commitOrAbort(

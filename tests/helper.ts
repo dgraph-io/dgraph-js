@@ -2,35 +2,6 @@ import * as grpc from "grpc";
 
 import * as dgraph from "../src";
 
-export function createLinRead(...ids: [number, number][]): dgraph.LinRead {
-    const lr = new dgraph.LinRead();
-    const idsMap = lr.getIdsMap();
-    for (const [k, v] of ids) {
-        idsMap.set(k, v);
-    }
-
-    return lr;
-}
-
-export function areLinReadsEqual(a: dgraph.LinRead, b: dgraph.LinRead): boolean {
-    const aIdsMap = a.getIdsMap();
-    const bIdsMap = b.getIdsMap();
-
-    if (aIdsMap.getLength() !== bIdsMap.getLength()) {
-        return false;
-    }
-
-    let ans = true;
-    aIdsMap.forEach((value: number, key: number): void => {
-        const bValue = bIdsMap.get(key);
-        if (bValue !== value) {
-            ans = false;
-        }
-    });
-
-    return ans;
-}
-
 // tslint:disable-next-line strict-boolean-expressions
 export const SERVER_ADDR = process.env.DGRAPH_SERVER_ADDR || "localhost:9080";
 export const SERVER_CREDENTIALS = grpc.credentials.createInsecure();
