@@ -118,15 +118,16 @@ export class Txn {
 
     public async doRequest(
         req: messages.Request, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Response> {
+        const mutationList = req.getMutationsList();
         if (this.finished) {
             this.dc.debug(`Do request (ERR_FINISHED):\nquery = ${req.getQuery()}\nvars = ${req.getVarsMap()}`);
-            this.dc.debug(`Do request (ERR_FINISHED):\nmutation = ${stringifyMessage(req.getMutationsList()[0])}`);
+            this.dc.debug(`Do request (ERR_FINISHED):\nmutation = ${stringifyMessage(mutationList[0])}`);
             throw ERR_FINISHED;
         }
 
-        if (req.getMutationsList.length > 0) {
+        if (mutationList.length > 0) {
             if (this.useReadOnly) {
-                this.dc.debug(`Do request (ERR_READ_ONLY):\nmutation = ${stringifyMessage(req.getMutationsList()[0])}`);
+                this.dc.debug(`Do request (ERR_READ_ONLY):\nmutation = ${stringifyMessage(mutationList[0])}`);
                 throw ERR_READ_ONLY;
             }
             this.mutated = true;

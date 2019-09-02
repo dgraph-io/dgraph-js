@@ -39,6 +39,7 @@ async function createData(dgraphClient) {
     try {
         // Create data.
         const p = {
+            uid: "_:alice",
             name: "Alice",
             age: 26,
             married: true,
@@ -76,7 +77,7 @@ async function createData(dgraphClient) {
         // Assigned#getUidsMap() returns a map from blank node names to uids.
         // For a json mutation, blank node names "blank-0", "blank-1", ... are used
         // for all the created nodes.
-        console.log(`Created person named "Alice" with uid = ${assigned.getUidsMap().get("blank-0")}\n`);
+        console.log(`Created person named "Alice" with uid = ${assigned.getUidsMap().get("alice")}\n`);
 
         console.log("All created nodes (map from blank node names to uids):");
         assigned.getUidsMap().forEach((uid, key) => console.log(`${key} => ${uid}`));
