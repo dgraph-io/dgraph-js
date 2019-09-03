@@ -11,7 +11,7 @@ before_install:
   - docker pull dgraph/dgraph:master
   - docker run -d --network dg --name zero dgraph/dgraph:master dgraph zero --my=zero:5080
   - sleep 30
-  - docker run -d --network dg -p 9080:9080 --name alpha -v `pwd`/hmac-secret:/tmp/hmac-secret dgraph/dgraph:master dgraph alpha --acl_secret_file=/tmp/hmac-secret --bindall --enterprise_features --lru_mb 4096 --zero zero:5080 --my=alpha:7080
+  - docker run -d --network dg -p 9080:9080 --name alpha -v `pwd`/hmac-secret:/tmp/hmac-secret dgraph/dgraph:master dgraph alpha --acl_secret_file=/tmp/hmac-secret --bindall --lru_mb 4096 --zero zero:5080 --my=alpha:7080
   - sleep 30
   - docker ps -a
 script:
