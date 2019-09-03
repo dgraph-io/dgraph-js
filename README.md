@@ -68,9 +68,9 @@ use a different version of this client.
 |     1.0.X      |      *1.X.Y*      |
 |     1.1.X      |      *2.X.Y*      |
 
-Note: One of the most important API breakages from *v1.X.Y* to *v2.X.Y* is in
-the function `DgraphClient.newTxn().mutate()`. This function returns an `messages.Assigned`
-type in *v1.X* but an `messages.Response` type in *v2.X*.
+Note: Only API breakage from *v1.X.Y* to *v2.X.Y* is in
+the function `DgraphClient.newTxn().mutate()`. This function returns a `messages.Assigned`
+type in *v1.X* but a `messages.Response` type in *v2.X*.
 
 ## Using a client
 
