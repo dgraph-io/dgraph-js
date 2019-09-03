@@ -22,12 +22,13 @@ and understand how to run and work with Dgraph.
 - [Install](#install)
 - [Quickstart](#quickstart)
 - [Using a client](#using-a-client)
-  - [Create a client](#create-a-client)
-  - [Alter the database](#alter-the-database)
-  - [Create a transaction](#create-a-transaction)
-  - [Run a mutation](#run-a-mutation)
-  - [Run a query](#run-a-query)
-  - [Commit a transaction](#commit-a-transaction)
+  - [Creating a client](#creating-a-client)
+  - [Altering the database](#altering-the-database)
+  - [Creating a transaction](#creating-a-transaction)
+  - [Running a mutation](#running-a-mutation)
+  - [Running a query](#running-a-query)
+  - [Running an Upsert: Query + Mutation](#running-an-upsert-query--mutation)
+  - [Committing a transaction](#committing-a-transaction)
   - [Cleanup Resources](#cleanup-resources)
   - [Debug mode](#debug-mode)
 - [Examples](#examples)
@@ -59,9 +60,21 @@ Build and run the [simple][] project in the `examples` folder, which
 contains an end-to-end example of using the Dgraph JavaScript client. Follow the
 instructions in the README of that project.
 
+Depending on the version of Dgraph that you are connecting to, you will have to
+use a different version of this client.
+
+| Dgraph version | dgraph-js version |
+|:--------------:|:-----------------:|
+|     1.0.X      |      *1.X.Y*      |
+|     1.1.X      |      *2.X.Y*      |
+
+Note: Only API breakage from *v1.X.Y* to *v2.X.Y* is in
+the function `DgraphClient.newTxn().mutate()`. This function returns a `messages.Assigned`
+type in *v1.X* but a `messages.Response` type in *v2.X*.
+
 ## Using a client
 
-### Create a client
+### Creating a client
 
 A `DgraphClient` object can be initialised by passing it a list of
 `DgraphClientStub` clients as variadic arguments. Connecting to multiple Dgraph
@@ -84,7 +97,7 @@ const dgraphClient = new dgraph.DgraphClient(clientStub);
 
 To facilitate debugging, [debug mode](#debug-mode) can be enabled for a client.
 
-### Alter the database
+### Altering the database
 
 To set the schema, create an `Operation` object, set the schema and pass it to
 `DgraphClient#alter(Operation)` method.
@@ -118,7 +131,7 @@ op.setDropAll(true);
 await dgraphClient.alter(op);
 ```
 
-### Create a transaction
+### Creating a transaction
 
 To create a transaction, call `DgraphClient#newTxn()` method, which returns a
 new `Txn` object. This operation incurs no network overhead.
@@ -138,7 +151,7 @@ try {
 }
 ```
 
-### Run a mutation
+### Running a mutation
 
 `Txn#mutate(Mutation)` runs a mutation. It takes in a `Mutation` object, which
 provides two main ways to set data: JSON and RDF N-Quad. You can choose whichever
@@ -170,7 +183,20 @@ not run conflict detection over the index, which would decrease the number of
 transaction conflicts and aborts. However, this would come at the cost of potentially
 inconsistent upsert operations.
 
-### Run a query
+Mutation can be run using `txn.doRequest` as well.
+
+```js
+const mu = new dgraph.Mutation();
+mu.setSetJson(q);
+
+const req = new dgraph.Request();
+req.setCommitNow(true);
+req.setMutationsList([mu]);
+
+await txn.doRequest(req);
+```
+
+### Running a query
 
 You can run a query by calling `Txn#query(string)`. You will need to pass in a
 GraphQL+- query string. If you want to pass an additional map of any variables that
@@ -218,7 +244,37 @@ Number of people named "Alice": 1
 Alice
 ```
 
-### Commit a transaction
+You can also use `txn.doQuery` function to run the query.
+```js
+const req = new dgraph.Request();
+const vars = req.getVarsMap();
+vars.set("$a", "Alice");
+req.setQuery(query);
+
+const res = await txn.doRequest(req);
+console.log(JSON.stringify(res.getJson()));
+```
+
+### Running an Upsert: Query + Mutation
+```js
+const query = `
+  query {
+      user as var(func: eq(email, "wrong_email@dgraph.io"))
+  }`
+
+const mu = new dgraph.Mutation();
+mu.setSetNquads(`uid(user) <email> "correct_email@dgraph.io" .`);
+
+const req = new dgraph.Request();
+req.setQuery(query);
+req.setMutationsList([mu]);
+req.setCommitNow(true);
+
+// Update email only if matching uid found.
+await dgraphClient.newTxn().doQuery(req);
+```
+
+### Committing a transaction
 
 A transaction can be committed using the `Txn#commit()` method. If your transaction
 consisted solely of calls to `Txn#query` or `Txn#queryWithVars`, and no calls to
