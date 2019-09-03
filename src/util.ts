@@ -1,25 +1,6 @@
 import * as jspb from "google-protobuf";
 import * as grpc from "grpc";
 
-import * as messages from "../generated/api_pb";
-
-export function mergeLinReads(target: messages.LinRead, src?: messages.LinRead): messages.LinRead {
-    if (src === undefined) {
-        return target;
-    }
-
-    const srcIdsMap = src.getIdsMap();
-    const targetIdsMap = target.getIdsMap();
-    srcIdsMap.forEach((value: number, key: number): void => {
-        const targetVal = targetIdsMap.get(key);
-        if (targetVal === undefined || value > targetVal) {
-            targetIdsMap.set(key, value);
-        }
-    });
-
-    return target;
-}
-
 export function errorCode(err: any): { valid: boolean; code: number } { // tslint:disable-line no-any
     if (
         err === undefined ||

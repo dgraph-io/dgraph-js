@@ -13,14 +13,13 @@ export declare class Txn {
     private mutated;
     private readonly useReadOnly;
     private readonly useBestEffort;
-    private sequencingProp;
     constructor(dc: DgraphClient, txnOpts?: TxnOptions);
-    sequencing(sequencing: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap]): void;
     query(q: string, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
     queryWithVars(q: string, vars?: {
         [k: string]: any;
     }, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
-    mutate(mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Assigned>;
+    mutate(mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Response>;
+    doRequest(req: messages.Request, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Response>;
     commit(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void>;
     discard(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void>;
     private mergeContext;

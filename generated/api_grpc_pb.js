@@ -16,20 +16,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+// Style guide for Protocol Buffer 3.
+// Use PascalCase (camelCase with an initial capital) for message names – for example,
+// SongServerRequest. Use snake_case (underscore_separated_names) for field names – for
+// example, song_name.
+//
 'use strict';
 var grpc = require('grpc');
 var api_pb = require('./api_pb.js');
-
-function serialize_api_Assigned(arg) {
-  if (!(arg instanceof api_pb.Assigned)) {
-    throw new Error('Expected argument of type api.Assigned');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_api_Assigned(buffer_arg) {
-  return api_pb.Assigned.deserializeBinary(new Uint8Array(buffer_arg));
-}
 
 function serialize_api_Check(arg) {
   if (!(arg instanceof api_pb.Check)) {
@@ -51,17 +45,6 @@ function serialize_api_LoginRequest(arg) {
 
 function deserialize_api_LoginRequest(buffer_arg) {
   return api_pb.LoginRequest.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
-function serialize_api_Mutation(arg) {
-  if (!(arg instanceof api_pb.Mutation)) {
-    throw new Error('Expected argument of type api.Mutation');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_api_Mutation(buffer_arg) {
-  return api_pb.Mutation.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_api_Operation(arg) {
@@ -154,17 +137,6 @@ var DgraphService = exports.DgraphService = {
     requestDeserialize: deserialize_api_Request,
     responseSerialize: serialize_api_Response,
     responseDeserialize: deserialize_api_Response,
-  },
-  mutate: {
-    path: '/api.Dgraph/Mutate',
-    requestStream: false,
-    responseStream: false,
-    requestType: api_pb.Mutation,
-    responseType: api_pb.Assigned,
-    requestSerialize: serialize_api_Mutation,
-    requestDeserialize: deserialize_api_Mutation,
-    responseSerialize: serialize_api_Assigned,
-    responseDeserialize: deserialize_api_Assigned,
   },
   alter: {
     path: '/api.Dgraph/Alter',

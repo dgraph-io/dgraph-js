@@ -37,7 +37,7 @@ export class DgraphClientStub {
             mu: messages.Mutation,
             metadata?: grpc.Metadata,
             options?: grpc.CallOptions,
-        ): Promise<messages.Assigned>;
+        ): Promise<messages.Response>;
 
         commitOrAbort(
             ctx: messages.TxnContext,
@@ -108,7 +108,7 @@ export class DgraphClientStub {
         return this.promisified.query(req, this.ensureMetadata(metadata), ensureCallOptions(options));
     }
 
-    public mutate(mu: messages.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Assigned> {
+    public mutate(mu: messages.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Response> {
         return this.promisified.mutate(mu, this.ensureMetadata(metadata), ensureCallOptions(options));
     }
 

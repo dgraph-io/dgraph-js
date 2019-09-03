@@ -22,15 +22,6 @@ type DgraphQuery = {
   readonly responseType: typeof api_pb.Response;
 };
 
-type DgraphMutate = {
-  readonly methodName: string;
-  readonly service: typeof Dgraph;
-  readonly requestStream: false;
-  readonly responseStream: false;
-  readonly requestType: typeof api_pb.Mutation;
-  readonly responseType: typeof api_pb.Assigned;
-};
-
 type DgraphAlter = {
   readonly methodName: string;
   readonly service: typeof Dgraph;
@@ -62,7 +53,6 @@ export class Dgraph {
   static readonly serviceName: string;
   static readonly Login: DgraphLogin;
   static readonly Query: DgraphQuery;
-  static readonly Mutate: DgraphMutate;
   static readonly Alter: DgraphAlter;
   static readonly CommitOrAbort: DgraphCommitOrAbort;
   static readonly CheckVersion: DgraphCheckVersion;
@@ -117,15 +107,6 @@ export class DgraphClient {
   query(
     requestMessage: api_pb.Request,
     callback: (error: ServiceError|null, responseMessage: api_pb.Response|null) => void
-  ): UnaryResponse;
-  mutate(
-    requestMessage: api_pb.Mutation,
-    metadata: grpc.Metadata,
-    callback: (error: ServiceError|null, responseMessage: api_pb.Assigned|null) => void
-  ): UnaryResponse;
-  mutate(
-    requestMessage: api_pb.Mutation,
-    callback: (error: ServiceError|null, responseMessage: api_pb.Assigned|null) => void
   ): UnaryResponse;
   alter(
     requestMessage: api_pb.Operation,

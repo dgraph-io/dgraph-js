@@ -3,12 +3,11 @@ import * as grpc from "grpc";
 import * as messages from "../generated/api_pb";
 
 import { DgraphClient } from "./client";
-import { ERR_ABORTED, ERR_BEST_EFFORT_REQUIRED_READ_ONLY, ERR_FINISHED } from "./errors";
+import { ERR_ABORTED, ERR_BEST_EFFORT_REQUIRED_READ_ONLY, ERR_FINISHED, ERR_READ_ONLY } from "./errors";
 import * as types from "./types";
 import {
     isAbortedError,
     isConflictError,
-    mergeLinReads,
     stringifyMessage,
 } from "./util";
 
@@ -38,13 +37,10 @@ export class Txn {
     private mutated: boolean = false;
     private readonly useReadOnly: boolean = false;
     private readonly useBestEffort: boolean = false;
-    private sequencingProp: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap];
 
     constructor(dc: DgraphClient, txnOpts?: TxnOptions) {
         this.dc = dc;
         this.ctx = new messages.TxnContext();
-        this.ctx.setLinRead(this.dc.getLinRead());
-        this.sequencingProp = messages.LinRead.Sequencing.CLIENT_SIDE;
         const defaultedTxnOpts = {readOnly: false, bestEffort: false, ...txnOpts};
         this.useReadOnly = defaultedTxnOpts.readOnly;
         this.useBestEffort = defaultedTxnOpts.bestEffort;
@@ -52,10 +48,6 @@ export class Txn {
             this.dc.debug(`Client attempted to query using best-effort without setting the transaction to read-only`);
             throw ERR_BEST_EFFORT_REQUIRED_READ_ONLY;
         }
-    }
-
-    public sequencing(sequencing: messages.LinRead.SequencingMap[keyof messages.LinRead.SequencingMap]): void {
-        this.sequencingProp = sequencing;
     }
 
     /**
@@ -88,11 +80,6 @@ export class Txn {
         req.setReadOnly(this.useReadOnly);
         req.setBestEffort(this.useBestEffort);
 
-        const linRead = this.ctx.getLinRead();
-        // tslint:disable-next-line no-unsafe-any
-        linRead.setSequencing(this.sequencingProp);
-        req.setLinRead(linRead);
-
         if (vars !== undefined) {
             const varsMap = req.getVarsMap();
             Object.keys(vars).forEach((key: string) => {
@@ -102,14 +89,8 @@ export class Txn {
                 }
             });
         }
-        this.dc.debug(`Query request:\n${stringifyMessage(req)}`);
 
-        const c = this.dc.anyClient();
-        const res = types.createResponse(await c.query(req, metadata, options));
-        this.mergeContext(res.getTxn());
-        this.dc.debug(`Query response:\n${stringifyMessage(res)}`);
-
-        return res;
+        return this.doRequest(req, metadata, options);
     }
 
     /**
@@ -125,20 +106,40 @@ export class Txn {
      * operations on it will fail.
      */
     public async mutate(
-        mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Assigned> {
+        mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Response> {
+
+        const req = new messages.Request();
+        req.setStartTs(this.ctx.getStartTs());
+        req.setMutationsList([<messages.Mutation>mu]);
+        req.setCommitNow(mu.getCommitNow());
+
+        return this.doRequest(req, metadata, options);
+    }
+
+    public async doRequest(
+        req: messages.Request, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Response> {
+        const mutationList = req.getMutationsList();
         if (this.finished) {
-            this.dc.debug(`Mutate request (ERR_FINISHED):\nmutation = ${stringifyMessage(mu)}`);
+            this.dc.debug(`Do request (ERR_FINISHED):\nquery = ${req.getQuery()}\nvars = ${req.getVarsMap()}`);
+            this.dc.debug(`Do request (ERR_FINISHED):\nmutation = ${stringifyMessage(mutationList[0])}`);
             throw ERR_FINISHED;
         }
 
-        this.mutated = true;
-        mu.setStartTs(this.ctx.getStartTs());
-        this.dc.debug(`Mutate request:\n${stringifyMessage(mu)}`);
+        if (mutationList.length > 0) {
+            if (this.useReadOnly) {
+                this.dc.debug(`Do request (ERR_READ_ONLY):\nmutation = ${stringifyMessage(mutationList[0])}`);
+                throw ERR_READ_ONLY;
+            }
+            this.mutated = true;
+        }
 
-        let ag: messages.Assigned;
+        req.setStartTs(this.ctx.getStartTs());
+        this.dc.debug(`Do request:\n${stringifyMessage(req)}`);
+
+        let resp: types.Response;
         const c = this.dc.anyClient();
         try {
-            ag = await c.mutate(<messages.Mutation>mu, metadata, options);
+            resp = types.createResponse(await c.query(req, metadata, options));
         } catch (e) {
             // Since a mutation error occurred, the txn should no longer be used (some
             // mutations could have applied but not others, but we don't know which ones).
@@ -155,14 +156,14 @@ export class Txn {
             throw (isAbortedError(e) || isConflictError(e)) ? ERR_ABORTED : e;
         }
 
-        if (mu.getCommitNow()) {
+        if (req.getCommitNow()) {
             this.finished = true;
         }
 
-        this.mergeContext(ag.getContext());
-        this.dc.debug(`Mutate response:\n${stringifyMessage(ag)}`);
+        this.mergeContext(resp.getTxn());
+        this.dc.debug(`Do request:\nresponse = ${stringifyMessage(resp)}`);
 
-        return ag;
+        return resp;
     }
 
     /**
@@ -222,9 +223,6 @@ export class Txn {
             // This condition will be true only if the server doesn't return a txn context after a query or mutation.
             return;
         }
-
-        mergeLinReads(this.ctx.getLinRead(), src.getLinRead());
-        this.dc.mergeLinReads(src.getLinRead());
 
         if (this.ctx.getStartTs() === 0) {
             this.ctx.setStartTs(src.getStartTs());

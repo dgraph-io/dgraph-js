@@ -37,6 +37,7 @@ describe("delete", () => {
 
         let mu = new dgraph.Mutation();
         mu.setSetJson({
+            uid: "_:alice",
             name: "Alice",
             age: 26,
             loc: "Riley Street",
@@ -59,7 +60,7 @@ describe("delete", () => {
         });
         mu.setCommitNow(true);
         const ag = await client.newTxn().mutate(mu);
-        const uid = ag.getUidsMap().get("blank-0");
+        const uid = ag.getUidsMap().get("alice");
 
         const q = `{
             me(func: uid(${uid})) {

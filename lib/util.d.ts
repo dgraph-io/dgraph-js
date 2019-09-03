@@ -1,6 +1,4 @@
 import * as jspb from "google-protobuf";
-import * as messages from "../generated/api_pb";
-export declare function mergeLinReads(target: messages.LinRead, src?: messages.LinRead): messages.LinRead;
 export declare function errorCode(err: any): {
     valid: boolean;
     code: number;

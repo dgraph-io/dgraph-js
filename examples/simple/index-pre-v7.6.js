@@ -39,6 +39,7 @@ function createData(dgraphClient) {
 
     // Create data.
     const p = {
+        uid: "_:alice",
         name: "Alice",
         age: 26,
         married: true,
@@ -64,26 +65,25 @@ function createData(dgraphClient) {
         ]
     };
 
-    let assigned;
+    let response;
     let err;
 
     // Run mutation.
     const mu = new dgraph.Mutation();
     mu.setSetJson(p);
     return txn.mutate(mu).then((res) => {
-        assigned = res;
+        response = res;
 
         // Commit transaction.
         return txn.commit();
     }).then(() => {
         // Get uid of the outermost object (person named "Alice").
-        // Assigned#getUidsMap() returns a map from blank node names to uids.
-        // For a json mutation, blank node names "blank-0", "blank-1", ... are used
-        // for all the created nodes.
-        console.log(`Created person named "Alice" with uid = ${assigned.getUidsMap().get("blank-0")}\n`);
+        // Response#getUidsMap() returns a map from blank node names to uids.
+        // For a json mutation, blank node label is used for the name of the created nodes.
+        console.log(`Created person named "Alice" with uid = ${response.getUidsMap().get("alice")}\n`);
 
         console.log("All created nodes (map from blank node names to uids):");
-        assigned.getUidsMap().forEach((uid, key) => console.log(`${key}: ${uid}`));
+        response.getUidsMap().forEach((uid, key) => console.log(`${key}: ${uid}`));
         console.log();
     }).catch((e) => {
         err = e;
