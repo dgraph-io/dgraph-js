@@ -187,7 +187,7 @@ Mutation can be run using `txn.doRequest` as well.
 
 ```js
 const mu = new dgraph.Mutation();
-mu.setSetJson(q);
+mu.setSetJson(p);
 
 const req = new dgraph.Request();
 req.setCommitNow(true);
@@ -244,7 +244,7 @@ Number of people named "Alice": 1
 Alice
 ```
 
-You can also use `txn.doQuery` function to run the query.
+You can also use `txn.doRequest` function to run the query.
 ```js
 const req = new dgraph.Request();
 const vars = req.getVarsMap();
@@ -256,6 +256,13 @@ console.log(JSON.stringify(res.getJson()));
 ```
 
 ### Running an Upsert: Query + Mutation
+
+The `txn.doRequest` function allows you to run upserts consisting of one query and one mutation. 
+Query variables could be defined and can then be used in the mutation. You can also use the 
+`txn.doRequest` function to perform just a query or a mutation.
+
+To know more about upsert, we highly recommend going through the docs at https://docs.dgraph.io/mutations/#upsert-block.
+
 ```js
 const query = `
   query {
@@ -271,7 +278,7 @@ req.setMutationsList([mu]);
 req.setCommitNow(true);
 
 // Update email only if matching uid found.
-await dgraphClient.newTxn().doQuery(req);
+await dgraphClient.newTxn().doRequest(req);
 ```
 
 ### Committing a transaction
