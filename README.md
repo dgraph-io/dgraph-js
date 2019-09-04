@@ -244,7 +244,7 @@ Number of people named "Alice": 1
 Alice
 ```
 
-You can also use `txn.doQuery` function to run the query.
+You can also use `txn.doRequest` function to run the query.
 ```js
 const req = new dgraph.Request();
 const vars = req.getVarsMap();
@@ -278,7 +278,7 @@ req.setMutationsList([mu]);
 req.setCommitNow(true);
 
 // Update email only if matching uid found.
-await dgraphClient.newTxn().doQuery(req);
+await dgraphClient.newTxn().doRequest(req);
 ```
 
 ### Committing a transaction
