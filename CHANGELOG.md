@@ -5,15 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-## [v1.3.0-rc1] - 2019-06-12
+## [v2.0.0] - 2019-09-06
 
 ### Added
+- `doRequest` function for performing upsert, or just a query or a mutation.
 - Support for ACL features in Dgraph v1.1 - login & jwt refresh
 - Updated protobufs to latest version
 - Upgraded all typescript dev libraries to latest version
-- Removed support for null values where appropriate (because typescript barks at those)
+- Removed support for null values where appropriate (because of typescript warning)
+
+### Changed
+- `Txn#mutate` used to returns a `messages.Assigned` type in *v1.X*, but
+ now returns a `messages.Response` type in *v2.X*.
 
 ### Added
 - `upsert` and `lang` fields to proto message type SchemaNode
@@ -94,7 +97,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Full compatibility with Dgraph v1.0.0
 
-[Unreleased]: https://github.com/dgraph-io/dgraph-js/compare/v1.2.1...HEAD
+[v2.0.0]: https://github.com/dgraph-io/dgraph-js/compare/v1.2.1...v2.0.0
 [v1.2.1]: https://github.com/dgraph-io/dgraph-js/compare/v1.2.0...v1.2.1
 [v1.2.0]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.2...v1.2.0
 [v1.1.2]: https://github.com/dgraph-io/dgraph-js/compare/v1.1.1...v1.1.2
