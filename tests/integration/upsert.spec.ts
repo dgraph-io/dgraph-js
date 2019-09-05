@@ -3,10 +3,10 @@ import * as dgraph from "../../src";
 import { setSchema, setup } from "../helper";
 
 const concurrency = 3;
-const timeout = 5 * 60 * 1000; // 5 minutes in milliseconds
+const FIVE_MINUTES_IN_SECONDS = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 // tslint:disable-next-line no-string-based-set-timeout
-jest.setTimeout(timeout * 2);
+jest.setTimeout(FIVE_MINUTES_IN_SECONDS * 2);
 
 let client: dgraph.DgraphClient;
 
@@ -90,7 +90,7 @@ async function upsert(account: Account): Promise<void> {
     }
 
     if (!done) {
-        throw new Error(`Timeout elapsed: ${timeout / 1000}s`);
+        throw new Error(`Timeout elapsed: ${FIVE_MINUTES_IN_SECONDS / 1000}s`);
     }
 }
 
@@ -107,7 +107,7 @@ async function doUpserts(): Promise<void> {
         () => {
             cancelled = true;
         },
-        timeout,
+        FIVE_MINUTES_IN_SECONDS,
     );
 
     await Promise.all(promises).then(() => {
