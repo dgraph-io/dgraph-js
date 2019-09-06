@@ -8,19 +8,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v2.0.0] - 2019-09-06
 
 ### Added
-- `doRequest` function for performing upsert, or just a query or a mutation.
+- `doRequest` function for performing upsert, or just a query or a mutation
 - Support for ACL features in Dgraph v1.1 - login & jwt refresh
-- Updated protobufs to latest version
-- Upgraded all typescript dev libraries to latest version
-- Removed support for null values where appropriate (because of typescript warning)
-
-### Changed
-- `Txn#mutate` used to returns a `messages.Assigned` type in *v1.X*, but
- now returns a `messages.Response` type in *v2.X*.
-
-### Added
 - `upsert` and `lang` fields to proto message type SchemaNode
 - Option for server-side sequencing
+
+### Changed
+- Return type of `Txn#mutate` function from `messages.Assigned` to `messages.Response`
+- Updated protobufs to the latest version
+- Upgraded all typescript dev libraries to the latest version
+
+### Removed
+- Support for null values where appropriate (because of typescript warning)
 
 ## [v1.2.1] - 2018-03-16
 
