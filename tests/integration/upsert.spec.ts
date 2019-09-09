@@ -169,6 +169,20 @@ async function doUpsert(): Promise<void> {
     await checkUpsertIntegrity();
 }
 
+async function doNotUpsert(): Promise<void> {
+    await performMutation(profiles[0]);
+    await performMutation(profiles[1]);
+    await performMutation(profiles[2]);
+    await checkMutationIntegrity();
+    const updatedProfile: Profile = {
+        name: "Prashant Shahi",
+        email: "prashantshahi@dgraph.io",
+        age: 24,
+    };
+    await performUpsert(updatedProfile);
+    await checkMutationIntegrity();
+}
+
 async function performMutation(profile: Profile): Promise<void> {
     const txn = client.newTxn();
     const mu = new dgraph.Mutation();
@@ -283,5 +297,15 @@ describe("upsert using doRequest", () => {
             age:    int   @index(int) .
         `);
         await doUpsert();
+    });
+
+    it("should not perform upsert", async () => {
+        client = await setup();
+        await setSchema(client, `
+            name:   string   @index(term) .
+            email:  string   @index(exact) .
+            age:    int   @index(int) .
+        `);
+        await doNotUpsert();
     });
 });
