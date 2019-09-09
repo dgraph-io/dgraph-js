@@ -30,6 +30,11 @@ export function isConflictError(err: any): boolean { // tslint:disable-line no-a
     return ec.valid && (ec.code === grpc.status.ABORTED || ec.code === grpc.status.FAILED_PRECONDITION);
 }
 
+export function isUnauthenticatedError(err: any): boolean { // tslint:disable-line no-any
+    const ec = errorCode(err);
+    return ec.valid && (ec.code === grpc.status.UNAUTHENTICATED);
+}
+
 export function promisify1<A, T>(
     f: (arg: A, cb: (err?: Error, res?: T) => void) => void,
     thisContext?: any, // tslint:disable-line no-any

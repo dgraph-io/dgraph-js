@@ -2,7 +2,7 @@ import * as grpc from "grpc";
 
 import * as messages from "../generated/api_pb";
 
-import { DgraphClient } from "./client";
+import { DgraphClient, isJwtExpired } from "./client";
 import { ERR_ABORTED, ERR_BEST_EFFORT_REQUIRED_READ_ONLY, ERR_FINISHED, ERR_READ_ONLY } from "./errors";
 import * as types from "./types";
 import {
@@ -141,19 +141,24 @@ export class Txn {
         try {
             resp = types.createResponse(await c.query(req, metadata, options));
         } catch (e) {
-            // Since a mutation error occurred, the txn should no longer be used (some
-            // mutations could have applied but not others, but we don't know which ones).
-            // Discarding the transaction enforces that the user cannot use the txn further.
-            try {
-                await this.discard(metadata, options);
-            } catch (e) {
-                // Ignore error - user should see the original error.
-            }
+            if (isJwtExpired(e) === true) {
+                await c.retryLogin(metadata, options);
+                resp = types.createResponse(await c.query(req, metadata, options));
+            } else {
+                // Since a mutation error occurred, the txn should no longer be used (some
+                // mutations could have applied but not others, but we don't know which ones).
+                // Discarding the transaction enforces that the user cannot use the txn further.
+                try {
+                    await this.discard(metadata, options);
+                } catch (e) {
+                    // Ignore error - user should see the original error.
+                }
 
-            // Transaction could be aborted(status.ABORTED) if commitNow was true, or server
-            // could send a message that this mutation conflicts(status.FAILED_PRECONDITION)
-            // with another transaction.
-            throw (isAbortedError(e) || isConflictError(e)) ? ERR_ABORTED : e;
+                // Transaction could be aborted(status.ABORTED) if commitNow was true, or server
+                // could send a message that this mutation conflicts(status.FAILED_PRECONDITION)
+                // with another transaction.
+                throw (isAbortedError(e) || isConflictError(e)) ? ERR_ABORTED : e;
+            }
         }
 
         if (req.getCommitNow()) {
@@ -189,7 +194,12 @@ export class Txn {
         try {
             await c.commitOrAbort(this.ctx, metadata, options);
         } catch (e) {
-            throw isAbortedError(e) ? ERR_ABORTED : e;
+            if (isJwtExpired(e) === true) {
+                await c.retryLogin(metadata, options);
+                await c.commitOrAbort(this.ctx, metadata, options);
+            } else {
+                throw isAbortedError(e) ? ERR_ABORTED : e;
+            }
         }
     }
 
@@ -215,7 +225,14 @@ export class Txn {
 
         this.ctx.setAborted(true);
         const c = this.dc.anyClient();
-        await c.commitOrAbort(this.ctx, metadata, options);
+        try {
+            await c.commitOrAbort(this.ctx, metadata, options);
+        } catch (e) {
+            if (isJwtExpired(e) === true) {
+                await c.retryLogin(metadata, options);
+                await c.commitOrAbort(this.ctx, metadata, options);
+            }
+        }
     }
 
     private mergeContext(src?: messages.TxnContext): void {

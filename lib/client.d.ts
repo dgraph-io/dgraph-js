@@ -13,4 +13,5 @@ export declare class DgraphClient {
     debug(msg: string): void;
     anyClient(): DgraphClientStub;
 }
+export declare function isJwtExpired(err: any): Boolean;
 export declare function deleteEdges(mu: types.Mutation, uid: string, ...predicates: string[]): void;
