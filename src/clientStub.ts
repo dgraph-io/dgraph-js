@@ -3,6 +3,7 @@ import * as grpc from "grpc";
 import * as services from "../generated/api_grpc_pb";
 import * as messages from "../generated/api_pb";
 
+import { ERR_REFRESH_JWT_EMPTY } from "./errors";
 import { promisify1, promisify3 } from "./util";
 
 /**
@@ -102,6 +103,19 @@ export class DgraphClientStub {
 
     public alter(op: messages.Operation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Payload> {
         return this.promisified.alter(op, this.ensureMetadata(metadata), ensureCallOptions(options));
+    }
+
+    public async retryLogin(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Jwt> {
+        if (this.refreshJwt.length === 0) {
+            throw ERR_REFRESH_JWT_EMPTY;
+        }
+        const req = new messages.LoginRequest();
+        req.setRefreshToken(this.refreshJwt);
+        const resp = await this.promisified.login(req, this.ensureMetadata(metadata), ensureCallOptions(options));
+        const jwtResponse = messages.Jwt.deserializeBinary(resp.getJson_asU8());
+        this.accessJwt = jwtResponse.getAccessJwt();
+        this.refreshJwt = jwtResponse.getRefreshJwt();
+        return jwtResponse;
     }
 
     public query(req: messages.Request, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Response> {
