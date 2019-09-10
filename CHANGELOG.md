@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v2.0.1] - 2019-09-10
 
 ### Fixed
-- Added function to refresh JWT token if expired. ([#56](https://github.com/dgraph-io/dgraph-js/issues/56))
+- Added function to refresh JWT token if expired
+  ([#56](https://github.com/dgraph-io/dgraph-js/issues/56))
 
 ## [v2.0.0] - 2019-09-06
 
