@@ -138,12 +138,13 @@ export class Txn {
 
         let resp: types.Response;
         const c = this.dc.anyClient();
+        const operation = async() => c.query(req, metadata, options);
         try {
-            resp = types.createResponse(await c.query(req, metadata, options));
+            resp = types.createResponse(await operation());
         } catch (e) {
             if (isJwtExpired(e) === true) {
                 await c.retryLogin(metadata, options);
-                resp = types.createResponse(await c.query(req, metadata, options));
+                resp = types.createResponse(await operation());
             } else {
                 // Since a mutation error occurred, the txn should no longer be used (some
                 // mutations could have applied but not others, but we don't know which ones).
@@ -191,12 +192,13 @@ export class Txn {
         }
 
         const c = this.dc.anyClient();
+        const operation = async () => c.commitOrAbort(this.ctx, metadata, options);
         try {
-            await c.commitOrAbort(this.ctx, metadata, options);
+            await operation();
         } catch (e) {
             if (isJwtExpired(e) === true) {
                 await c.retryLogin(metadata, options);
-                await c.commitOrAbort(this.ctx, metadata, options);
+                await operation();
             } else {
                 throw isAbortedError(e) ? ERR_ABORTED : e;
             }
@@ -225,12 +227,13 @@ export class Txn {
 
         this.ctx.setAborted(true);
         const c = this.dc.anyClient();
+        const operation = async() => c.commitOrAbort(this.ctx, metadata, options);
         try {
-            await c.commitOrAbort(this.ctx, metadata, options);
+            await operation();
         } catch (e) {
             if (isJwtExpired(e) === true) {
                 await c.retryLogin(metadata, options);
-                await c.commitOrAbort(this.ctx, metadata, options);
+                await operation();
             }
         }
     }
