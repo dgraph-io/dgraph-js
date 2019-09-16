@@ -45,8 +45,6 @@ async function performDeletion(client: dgraph.DgraphClient) {
     const data: {
         me: Person[];
     } = res.getJson(); // tslint:disable-line no-unsafe-any
-    // tslint:disable-next-line no-console
-    console.log(`me: ${JSON.stringify(res.getJson())}`);
     expect(data.me.length).toEqual(0);
 }
 

@@ -29,25 +29,6 @@ firsts.forEach((first: string): void => lasts.forEach((last: string): void => ag
     });
 })));
 
-async function tryUpsert(query: string, mutation: dgraph.Mutation, blankNodeLabel: string): Promise<void> {
-    const txn = client.newTxn();
-
-    const req = new dgraph.Request();
-    req.setQuery(query);
-    req.setMutationsList([mutation]);
-    req.setCommitNow(true);
-
-    let uid: string;
-    try {
-        // Update account only if matching uid found.
-        const response = await txn.doRequest(req);
-        uid = response.getUidsMap().get(blankNodeLabel);
-        expect(uid).not.toEqual("");
-    } finally {
-        await txn.discard();
-    }
-}
-
 let startStatus = 0; // set at the start of doUpserts
 let lastStatus = 0;
 let cancelled = false; // cancelled due to timeout
@@ -62,6 +43,20 @@ function conditionalLog(): void {
         console.log(`Success: ${successCount}, Retries: ${retryCount}, Total Time: ${now - startStatus} ms`);
         lastStatus = now;
     }
+}
+
+async function tryUpsert(query: string, mu: dgraph.Mutation, blankNodeLabel: string): Promise<void> {
+    const req = new dgraph.Request();
+    req.setQuery(query);
+    req.setMutationsList([mu]);
+    req.setCommitNow(true);
+
+    let uid: string;
+
+    // Update account only if matching uid found or else insert.
+    const response = await client.newTxn().doRequest(req);
+    uid = response.getUidsMap().get(blankNodeLabel);
+    expect(uid).not.toEqual("");
 }
 
 async function upsert(account: Account): Promise<void> {
@@ -170,25 +165,11 @@ async function doUpsert(): Promise<void> {
     await checkUpsertIntegrity();
 }
 
-async function doJsonUpsert(): Promise<void> {
-    await performJsonMutation(profiles[0]);
-    await performJsonMutation(profiles[1]);
-    await performJsonMutation(profiles[2]);
-    await checkMutationIntegrity(profiles);
-    const updatedProfile: Profile = {
-        name: "Prashant Shahi",
-        email: "prashant@dgraph.io",
-        age: 24,
-    };
-    await performJsonUpsert(updatedProfile);
-    await checkUpsertIntegrity();
-}
-
 async function doInsertUpsert(): Promise<void> {
     await performMutation(profiles[0]);
     await performMutation(profiles[1]);
     await performMutation(profiles[2]);
-    const tempProfiles: Profile[] = profiles;
+    const tempProfiles: Profile[] = JSON.parse(JSON.stringify(profiles));
     await checkMutationIntegrity(tempProfiles);
     const updatedProfile: Profile = {
         uid: "uid(profile)",
@@ -197,6 +178,25 @@ async function doInsertUpsert(): Promise<void> {
         age: 24,
     };
     await performUpsert(updatedProfile);
+    tempProfiles.push(updatedProfile);
+    await checkMutationIntegrity(tempProfiles);
+}
+
+async function doJsonUpsert(): Promise<void> {
+    await performJsonMutation(profiles[0]);
+    await performJsonMutation(profiles[1]);
+    await performJsonMutation(profiles[2]);
+    const tempProfiles: Profile[] = JSON.parse(JSON.stringify(profiles));
+    await checkMutationIntegrity(tempProfiles);
+
+    const updatedProfile: Profile = {
+        name: "Prashant Shahi",
+        email: "prashant@dgraph.io",
+        age: 24,
+    };
+    await performJsonUpsert(updatedProfile);
+    await checkUpsertIntegrity();
+    tempProfiles.pop();
     tempProfiles.push(updatedProfile);
     await checkMutationIntegrity(tempProfiles);
 }
@@ -236,12 +236,12 @@ async function performUpsert(profile: Profile): Promise<void> {
         profile as var(func: eq(email, "${profile.email}"))
     }`;
     const mu = new dgraph.Mutation();
-    mu.setSetNquads(`
-        uid(profile) <name> "${profile.name}" .
-        uid(profile) <email>  "${profile.email}" .
-        uid(profile) <age>   "${profile.age}"^^<xs:int> .
-    `);
     const blankNodeLabel = `uid(profile)`;
+    mu.setSetNquads(`
+        ${blankNodeLabel} <name> "${profile.name}" .
+        ${blankNodeLabel} <email>  "${profile.email}" .
+        ${blankNodeLabel} <age>   "${profile.age}"^^<xs:int> .
+    `);
 
     await tryUpsert(query, mu, blankNodeLabel);
 }
@@ -251,10 +251,18 @@ async function performJsonUpsert(profile: Profile): Promise<void> {
         profile as var(func: eq(email, "${profile.email}"))
     }`;
     const mu = new dgraph.Mutation();
-    mu.setSetJson(profile);
     const blankNodeLabel = `uid(profile)`;
+    profile.uid = blankNodeLabel;
+    mu.setSetJson(profile);
+    const req = new dgraph.Request();
+    req.setQuery(query);
+    req.setMutationsList([mu]);
+    req.setCommitNow(true);
 
-    await tryUpsert(query, mu, blankNodeLabel);
+    let uid: string;
+    const response = await client.newTxn().doRequest(req);
+    uid = response.getUidsMap().get(blankNodeLabel);
+    expect(uid).not.toEqual("");
 }
 
 async function checkMutationIntegrity(ourProfiles: Profile[]): Promise<void> {
@@ -320,7 +328,6 @@ async function checkUpsertIntegrity(): Promise<void> {
 }
 
 describe("upsert using doRequest", () => {
-
     it("should successfully perform upsert - update existing data", async () => {
         client = await setup();
         await setSchema(client, `
@@ -341,16 +348,6 @@ describe("upsert using doRequest", () => {
         await doInsertUpsert();
     });
 
-    it("should successfully perform upsert using Json", async () => {
-        client = await setup();
-        await setSchema(client, `
-            name:   string   @index(term) .
-            email:  string   @index(exact) .
-            age:    int   @index(int) .
-        `);
-        await doJsonUpsert();
-    });
-
     it("should successfully perform upsert loadset using Do", async () => {
         client = await setup();
         await setSchema(client, `
@@ -367,5 +364,15 @@ describe("upsert using doRequest", () => {
         `);
         await doUpserts();
         await checkIntegrity();
+    });
+
+    it("should successfully perform upsert using Json", async () => {
+        client = await setup();
+        await setSchema(client, `
+            name:   string   @index(term) .
+            email:  string   @index(exact) .
+            age:    int   @index(int) .
+        `);
+        await doJsonUpsert();
     });
 });
