@@ -141,6 +141,7 @@ async function checkIntegrity(): Promise<void> {
 }
 
 type Profile = {
+    uid?: string;
     name: string;
     email: string;
     age: number;
@@ -159,7 +160,7 @@ async function doUpsert(): Promise<void> {
     await performMutation(profiles[0]);
     await performMutation(profiles[1]);
     await performMutation(profiles[2]);
-    await checkMutationIntegrity();
+    await checkMutationIntegrity(profiles);
     const updatedProfile: Profile = {
         name: "Prashant Shahi",
         email: "prashant@dgraph.io",
@@ -169,34 +170,64 @@ async function doUpsert(): Promise<void> {
     await checkUpsertIntegrity();
 }
 
-async function doNotUpsert(): Promise<void> {
+async function doJsonUpsert(): Promise<void> {
+    await performJsonMutation(profiles[0]);
+    await performJsonMutation(profiles[1]);
+    await performJsonMutation(profiles[2]);
+    await checkMutationIntegrity(profiles);
+    const updatedProfile: Profile = {
+        name: "Prashant Shahi",
+        email: "prashant@dgraph.io",
+        age: 24,
+    };
+    await performJsonUpsert(updatedProfile);
+    await checkUpsertIntegrity();
+}
+
+async function doInsertUpsert(): Promise<void> {
     await performMutation(profiles[0]);
     await performMutation(profiles[1]);
     await performMutation(profiles[2]);
-    await checkMutationIntegrity();
+    const tempProfiles: Profile[] = profiles;
+    await checkMutationIntegrity(tempProfiles);
     const updatedProfile: Profile = {
+        uid: "uid(profile)",
         name: "Prashant Shahi",
         email: "prashantshahi@dgraph.io",
         age: 24,
     };
     await performUpsert(updatedProfile);
-    await checkMutationIntegrity();
+    tempProfiles.push(updatedProfile);
+    await checkMutationIntegrity(tempProfiles);
+}
+
+async function performJsonMutation(profile: Profile): Promise<void> {
+    const txn = client.newTxn();
+    const mu = new dgraph.Mutation();
+    const blankNodeLabel = profile.name.toLocaleLowerCase();
+    profile.uid = `_:${blankNodeLabel}`;
+    mu.setSetJson(profile);
+
+    const res = await txn.mutate(mu);
+    await txn.commit();
+    const uid = res.getUidsMap().get(blankNodeLabel);
+    expect(uid).not.toEqual("");
 }
 
 async function performMutation(profile: Profile): Promise<void> {
     const txn = client.newTxn();
     const mu = new dgraph.Mutation();
-    const blankNodeLabel = `_:${profile.name.toLocaleLowerCase()}`;
+    const blankNodeLabel = `${profile.name.toLocaleLowerCase()}`;
 
     mu.setSetNquads(`
-        ${blankNodeLabel} <name> "${profile.name}" .
-        ${blankNodeLabel} <email>  "${profile.email}" .
-        ${blankNodeLabel} <age>   "${profile.age}"^^<xs:int> .
+        _:${blankNodeLabel} <name> "${profile.name}" .
+        _:${blankNodeLabel} <email>  "${profile.email}" .
+        _:${blankNodeLabel} <age>   "${profile.age}"^^<xs:int> .
     `);
 
-    const ag = await txn.mutate(mu);
+    const res = await txn.mutate(mu);
     await txn.commit();
-    const uid = ag.getUidsMap().get(blankNodeLabel);
+    const uid = res.getUidsMap().get(blankNodeLabel);
     expect(uid).not.toEqual("");
 }
 
@@ -215,7 +246,18 @@ async function performUpsert(profile: Profile): Promise<void> {
     await tryUpsert(query, mu, blankNodeLabel);
 }
 
-async function checkMutationIntegrity(): Promise<void> {
+async function performJsonUpsert(profile: Profile): Promise<void> {
+    const query = `query {
+        profile as var(func: eq(email, "${profile.email}"))
+    }`;
+    const mu = new dgraph.Mutation();
+    mu.setSetJson(profile);
+    const blankNodeLabel = `uid(profile)`;
+
+    await tryUpsert(query, mu, blankNodeLabel);
+}
+
+async function checkMutationIntegrity(ourProfiles: Profile[]): Promise<void> {
     const query = `{
         all(func: anyofterms(name, "${names.join(" ")}")) {
             uid
@@ -238,7 +280,8 @@ async function checkMutationIntegrity(): Promise<void> {
         profileSet[`${profile.name}_${profile.email}_${profile.age}`] = true;
     }
 
-    for (const profile of profiles) {
+    expect(data.all.length).toEqual(ourProfiles.length);
+    for (const profile of ourProfiles) {
         expect(profileSet[`${profile.name}_${profile.email}_${profile.age}`]).toBe(true);
     }
 }
@@ -277,19 +320,8 @@ async function checkUpsertIntegrity(): Promise<void> {
 }
 
 describe("upsert using doRequest", () => {
-    it("should successfully perform upsert load test", async () => {
-        client = await setup();
-        await setSchema(client, `
-            first:  string   @index(term) .
-            last:   string   @index(hash) .
-            age:    int      @index(int)  .
-            when:   int                   .
-        `);
-        await doUpserts();
-        await checkIntegrity();
-    });
 
-    it("should successfully perform upsert", async () => {
+    it("should successfully perform upsert - update existing data", async () => {
         client = await setup();
         await setSchema(client, `
             name:   string   @index(term) .
@@ -299,13 +331,41 @@ describe("upsert using doRequest", () => {
         await doUpsert();
     });
 
-    it("should not perform upsert", async () => {
+    it("should successfully perform upsert - create new data", async () => {
         client = await setup();
         await setSchema(client, `
             name:   string   @index(term) .
             email:  string   @index(exact) .
             age:    int   @index(int) .
         `);
-        await doNotUpsert();
+        await doInsertUpsert();
+    });
+
+    it("should successfully perform upsert using Json", async () => {
+        client = await setup();
+        await setSchema(client, `
+            name:   string   @index(term) .
+            email:  string   @index(exact) .
+            age:    int   @index(int) .
+        `);
+        await doJsonUpsert();
+    });
+
+    it("should successfully perform upsert loadset using Do", async () => {
+        client = await setup();
+        await setSchema(client, `
+            first:  string   @index(term) .
+            last:   string   @index(hash) .
+            age:    int      @index(int)  .
+            when:   int                   .
+
+            type Person {
+                first: string
+                last: string
+                age: int
+            }
+        `);
+        await doUpserts();
+        await checkIntegrity();
     });
 });

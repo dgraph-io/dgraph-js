@@ -3,9 +3,16 @@ import * as dgraph from "../../src";
 import { setSchema, setup } from "../helper";
 
 const data = ["200", "300", "400"];
+const UNKNOWN_CODE = "2 UNKNOWN";
+
+async function createMutation(element: Object) {
+    const mu = new dgraph.Mutation();
+    mu.setSetJson(element);
+    return mu;
+}
 
 describe("doRequest", () => {
-    it("should insert 3Quads", async () => {
+    it("should insert 3Quads(mutation) and then query", async () => {
         const client = await setup();
         await setSchema(client, "name: string @index(fulltext) .");
 
@@ -17,9 +24,9 @@ describe("doRequest", () => {
             nquad.setSubject(`_:${datum}`);
             nquad.setPredicate("name");
 
-            const ov = new dgraph.Value();
-            ov.setStrVal(`ok ${datum}`);
-            nquad.setObjectValue(ov);
+            const objectValue = new dgraph.Value();
+            objectValue.setStrVal(`ok ${datum}`);
+            nquad.setObjectValue(objectValue);
 
             const mu = new dgraph.Mutation();
             mu.addSet(nquad);
@@ -37,5 +44,39 @@ describe("doRequest", () => {
         res = await client.newTxn().doRequest(req);
 
         expect(res.getJson()).toEqual({ me: [{ name: "ok 200" }, { name: "ok 300" }, { name: "ok 400" }] });
+    });
+
+    it("should fail - 2 mutations", async () => {
+        const client = await setup();
+        await setSchema(client, `
+            name: string @index(fulltext) .
+        `);
+        const dataSet = [
+            { name: `ok ${data[0]}` },
+            { name: `ok ${data[1]}` },
+        ];
+        const mu1 = await createMutation(dataSet[0]);
+        const mu2 = await createMutation(dataSet[1]);
+        const req = new dgraph.Request();
+        req.setMutationsList([mu1, mu2]);
+        req.setCommitNow(true);
+
+        const res = client.newTxn().doRequest(req);
+        const ONLY_ONE_MUTATION_SUPPORTED = new Error(`${UNKNOWN_CODE}: Only 1 mutation per request is supported`);
+        await expect(res).rejects.toEqual(ONLY_ONE_MUTATION_SUPPORTED);
+    });
+
+    it("should fail - 0 mutations", async () => {
+        const client = await setup();
+        await setSchema(client, `
+            name: string @index(fulltext) .
+        `);
+
+        const req = new dgraph.Request();
+        req.setCommitNow(true);
+
+        const res = client.newTxn().doRequest(req);
+        const EMPTY_ERROR = new Error(`${UNKNOWN_CODE}: Empty query`);
+        await expect(res).rejects.toEqual(EMPTY_ERROR);
     });
 });
