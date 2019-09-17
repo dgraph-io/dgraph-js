@@ -27,7 +27,8 @@ and understand how to run and work with Dgraph.
   - [Creating a transaction](#creating-a-transaction)
   - [Running a mutation](#running-a-mutation)
   - [Running a query](#running-a-query)
-  - [Running an Upsert: Query + Mutation](#running-an-upsert-query--mutation)
+  - [Running an upsert: query + mutation](#running-an-upsert-query--mutation)
+  - [Running a conditional upsert](#running-a-conditional-upsert)
   - [Committing a transaction](#committing-a-transaction)
   - [Cleanup Resources](#cleanup-resources)
   - [Debug mode](#debug-mode)
@@ -255,7 +256,7 @@ const res = await txn.doRequest(req);
 console.log(JSON.stringify(res.getJson()));
 ```
 
-### Running an Upsert: Query + Mutation
+### Running an upsert: query + mutation
 
 The `txn.doRequest` function allows you to run upserts consisting of one query and one mutation. 
 Query variables could be defined and can then be used in the mutation. You can also use the 
@@ -282,22 +283,21 @@ req.setCommitNow(true);
 await dgraphClient.newTxn().doRequest(req);
 ```
 
-You can also perform [Conditional Upsert](https://docs.dgraph.io/mutations/#conditional-upsert) using `@if` directive.
+### Running a conditional upsert
+
+The upsert block allows specifying a conditional mutation block using an `@if` directive. The mutation is executed
+only when the specified condition is true. If the condition is false, the mutation is silently ignored.
+
+See more about Conditional Upsert [Here](https://docs.dgraph.io/mutations/#conditional-upsert).
 
 ```js
 const query = `
   query {
-      user as var(func: eq(email, "prashant@dgraph.io"))
+      user as var(func: eq(email, "wrong_email@dgraph.io"))
   }`
 
 const mu = new dgraph.Mutation();
-mu.setSetNquads(`
-  uid(user) <name> "Prash" .
-  uid(age) <age> "24" .
-`);
-
-// Condition: if the total number of users with email prashant@dgraph.io
-// is equaled to one.
+mu.setSetNquads(`uid(user) <email> "correct_email@dgraph.io" .`);
 mu.setCond(`@if(eq(len(user), 1))`);
 
 const req = new dgraph.Request();
@@ -305,8 +305,6 @@ req.setQuery(query);
 req.addMutations(mu);
 req.setCommitNow(true);
 
-// Conditional upsert: when the condition is satisfied, update name
-// and age for the user with email prashant@dgraph.io.
 await dgraphClient.newTxn().doRequest(req);
 ```
 
