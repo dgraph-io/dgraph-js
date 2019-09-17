@@ -277,7 +277,36 @@ req.setQuery(query);
 req.setMutationsList([mu]);
 req.setCommitNow(true);
 
-// Update email only if matching uid found.
+// Upsert: If wrong_email found, update the existing data
+// or else perform a new mutation.
+await dgraphClient.newTxn().doRequest(req);
+```
+
+You can also perform [Conditional Upsert](https://docs.dgraph.io/mutations/#conditional-upsert) using `@if` directive.
+
+```js
+const query = `
+  query {
+      user as var(func: eq(email, "prashant@dgraph.io"))
+  }`
+
+const mu = new dgraph.Mutation();
+mu.setSetNquads(`
+  uid(user) <name> "Prash" .
+  uid(age) <age> "24" .
+`);
+
+// Condition: if the total number of users with email prashant@dgraph.io
+// is equaled to one.
+mu.setCond(`@if(eq(len(user), 1))`);
+
+const req = new dgraph.Request();
+req.setQuery(query);
+req.addMutations(mu);
+req.setCommitNow(true);
+
+// Conditional upsert: when the condition is satisfied, update name
+// and age for the user with email prashant@dgraph.io.
 await dgraphClient.newTxn().doRequest(req);
 ```
 
