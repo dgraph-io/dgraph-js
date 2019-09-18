@@ -19,10 +19,6 @@ const PRED = "name";
 const DEV_GROUP = "dev";
 const DGRAPH_ADDR = "localhost:9080";
 
-// function sleep (ms) {
-//     return new Promise(resolve => setTimeout(resolve, ms));
-// }
-
 // tslint:disable-next-line mocha-no-side-effect-code
 const execute = util.promisify(exec);
 
