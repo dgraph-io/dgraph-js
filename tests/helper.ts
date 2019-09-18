@@ -6,8 +6,12 @@ import * as dgraph from "../src";
 export const SERVER_ADDR = process.env.DGRAPH_SERVER_ADDR || "localhost:9080";
 export const SERVER_CREDENTIALS = grpc.credentials.createInsecure();
 
-export function createClient(): dgraph.DgraphClient {
-    return new dgraph.DgraphClient(new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS));
+export function createClientStub(): dgraph.DgraphClientStub {
+    return new dgraph.DgraphClientStub(SERVER_ADDR, SERVER_CREDENTIALS);
+}
+
+export function createClient(clientStub: dgraph.DgraphClientStub): dgraph.DgraphClient {
+    return new dgraph.DgraphClient(clientStub);
 }
 
 export function setSchema(c: dgraph.DgraphClient, schema: string): Promise<dgraph.Payload> {

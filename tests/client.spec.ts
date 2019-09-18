@@ -1,6 +1,6 @@
 import * as dgraph from "../src";
 
-import { createClient } from "./helper";
+import { createClient, createClientStub } from "./helper";
 
 // tslint:disable no-console
 describe("client", () => {
@@ -20,7 +20,7 @@ describe("client", () => {
             console.log = jest.fn();
 
             const msg = "test message";
-            const client = createClient();
+            const client = createClient(createClientStub());
 
             client.debug(msg);
             expect(console.log).not.toHaveBeenCalled();
