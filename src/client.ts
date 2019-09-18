@@ -46,17 +46,18 @@ export class DgraphClient {
         let payload: messages.Payload;
         const operation = async () => c.alter(op, metadata, options);
         try {
-            payload = await operation();
+            payload = types.createPayload(await operation());
         } catch (e) {
             if (isJwtExpired(e) === true) {
                 await c.retryLogin(metadata, options);
-                payload = await operation();
+                payload = types.createPayload(await operation());
+            } else {
+                throw e;
             }
         }
-        const pl = types.createPayload(payload);
-        this.debug(`Alter response:\n${stringifyMessage(pl)}`);
+        this.debug(`Alter response:\n${stringifyMessage(payload)}`);
 
-        return pl;
+        return payload;
     }
 
     /**

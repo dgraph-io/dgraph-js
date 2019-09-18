@@ -227,13 +227,15 @@ export class Txn {
 
         this.ctx.setAborted(true);
         const c = this.dc.anyClient();
-        const operation = async() => c.commitOrAbort(this.ctx, metadata, options);
+        const operation = async () => c.commitOrAbort(this.ctx, metadata, options);
         try {
             await operation();
         } catch (e) {
             if (isJwtExpired(e) === true) {
                 await c.retryLogin(metadata, options);
                 await operation();
+            } else {
+                throw isAbortedError(e) ? ERR_ABORTED : e;
             }
         }
     }
