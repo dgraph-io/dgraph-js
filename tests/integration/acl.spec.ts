@@ -1,13 +1,14 @@
 import { exec } from "child_process";
-import * as util from "util";
+import { promisify } from "util";
 
 import * as dgraph from "../../src";
-import { createClient, createClientStub, setSchema, setup, wait } from "../helper";
+import { createClient, createClientStub, SERVER_ADDR, setSchema, setup, wait } from "../helper";
 
-const FIVE_MINUTES_IN_SECONDS = 5 * 60 * 1000; // 5 minutes in milliseconds
+const JEST_TIMEOUT = 60 * 1000;         // 1 minute in milliseconds
+const WAIT_FOR_SIX_SECONDS = 6 * 1000;  // 6 seconds in milliseconds
 
 // tslint:disable-next-line no-string-based-set-timeout
-jest.setTimeout(FIVE_MINUTES_IN_SECONDS * 2);
+jest.setTimeout(JEST_TIMEOUT);
 
 let client: dgraph.DgraphClient;
 let aclClient: dgraph.DgraphClient;
@@ -17,23 +18,13 @@ const USERID = "alice";
 const USERPWD = "alicepassword";
 const PRED = "name";
 const DEV_GROUP = "dev";
-const DGRAPH_ADDR = "localhost:9080";
 
 // tslint:disable-next-line mocha-no-side-effect-code
-const execute = util.promisify(exec);
-
-function getTime(): string {
-    const today = new Date();
-    return `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-}
+const execute = promisify(exec);
 
 async function cmd(command: string) {
     try {
-        // await execute(command);
-        // For Debugging: comment the previous statement and uncomment following 3 statements.
-        const { stderr, stdout } = await execute(command);
-        // tslint:disable-next-line no-console
-        console.log(`time: ${getTime()}\ncommand: ${command}\nstderr: ${stderr}\nstdout: ${stdout}`);
+        await execute(command);
     } catch (err) {
         fail(`Failed to execute command:\n\t${command}\nError: ${err}`);
     }
@@ -57,11 +48,6 @@ async function insertSampleData() {
 
 async function loginUser(): Promise<dgraph.DgraphClient> {
     const aclClientStub = createClientStub();
-    // tslint:disable-next-line no-console
-    console.log("Going to sleep");
-    await wait(8000);
-    // tslint:disable-next-line no-console
-    console.log("Sleep over");
     try {
         await aclClientStub.login(USERID, USERPWD);
     } catch (e) {
@@ -83,28 +69,24 @@ async function aclSetup() {
 }
 
 async function addUser() {
-    const command = `dgraph acl -a ${DGRAPH_ADDR} add -u ${USERID} -p ${USERPWD} -x ${GROOT_PWD}`;
+    const command = `dgraph acl -a ${SERVER_ADDR} add -u ${USERID} -p ${USERPWD} -x ${GROOT_PWD}`;
     await cmd(command);
 }
 
 async function addGroup() {
-    const command = `dgraph acl -a ${DGRAPH_ADDR} add -g ${DEV_GROUP} -x ${GROOT_PWD}`;
+    const command = `dgraph acl -a ${SERVER_ADDR} add -g ${DEV_GROUP} -x ${GROOT_PWD}`;
     await cmd(command);
 }
 
 async function addUserToGroup() {
-    const command = `dgraph acl -a ${DGRAPH_ADDR} mod -u ${USERID} -l ${DEV_GROUP} -x ${GROOT_PWD}`;
+    const command = `dgraph acl -a ${SERVER_ADDR} mod -u ${USERID} -l ${DEV_GROUP} -x ${GROOT_PWD}`;
     await cmd(command);
 }
 
 async function changePermission(permission: number) {
-    const command = `dgraph acl -a ${DGRAPH_ADDR} mod -g ${DEV_GROUP} -p ${PRED} -m ${permission} -x ${GROOT_PWD}`;
+    const command = `dgraph acl -a ${SERVER_ADDR} mod -g ${DEV_GROUP} -p ${PRED} -m ${permission} -x ${GROOT_PWD}`;
     await cmd(command);
-    // tslint:disable-next-line no-console
-    console.log("Going to sleep");
-    await wait(8000);
-    // tslint:disable-next-line no-console
-    console.log("Sleep over");
+    await wait(WAIT_FOR_SIX_SECONDS);
 }
 
 async function tryReading(expected: boolean) {
@@ -117,11 +99,10 @@ async function tryReading(expected: boolean) {
     }`;
     try {
         const res: dgraph.Response = await txn.query(query);
-        // tslint:disable-next-line no-console
-        console.log(`res: ${JSON.stringify(res.getJson())}`);
         if (!expected) {
             fail("ACL test failed: Read successful without permission");
         }
+        expect(res.getJson().me).not.toHaveLength(0);
     } catch (e) {
         if (expected) {
             fail(`ACL test failed: Read failed for readable predicate.\n${e}`);
@@ -139,8 +120,6 @@ async function tryWriting(expected: boolean) {
         mu.setCommitNow(true);
         const res = await txn.mutate(mu);
         const uid = res.getUidsMap().get("ashish");
-        // tslint:disable-next-line no-console
-        console.log(`uid: ${uid}`);
         if (!expected) {
             fail("ACL test failed: Write successful without permission");
         }
