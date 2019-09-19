@@ -21,14 +21,15 @@ and understand how to run and work with Dgraph.
 
 - [Install](#install)
 - [Quickstart](#quickstart)
-- [Using a client](#using-a-client)
-  - [Creating a client](#creating-a-client)
-  - [Altering the database](#altering-the-database)
-  - [Creating a transaction](#creating-a-transaction)
-  - [Running a mutation](#running-a-mutation)
-  - [Running a query](#running-a-query)
+- [Using a Client](#using-a-client)
+  - [Creating a Client](#creating-a-client)
+  - [Altering the Database](#altering-the-database)
+  - [Creating a Transaction](#creating-a-transaction)
+  - [Running a Mutation](#running-a-mutation)
+  - [Running a Query](#running-a-query)
   - [Running an Upsert: Query + Mutation](#running-an-upsert-query--mutation)
-  - [Committing a transaction](#committing-a-transaction)
+  - [Running a Conditional Upsert](#running-a-conditional-upsert)
+  - [Committing a Transaction](#committing-a-transaction)
   - [Cleanup Resources](#cleanup-resources)
   - [Debug mode](#debug-mode)
 - [Examples](#examples)
@@ -72,9 +73,9 @@ Note: Only API breakage from *v1.X.Y* to *v2.X.Y* is in
 the function `DgraphClient.newTxn().mutate()`. This function returns a `messages.Assigned`
 type in *v1.X* but a `messages.Response` type in *v2.X*.
 
-## Using a client
+## Using a Client
 
-### Creating a client
+### Creating a Client
 
 A `DgraphClient` object can be initialised by passing it a list of
 `DgraphClientStub` clients as variadic arguments. Connecting to multiple Dgraph
@@ -97,7 +98,7 @@ const dgraphClient = new dgraph.DgraphClient(clientStub);
 
 To facilitate debugging, [debug mode](#debug-mode) can be enabled for a client.
 
-### Altering the database
+### Altering the Database
 
 To set the schema, create an `Operation` object, set the schema and pass it to
 `DgraphClient#alter(Operation)` method.
@@ -131,7 +132,7 @@ op.setDropAll(true);
 await dgraphClient.alter(op);
 ```
 
-### Creating a transaction
+### Creating a Transaction
 
 To create a transaction, call `DgraphClient#newTxn()` method, which returns a
 new `Txn` object. This operation incurs no network overhead.
@@ -151,7 +152,7 @@ try {
 }
 ```
 
-### Running a mutation
+### Running a Mutation
 
 `Txn#mutate(Mutation)` runs a mutation. It takes in a `Mutation` object, which
 provides two main ways to set data: JSON and RDF N-Quad. You can choose whichever
@@ -196,7 +197,7 @@ req.setMutationsList([mu]);
 await txn.doRequest(req);
 ```
 
-### Running a query
+### Running a Query
 
 You can run a query by calling `Txn#query(string)`. You will need to pass in a
 GraphQL+- query string. If you want to pass an additional map of any variables that
@@ -255,7 +256,7 @@ const res = await txn.doRequest(req);
 console.log(JSON.stringify(res.getJson()));
 ```
 
-### Running an Upsert: Query + Mutation
+### Running an Upsert: query + mutation
 
 The `txn.doRequest` function allows you to run upserts consisting of one query and one mutation. 
 Query variables could be defined and can then be used in the mutation. You can also use the 
@@ -277,11 +278,37 @@ req.setQuery(query);
 req.setMutationsList([mu]);
 req.setCommitNow(true);
 
-// Update email only if matching uid found.
+// Upsert: If wrong_email found, update the existing data
+// or else perform a new mutation.
 await dgraphClient.newTxn().doRequest(req);
 ```
 
-### Committing a transaction
+### Running a Conditional Upsert
+
+The upsert block allows specifying a conditional mutation block using an `@if` directive. The mutation is executed
+only when the specified condition is true. If the condition is false, the mutation is silently ignored.
+
+See more about Conditional Upsert [Here](https://docs.dgraph.io/mutations/#conditional-upsert).
+
+```js
+const query = `
+  query {
+      user as var(func: eq(email, "wrong_email@dgraph.io"))
+  }`
+
+const mu = new dgraph.Mutation();
+mu.setSetNquads(`uid(user) <email> "correct_email@dgraph.io" .`);
+mu.setCond(`@if(eq(len(user), 1))`);
+
+const req = new dgraph.Request();
+req.setQuery(query);
+req.addMutations(mu);
+req.setCommitNow(true);
+
+await dgraphClient.newTxn().doRequest(req);
+```
+
+### Committing a Transaction
 
 A transaction can be committed using the `Txn#commit()` method. If your transaction
 consisted solely of calls to `Txn#query` or `Txn#queryWithVars`, and no calls to

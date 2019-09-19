@@ -6,7 +6,7 @@ import { DgraphClientStub } from "./clientStub";
 import { ERR_NO_CLIENTS } from "./errors";
 import { Txn, TxnOptions } from "./txn";
 import * as types from "./types";
-import { stringifyMessage } from "./util";
+import { isUnauthenticatedError, stringifyMessage } from "./util";
 
 /**
  * Client is a transaction aware client to a set of Dgraph server instances.
@@ -43,7 +43,17 @@ export class DgraphClient {
         this.debug(`Alter request:\n${stringifyMessage(op)}`);
 
         const c = this.anyClient();
-        const pl = types.createPayload(await c.alter(op, metadata, options));
+        let payload: messages.Payload;
+        const operation = async () => c.alter(op, metadata, options);
+        try {
+            payload = await operation();
+        } catch (e) {
+            if (isJwtExpired(e) === true) {
+                await c.retryLogin(metadata, options);
+                payload = await operation();
+            }
+        }
+        const pl = types.createPayload(payload);
         this.debug(`Alter response:\n${stringifyMessage(pl)}`);
 
         return pl;
@@ -77,6 +87,14 @@ export class DgraphClient {
     public anyClient(): DgraphClientStub {
         return this.clients[Math.floor(Math.random() * this.clients.length)];
     }
+}
+
+// isJwtExpired returns true if the error indicates that the jwt has expired.
+export function isJwtExpired(err: any): Boolean { // tslint:disable-line no-any
+    if (!err) {
+        return false;
+    }
+    return isUnauthenticatedError(err);
 }
 
 /**
