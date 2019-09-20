@@ -89,7 +89,8 @@ async function changePermission(permission: number) {
     await wait(WAIT_FOR_SIX_SECONDS);
 }
 
-async function tryReading(expected: boolean) {
+async function tryReading(): Promise<Boolean> {
+    let success: Boolean;
     const txn = aclClient.newTxn();
     const query = `{
         me(func: has(${PRED})) {
@@ -99,18 +100,16 @@ async function tryReading(expected: boolean) {
     }`;
     try {
         const res: dgraph.Response = await txn.query(query);
-        if (!expected) {
-            fail("ACL test failed: Read successful without permission");
-        }
         expect(res.getJson().me).not.toHaveLength(0);
+        success = true;
     } catch (e) {
-        if (expected) {
-            fail(`ACL test failed: Read failed for readable predicate.\n${e}`);
-        }
+        success = false;
     }
+    return success;
 }
 
-async function tryWriting(expected: boolean) {
+async function tryWriting(): Promise<Boolean> {
+    let success: Boolean;
     const txn = aclClient.newTxn();
     try {
         const mu = new dgraph.Mutation();
@@ -120,59 +119,54 @@ async function tryWriting(expected: boolean) {
         mu.setCommitNow(true);
         const res = await txn.mutate(mu);
         const uid = res.getUidsMap().get("ashish");
-        if (!expected) {
-            fail("ACL test failed: Write successful without permission");
-        }
         expect(uid).toBeDefined();
+        success = true;
     } catch (e) {
-        if (expected) {
-            fail(`ACL test failed: Write failed for writable predicate.\n${e}`);
-        }
+        success = false;
     }
+    return success;
 }
 
-async function tryAltering(expected: boolean) {
+async function tryAltering(): Promise<Boolean> {
+    let success: Boolean;
     try {
         const operation = new dgraph.Operation();
         operation.setSchema(`
             ${PRED}: string @index(exact, term) .
         `);
         await aclClient.alter(operation);
-        if (!expected) {
-            fail("ACL test failed: Alter successful without permission");
-        }
+        success = true;
     } catch (e) {
-        if (expected) {
-            fail(`ACL test failed: Alter failed for alterable predicate.\n${e}`);
-        }
+        success = false;
     }
+    return success;
 }
 
 describe("ACL tests", () => {
     it("should only have read access", async () => {
         await aclSetup();
         await changePermission(4);
-        await tryReading(true);
-        await tryWriting(false);
-        await tryAltering(false);
+        await expect(tryReading()).resolves.toBe(true);
+        await expect(tryWriting()).resolves.toBe(false);
+        await expect(tryAltering()).resolves.toBe(false);
         await changePermission(0);
     });
 
     it("should only have write access", async () => {
         await aclSetup();
         await changePermission(2);
-        await tryReading(false);
-        await tryWriting(true);
-        await tryAltering(false);
+        await expect(tryReading()).resolves.toBe(false);
+        await expect(tryWriting()).resolves.toBe(true);
+        await expect(tryAltering()).resolves.toBe(false);
         await changePermission(0);
     });
 
     it("should only have modify access", async () => {
         await aclSetup();
         await changePermission(1);
-        await tryReading(false);
-        await tryWriting(false);
-        await tryAltering(true);
+        await expect(tryReading()).resolves.toBe(false);
+        await expect(tryWriting()).resolves.toBe(false);
+        await expect(tryAltering()).resolves.toBe(true);
         await changePermission(0);
     });
 });

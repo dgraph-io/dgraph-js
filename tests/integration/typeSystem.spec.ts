@@ -2,12 +2,9 @@ import * as dgraph from "../../src";
 
 import { setSchema, setup } from "../helper";
 
-type Person = {
-    name: string;
-    age: number;
-};
+let client: dgraph.DgraphClient;
 
-async function performMutation(client: dgraph.DgraphClient) {
+async function performMutation() {
     const mu = new dgraph.Mutation();
     mu.setSetNquads(`
         _:prashant <name> "Prashant" .
@@ -15,13 +12,16 @@ async function performMutation(client: dgraph.DgraphClient) {
         _:prashant <dgraph.type> "Person" .
     `);
     mu.setCommitNow(true);
+
     const resp = await client.newTxn().mutate(mu);
-    expect(resp.getUidsMap().get("prashant")).not.toBeUndefined();
+    expect(resp.getUidsMap().get("prashant")).toBeDefined();
+
+    await expandQuery(1);
 }
 
-async function performDeletion(client: dgraph.DgraphClient) {
+async function performDeletion() {
     const req = new dgraph.Request();
-    let q = `query {
+    const q = `query {
         me as var(func: eq(name, "Prashant"))
     }`;
     req.setQuery(q);
@@ -33,37 +33,25 @@ async function performDeletion(client: dgraph.DgraphClient) {
 
     const resp = await client.newTxn().doRequest(req);
     const uid = resp.getUidsMap().get("uid(me)");
-    // tslint:disable-next-line no-unsafe-any
     expect(uid).toBeUndefined();
 
-    q = `{
-        me(func: eq(name, "Prashant")) {
-            name
-        }
-    }`;
-    const res = await client.newTxn().query(q);
-    const data: {
-        me: Person[];
-    } = res.getJson(); // tslint:disable-line no-unsafe-any
-    expect(data.me.length).toEqual(0);
+    await expandQuery(0);
 }
 
-async function expandQuery(client: dgraph.DgraphClient) {
+async function expandQuery(personCount: number) {
     const q = `{
         all(func: type(Person)) {
             expand(_all_)
         }
     }`;
     const resp = await client.newTxn().query(q);
-    const data: {
-        all: Person[];
-    } = resp.getJson(); // tslint:disable-line no-unsafe-any
-    expect(data.all.length).toEqual(1);
+    const data = resp.getJson();
+    expect(data.all.length).toEqual(personCount);
 }
 
 describe("Type system/directive", () => {
     it("should expand using type system", async () => {
-        const client = await setup();
+        client = await setup();
         await setSchema(client, `
             name:  string   @index(term) .
             age:    int      @index(int)  .
@@ -74,12 +62,11 @@ describe("Type system/directive", () => {
             }
         `);
 
-        await performMutation(client);
-        await expandQuery(client);
+        await performMutation();
     });
 
     it("should perform s * * delete", async () => {
-        const client = await setup();
+        client = await setup();
         await setSchema(client, `
             name:  string   @index(term) .
             age:    int      @index(int)  .
@@ -90,7 +77,7 @@ describe("Type system/directive", () => {
             }
         `);
 
-        await performMutation(client);
-        await performDeletion(client);
+        await performMutation();
+        await performDeletion();
     });
 });

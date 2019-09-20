@@ -117,7 +117,7 @@ async function checkUpsertIntegrity(expectedObject: Profile): Promise<void> {
     expect(receivedObject).toEqual(expectedObject);
 }
 
-async function doNotConditionalUpsert(): Promise<void> {
+async function doUnconditionalUpsert(): Promise<void> {
     const p1: Profile = { uid: await performMutation(profiles[0]) };
     const p2: Profile = { uid: await performMutation(profiles[1]) };
     const friends: [Profile] = [p1];
@@ -180,7 +180,7 @@ describe("conditional upsert", () => {
             age:    int      @index(int)  .
             friend: [uid]      @reverse     .
         `);
-        await doNotConditionalUpsert();
+        await doUnconditionalUpsert();
         const expectedObject: Profile = {
             name: "Prashant",
             email: "prashant@dgraph.io",

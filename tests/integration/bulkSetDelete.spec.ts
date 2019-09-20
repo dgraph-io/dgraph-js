@@ -36,8 +36,7 @@ function getMutationNquads() {
 async function doBulkSet() {
     const txn = client.newTxn();
     const mu = new dgraph.Mutation();
-    const mutationNquads = getMutationNquads();
-    mu.setSetNquads(mutationNquads);
+    mu.setSetNquads(getMutationNquads());
 
     const req = new dgraph.Request();
     req.addMutations(mu);
@@ -45,11 +44,11 @@ async function doBulkSet() {
 
     await txn.doRequest(req);
 
-    const res = await checkIntegrity();
+    const res = await readProfiles();
     expect(res).toEqual({all: profiles});
 }
 
-async function checkIntegrity() {
+async function readProfiles() {
     const query = `query {
         all(func: anyofterms(name, "${names.join(", ")}"), orderasc: name) {
             name
@@ -83,14 +82,14 @@ async function doBulkDelete() {
 
     await txn.doRequest(req);
 
-    const res = await checkIntegrity();
+    const res = await readProfiles();
     const tempProfiles = profiles;
     tempProfiles.pop();
     expect(res).toEqual({ all: tempProfiles });
 }
 
-describe("upsert using doRequest", () => {
-    it("should successfully perform bulk set using Do", async () => {
+describe("Bulk operations using doRequest", () => {
+    it("should successfully perform bulk set", async () => {
         client = await setup();
         await setSchema(client, `
             name:   string   @index(term) .
@@ -101,7 +100,7 @@ describe("upsert using doRequest", () => {
         await doBulkSet();
     });
 
-    it("should successfully perform bulk delete using Do", async () => {
+    it("should successfully perform bulk delete", async () => {
         client = await setup();
         await setSchema(client, `
             name:   string   @index(term) .
