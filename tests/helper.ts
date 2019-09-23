@@ -68,6 +68,9 @@ export async function tryUpsert(client: dgraph.DgraphClient, query: string, muta
     }
 }
 
-export const QUERY_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED: unauthorized to query the predicate: unauthorized to do Read on predicate name");
-export const MUTATE_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED: unauthorized to mutate the predicate: unauthorized to do Write on predicate name");
-export const ALTER_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED: unauthorized to alter the predicate: unauthorized to do Modify on predicate name");
+export const QUERY_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
+ unauthorized to query the predicate: unauthorized to do Read on predicate name");
+export const MUTATE_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
+ unauthorized to mutate the predicate: unauthorized to do Write on predicate name");
+export const ALTER_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
+ unauthorized to alter the predicate: unauthorized to do Modify on predicate name");
