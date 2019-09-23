@@ -2,7 +2,10 @@ import { exec } from "child_process";
 import { promisify } from "util";
 
 import * as dgraph from "../../src";
-import { createClient, createClientStub, SERVER_ADDR, setSchema, setup, wait } from "../helper";
+import {
+    ALTER_PERMISSION_DENIED, createClient, createClientStub, MUTATE_PERMISSION_DENIED,
+    QUERY_PERMISSION_DENIED, SERVER_ADDR, setSchema, setup, wait,
+} from "../helper";
 
 const JEST_TIMEOUT = 60 * 1000;         // 1 minute in milliseconds
 const WAIT_FOR_SIX_SECONDS = 6 * 1000;  // 6 seconds in milliseconds
@@ -103,6 +106,7 @@ async function tryReading(): Promise<Boolean> {
         expect(res.getJson().me).not.toHaveLength(0);
         success = true;
     } catch (e) {
+        expect(e).toEqual(QUERY_PERMISSION_DENIED);
         success = false;
     }
     return success;
@@ -122,6 +126,7 @@ async function tryWriting(): Promise<Boolean> {
         expect(uid).toBeDefined();
         success = true;
     } catch (e) {
+        expect(e).toEqual(MUTATE_PERMISSION_DENIED);
         success = false;
     }
     return success;
@@ -137,36 +142,38 @@ async function tryAltering(): Promise<Boolean> {
         await aclClient.alter(operation);
         success = true;
     } catch (e) {
+        expect(e).toEqual(ALTER_PERMISSION_DENIED);
         success = false;
     }
     return success;
 }
 
 describe("ACL tests", () => {
-    it("should only have read access", async () => {
+    it("only has read access", async () => {
         await aclSetup();
         await changePermission(4);
         await expect(tryReading()).resolves.toBe(true);
         await expect(tryWriting()).resolves.toBe(false);
         await expect(tryAltering()).resolves.toBe(false);
-        await changePermission(0);
     });
 
-    it("should only have write access", async () => {
+    it("only has write access", async () => {
         await aclSetup();
         await changePermission(2);
         await expect(tryReading()).resolves.toBe(false);
         await expect(tryWriting()).resolves.toBe(true);
         await expect(tryAltering()).resolves.toBe(false);
-        await changePermission(0);
     });
 
-    it("should only have modify access", async () => {
+    it("only has modify access", async () => {
         await aclSetup();
         await changePermission(1);
         await expect(tryReading()).resolves.toBe(false);
         await expect(tryWriting()).resolves.toBe(false);
         await expect(tryAltering()).resolves.toBe(true);
+    });
+
+    afterEach(async () => {
         await changePermission(0);
     });
 });

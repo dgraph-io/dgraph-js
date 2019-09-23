@@ -12,7 +12,7 @@ async function createMutation(element: Object) {
 }
 
 describe("doRequest", () => {
-    it("should insert 3Quads(mutation) and then query", async () => {
+    it("insert 3Quads(mutation) and then query finishes successfully", async () => {
         const client = await setup();
         await setSchema(client, "name: string @index(fulltext) .");
 
@@ -46,7 +46,7 @@ describe("doRequest", () => {
         expect(res.getJson()).toEqual({ me: [{ name: "ok 200" }, { name: "ok 300" }, { name: "ok 400" }] });
     });
 
-    it("should fail - 2 mutations", async () => {
+    it("fails with two mutations since currently only single is supported", async () => {
         const client = await setup();
         await setSchema(client, `
             name: string @index(fulltext) .
@@ -66,7 +66,7 @@ describe("doRequest", () => {
         await expect(res).rejects.toEqual(ONLY_ONE_MUTATION_SUPPORTED);
     });
 
-    it("should fail - 0 mutations", async () => {
+    it("fails with zero mutations since either a mutation or a query is required", async () => {
         const client = await setup();
         await setSchema(client, `
             name: string @index(fulltext) .

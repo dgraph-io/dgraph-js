@@ -50,7 +50,7 @@ async function expandQuery(personCount: number) {
 }
 
 describe("Type system/directive", () => {
-    it("should expand using type system", async () => {
+    it("query fields expand using type system", async () => {
         client = await setup();
         await setSchema(client, `
             name:  string   @index(term) .
@@ -65,7 +65,7 @@ describe("Type system/directive", () => {
         await performMutation();
     });
 
-    it("should perform s * * delete", async () => {
+    it("performs s * * delete", async () => {
         client = await setup();
         await setSchema(client, `
             name:  string   @index(term) .

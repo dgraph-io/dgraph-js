@@ -1,6 +1,6 @@
 import * as dgraph from "../../src";
 
-import { setSchema, setup } from "../helper";
+import { setSchema, setup, tryUpsert } from "../helper";
 
 let client: dgraph.DgraphClient;
 
@@ -32,25 +32,6 @@ async function performMutation(person: Profile): Promise<string> {
     const uid = res.getUidsMap().get(person.uid.slice(2));
     expect(uid).not.toEqual("");
     return uid;
-}
-
-async function tryUpsert(query: string, mutation: dgraph.Mutation, blankNodeLabel: string): Promise<void> {
-    const txn = client.newTxn();
-
-    const req = new dgraph.Request();
-    req.setQuery(query);
-    req.setMutationsList([mutation]);
-    req.setCommitNow(true);
-
-    let uid: string;
-    try {
-        // Update account only if matching uid found.
-        const response = await txn.doRequest(req);
-        uid = response.getUidsMap().get(blankNodeLabel);
-        expect(uid).not.toEqual("");
-    } finally {
-        await txn.discard();
-    }
 }
 
 async function doConditionalUpsert(): Promise<void> {
@@ -86,7 +67,7 @@ async function doConditionalUpsert(): Promise<void> {
         uid(profile) <age>   "${profile.age}"^^<xs:int> .
     `);
 
-    await tryUpsert(query, mu, profile.uid);
+    await tryUpsert(client, query, mu, profile.uid);
 }
 
 async function checkUpsertIntegrity(expectedObject: Profile): Promise<void> {
@@ -150,12 +131,12 @@ async function doUnconditionalUpsert(): Promise<void> {
         uid(profile) <age>   "${profile.age}"^^<xs:int> .
     `);
 
-    await tryUpsert(query, mu, profile.uid);
+    await tryUpsert(client, query, mu, profile.uid);
 }
 
 describe("conditional upsert", () => {
 
-    it("should successfully perform conditional upsert", async () => {
+    it("successfully perform conditional upsert", async () => {
         client = await setup();
         await setSchema(client, `
             name:    string    @index(term)  .
@@ -172,7 +153,7 @@ describe("conditional upsert", () => {
         await checkUpsertIntegrity(expectedObject);
     });
 
-    it("should not perform upsert - @if condition is false", async () => {
+    it("when @if condition is false, do not perform upsert", async () => {
         client = await setup();
         await setSchema(client, `
             name:  string   @index(term) .

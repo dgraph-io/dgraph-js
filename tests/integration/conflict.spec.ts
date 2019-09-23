@@ -3,7 +3,7 @@ import * as dgraph from "../../src";
 import { setup } from "../helper";
 
 describe("conflict", () => {
-    it("should abort on TxnConflict Exception", async () => {
+    it("aborts when TxnConflict raises exception", async () => {
         const client = await setup();
 
         const txn1 = client.newTxn();
@@ -25,7 +25,7 @@ describe("conflict", () => {
         await expect(p2).rejects.toBe(dgraph.ERR_ABORTED);
     });
 
-    it("should abort on TxnReadOnly Exception", async () => {
+    it("aborts when TxnReadOnly raises exception", async () => {
         const client = await setup();
         const txnOption: dgraph.TxnOptions = {
             readOnly: true,
@@ -38,7 +38,7 @@ describe("conflict", () => {
         await expect(res).rejects.toBe(dgraph.ERR_READ_ONLY);
     });
 
-    it("should abort on TxnFinished Exception", async () => {
+    it("aborts when TxnFinished raises exception", async () => {
         const client = await setup();
 
         const txn1 = client.newTxn();

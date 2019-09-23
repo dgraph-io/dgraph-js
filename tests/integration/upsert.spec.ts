@@ -1,6 +1,6 @@
 import * as dgraph from "../../src";
 
-import { setSchema, setup } from "../helper";
+import { setSchema, setup, tryUpsert } from "../helper";
 
 const concurrency = 3;
 const FIVE_MINUTES_IN_SECONDS = 5 * 60 * 1000; // 5 minutes in milliseconds
@@ -45,20 +45,6 @@ function conditionalLog(): void {
     }
 }
 
-async function tryUpsert(query: string, mu: dgraph.Mutation, blankNodeLabel: string): Promise<void> {
-    const req = new dgraph.Request();
-    req.setQuery(query);
-    req.setMutationsList([mu]);
-    req.setCommitNow(true);
-
-    let uid: string;
-
-    // Update account only if matching uid found or else insert.
-    const response = await client.newTxn().doRequest(req);
-    uid = response.getUidsMap().get(blankNodeLabel);
-    expect(uid).not.toEqual("");
-}
-
 async function upsert(account: Account): Promise<void> {
     let done = false;
     const query = `query {
@@ -73,7 +59,7 @@ async function upsert(account: Account): Promise<void> {
     const blankNodeLabel = `uid(account)`;
     while (!done && !cancelled) {
         try {
-            await tryUpsert(query, mu, blankNodeLabel);
+            await tryUpsert(client, query, mu, blankNodeLabel);
             successCount += 1;
             done = true;
         } catch (e) {
@@ -243,7 +229,7 @@ async function performUpsert(profile: Profile): Promise<void> {
         ${blankNodeLabel} <age>   "${profile.age}"^^<xs:int> .
     `);
 
-    await tryUpsert(query, mu, blankNodeLabel);
+    await tryUpsert(client, query, mu, blankNodeLabel);
 }
 
 async function performJsonUpsert(profile: Profile): Promise<void> {
@@ -328,7 +314,7 @@ async function checkUpsertIntegrity(): Promise<void> {
 }
 
 describe("upsert using doRequest", () => {
-    it("should successfully perform upsert - update existing data", async () => {
+    it("update existing data with upsert", async () => {
         client = await setup();
         await setSchema(client, `
             name:   string   @index(term) .
@@ -338,7 +324,7 @@ describe("upsert using doRequest", () => {
         await doUpsert();
     });
 
-    it("should successfully perform upsert - create new data", async () => {
+    it("create new data with upsert", async () => {
         client = await setup();
         await setSchema(client, `
             name:   string   @index(term) .
@@ -348,7 +334,7 @@ describe("upsert using doRequest", () => {
         await doInsertUpsert();
     });
 
-    it("should successfully perform upsert loadset using Do", async () => {
+    it("successfully performs upsert loadset", async () => {
         client = await setup();
         await setSchema(client, `
             first:  string   @index(term) .
@@ -366,7 +352,7 @@ describe("upsert using doRequest", () => {
         await checkIntegrity();
     });
 
-    it("should successfully perform upsert using Json", async () => {
+    it("successfully performs upsert using JSON", async () => {
         client = await setup();
         await setSchema(client, `
             name:   string   @index(term) .

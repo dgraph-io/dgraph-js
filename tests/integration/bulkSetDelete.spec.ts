@@ -89,7 +89,7 @@ async function doBulkDelete() {
 }
 
 describe("Bulk operations using doRequest", () => {
-    it("should successfully perform bulk set", async () => {
+    it("successfully perform bulk set", async () => {
         client = await setup();
         await setSchema(client, `
             name:   string   @index(term) .
@@ -100,7 +100,7 @@ describe("Bulk operations using doRequest", () => {
         await doBulkSet();
     });
 
-    it("should successfully perform bulk delete", async () => {
+    it("successfully perform bulk delete", async () => {
         client = await setup();
         await setSchema(client, `
             name:   string   @index(term) .
