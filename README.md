@@ -256,7 +256,7 @@ const res = await txn.doRequest(req);
 console.log(JSON.stringify(res.getJson()));
 ```
 
-### Running an Upsert: query + mutation
+### Running an Upsert: Query + Mutation
 
 The `txn.doRequest` function allows you to run upserts consisting of one query and one mutation. 
 Query variables could be defined and can then be used in the mutation. You can also use the 
