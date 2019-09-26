@@ -57,20 +57,12 @@ export async function tryUpsert(client: dgraph.DgraphClient, query: string, muta
     req.setMutationsList([mutation]);
     req.setCommitNow(true);
 
-    let uid: string;
     try {
         // Update account only if matching uid found.
         const response = await txn.doRequest(req);
-        uid = response.getUidsMap().get(blankNodeLabel);
+        const uid = response.getUidsMap().get(blankNodeLabel);
         expect(uid).not.toEqual("");
     } finally {
         await txn.discard();
     }
 }
-
-export const QUERY_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
- unauthorized to query the predicate: unauthorized to do Read on predicate name");
-export const MUTATE_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
- unauthorized to mutate the predicate: unauthorized to do Write on predicate name");
-export const ALTER_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
- unauthorized to alter the predicate: unauthorized to do Modify on predicate name");

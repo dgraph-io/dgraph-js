@@ -2,10 +2,7 @@ import { exec } from "child_process";
 import { promisify } from "util";
 
 import * as dgraph from "../../src";
-import {
-    ALTER_PERMISSION_DENIED, createClient, createClientStub, MUTATE_PERMISSION_DENIED,
-    QUERY_PERMISSION_DENIED, SERVER_ADDR, setSchema, setup, wait,
-} from "../helper";
+import { createClient, createClientStub, SERVER_ADDR, setSchema, setup, wait } from "../helper";
 
 const JEST_TIMEOUT = 60 * 1000;         // 1 minute in milliseconds
 const WAIT_FOR_SIX_SECONDS = 6 * 1000;  // 6 seconds in milliseconds
@@ -24,6 +21,16 @@ const DEV_GROUP = "dev";
 
 // tslint:disable-next-line mocha-no-side-effect-code
 const execute = promisify(exec);
+
+// tslint:disable-next-line mocha-no-side-effect-code
+const QUERY_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
+ unauthorized to query the predicate: unauthorized to do Read on predicate name");
+ // tslint:disable-next-line mocha-no-side-effect-code
+const MUTATE_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
+ unauthorized to mutate the predicate: unauthorized to do Write on predicate name");
+ // tslint:disable-next-line mocha-no-side-effect-code
+const ALTER_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
+ unauthorized to alter the predicate: unauthorized to do Modify on predicate name");
 
 async function cmd(command: string) {
     try {
