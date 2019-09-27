@@ -1,4 +1,4 @@
-# dgraph-js [![npm version](https://img.shields.io/npm/v/dgraph-js.svg?style=flat)](https://www.npmjs.com/package/dgraph-js) [![Build Status](https://img.shields.io/travis/dgraph-io/dgraph-js/master.svg?style=flat)](https://travis-ci.org/dgraph-io/dgraph-js) [![Coverage Status](https://img.shields.io/coveralls/github/dgraph-io/dgraph-js/master.svg?style=flat)](https://coveralls.io/github/dgraph-io/dgraph-js?branch=master)
+# dgraph-js [![npm version](https://img.shields.io/npm/v/dgraph-js.svg?style=flat)](https://www.npmjs.com/package/dgraph-js) [![Build Status](https://teamcity.dgraph.io/guestAuth/app/rest/builds/buildType:(id:dgraphjs_Build)/statusIcon.svg)](https://teamcity.dgraph.io/viewLog.html?buildTypeId=dgraphjs_Build&buildId=lastFinished&guest=1) [![Coverage Status](https://img.shields.io/coveralls/github/dgraph-io/dgraph-js/master.svg?style=flat)](https://coveralls.io/github/dgraph-io/dgraph-js?branch=master)
 
 Official Dgraph client implementation for JavaScript (Node.js v6 and above),
 using [gRPC].
