@@ -48,7 +48,7 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
-    "google-protobuf": "^3.5.0",
+    "google-protobuf": "^3.8.0",
     "grpc": "^1.21.1",
     "is-base64": "^0.1.0"
   },
