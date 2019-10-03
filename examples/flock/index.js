@@ -5,7 +5,7 @@ const twitter = require('twitter');
 const creds = require('./credentials.json');
 const client = new twitter(creds);
 
-const ALPHA_ADDR = process.env.DGRAPH_SERVER_ADDR || "localhost:9080"
+const ALPHA_ADDR = process.env.ALPHA_ADDR || "localhost:9080"
 const LOG_INTERVAL_TIME = process.env.LOG_INTERVAL_TIME || 2000;
 const startStatus = new Date().getTime();
 
@@ -13,40 +13,12 @@ let lastStatus = 0;
 let retry = true;
 let failureCount = 0;
 let totalTweets = 0;
+let oldTotalTweets = 0;
 let retryCount = 0;
 let errorCount = 0;
 
 const dgraphClientStub = new dgraph.DgraphClientStub(ALPHA_ADDR, grpc.credentials.createInsecure());
 const dgraphClient = new dgraph.DgraphClient(dgraphClientStub);
-
-async function wait(time) {
-  return new Promise((resolve) => {
-    const id = setTimeout(
-        () => {
-          clearTimeout(id);
-          resolve();
-        },
-        time,
-    );
-  });
-}
-
-function conditionalLog() {
-  const now = new Date().getTime();
-  if (now - lastStatus > 1000) {
-    // tslint:disable-next-line no-console
-    console.log(`STATS Tweets: ${totalTweets}, Failues: ${failureCount}, Retries: ${retryCount}, \
-Errors: ${errorCount}, Total Time: ${now - startStatus} ms`);
-    lastStatus = now;
-  }
-}
-
-// Drop All - discard all data and start from a clean slate.
-async function dropAll() {
-  const op = new dgraph.Operation();
-  op.setDropAll(true);
-  await dgraphClient.alter(op);
-}
 
 async function setSchema() {
   const schema = `
@@ -100,7 +72,6 @@ async function upsertData(jsonObj, query) {
     await dgraphClient.newTxn().doRequest(req);
   } catch (err) {
     const errMsg = err.message;
-    console.log(`ERROR: ${err}\n`);
     if (errMsg.includes('connection refused')) {
       // wait for alpha to restart
       console.log('ERROR Connection refused... waiting a bit');
@@ -114,7 +85,7 @@ async function upsertData(jsonObj, query) {
       await upsertData(jsonObj, query);
     } else {
       errorCount += 1;
-      console.log(`ERROR Unable to upsert: ${err}\n`);
+      console.log(`ERROR Unable to commit.\n${err}\n`);
     }
   }
 }
@@ -194,9 +165,30 @@ async function buildQuery(tweet) {
   return finalQuery;
 }
 
-main = async function () {
+function reportStats() {
+  const now = new Date().getTime();
+  // tslint:disable-next-line no-console
+  console.log(`STATS Tweets: ${totalTweets}, Failues: ${failureCount}, Retries: ${retryCount}, \
+Errors: ${errorCount}, Commit Rate: ${(totalTweets-oldTotalTweets)/(LOG_INTERVAL_TIME/1000)}  Total Time: ${now - startStatus} ms`);
+  oldTotalTweets = totalTweets;
+}
+
+async function wait(time) {
+  return new Promise((resolve) => {
+    const id = setTimeout(
+        () => {
+          clearTimeout(id);
+          resolve();
+        },
+        time,
+    );
+  });
+}
+
+async function main() {
   await setSchema();
-  setInterval(conditionalLog, LOG_INTERVAL_TIME);
+  console.log(`Reporting stats every ${LOG_INTERVAL_TIME/1000} seconds\n`)
+  setInterval(reportStats, LOG_INTERVAL_TIME);
   client.stream('statuses/sample.json', function(stream) {
     stream.on('data', async function(tweet) {
       totalTweets += 1;
@@ -206,9 +198,13 @@ main = async function () {
       await upsertData(tweetObj, queries);
     });
     stream.on('error', function(error) {
-      console.log(`Error: ${error}`);
+      console.log(error);
     });
   });
 }
 
-main();
+main().then(() => {
+    console.log("\nDONE!");
+}).catch((e) => {
+    console.log("ERROR: ", e);
+});
