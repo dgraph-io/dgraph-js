@@ -1,0 +1,47 @@
+version: "3.2"
+services:
+  zero:
+    image: dgraph/dgraph:v1.1.0
+    container_name: zero
+    labels:
+      cluster: flock-cluster
+    ports:
+    - 5080:5080
+    - 6080:6080
+    volumes:
+      - type: bind
+        source: $DATA_DIR
+        target: /dgraph
+    restart: on-failure
+    command: dgraph zero --my=zero:5080
+  alpha:
+    container_name: alpha
+    image: dgraph/dgraph:v1.1.0
+    labels:
+      cluster: flock-cluster
+    ports:
+    - 8080:8080
+    - 9080:9080
+    volumes:
+      - type: bind
+        source: $DATA_DIR
+        target: /dgraph
+    restart: on-failure
+    command: dgraph alpha --my=alpha:7080 --lru_mb=2048 --zero=zero:5080
+  ratel:
+    container_name: ratel
+    image: dgraph/dgraph:v1.1.0
+    labels:
+      cluster: flock-cluster
+    volumes:
+      - type: volume
+        source: dgraph
+        target: /dgraph
+        volume:
+          nocopy: true
+    ports:
+      - 8000:8000
+    command: dgraph-ratel
+
+volumes:
+  dgraph:
