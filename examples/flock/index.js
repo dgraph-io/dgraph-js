@@ -187,7 +187,6 @@ async function wait(time) {
 
 async function main() {
   await setSchema();
-  console.log(`Reporting stats every ${LOG_INTERVAL_TIME/1000} seconds\n`)
   setInterval(reportStats, LOG_INTERVAL_TIME);
   client.stream('statuses/sample.json', function(stream) {
     stream.on('data', async function(tweet) {
@@ -204,7 +203,7 @@ async function main() {
 }
 
 main().then(() => {
-    console.log("\nDONE!");
+  console.log(`\nReporting stats every ${LOG_INTERVAL_TIME/1000} seconds\n`)
 }).catch((e) => {
-    console.log("ERROR: ", e);
+  console.log(e);
 });
