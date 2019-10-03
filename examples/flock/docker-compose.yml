@@ -12,7 +12,6 @@ services:
       - type: bind
         source: $DATA_DIR
         target: /dgraph
-    restart: on-failure
     command: dgraph zero --my=zero:5080
   alpha:
     container_name: alpha
@@ -26,7 +25,6 @@ services:
       - type: bind
         source: $DATA_DIR
         target: /dgraph
-    restart: on-failure
     command: dgraph alpha --my=alpha:7080 --lru_mb=2048 --zero=zero:5080
   ratel:
     container_name: ratel

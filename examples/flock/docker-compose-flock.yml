@@ -8,7 +8,6 @@ services:
     environment:
       - ALPHA_ADDR=localhost:9080
       - LOG_INTERVAL_TIME=2000
-    restart: always
     network_mode: "host"
     volumes:
       - ./credentials.json:/usr/src/app/credentials.json
