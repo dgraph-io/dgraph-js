@@ -1,7 +1,7 @@
 # Alpine base image with NodeJS (lts)
 FROM node:lts-alpine
 
-LABEL maintainer="Prashant Shahi<prashant@dgraph.io>"
+LABEL maintainer="Prashant Shahi <prashant@dgraph.io>"
 
 # Setting work directory
 WORKDIR /usr/src/app
@@ -13,4 +13,4 @@ COPY . ./
 RUN npm install
 
 # Run the node command
-CMD ["npm", "start"]
+CMD ["node", "index.js"]

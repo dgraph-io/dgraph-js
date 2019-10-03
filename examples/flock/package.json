@@ -4,8 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm rebuild && node index.js",
-    "postinstall": "npm rebuild grpc --target=6.1.0 --target_arch=x64 --target_platform=linux --target_libc=glibc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
