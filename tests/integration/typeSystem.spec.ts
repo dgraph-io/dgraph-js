@@ -57,8 +57,8 @@ describe("Type system/directive", () => {
             age:    int      @index(int)  .
 
             type Person {
-                name: string
-                age: int
+                name
+                age
             }
         `);
 
@@ -72,8 +72,8 @@ describe("Type system/directive", () => {
             age:    int      @index(int)  .
 
             type Person {
-                name: string
-                age: int
+                name
+                age
             }
         `);
 

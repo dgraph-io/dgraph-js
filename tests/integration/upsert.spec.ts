@@ -343,9 +343,9 @@ describe("upsert using doRequest", () => {
             when:   int                   .
 
             type Person {
-                first: string
-                last: string
-                age: int
+                first
+                last
+                age
             }
         `);
         await doUpserts();
