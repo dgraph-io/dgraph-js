@@ -21,20 +21,6 @@ async function dropAll(dgraphClient) {
 // Set schema.
 async function setSchema(dgraphClient) {
     const schema = `
-        type Person {
-            name
-            age
-            married
-            loc
-            dob
-            friend
-            school
-        }
-
-        type School {
-            name
-        }
-
         name: string @index(exact) .
         age: int .
         married: bool .
@@ -56,7 +42,6 @@ async function createData(dgraphClient) {
         const p = {
             uid: "_:alice",
             name: "Alice",
-            "dgraph.type": "Person",
             age: 26,
             married: true,
             loc: {
@@ -67,19 +52,16 @@ async function createData(dgraphClient) {
             friend: [
                 {
                     name: "Bob",
-                    "dgraph.type": "Person",
                     age: 24,
                 },
                 {
                     name: "Charlie",
-                    "dgraph.type": "Person",
                     age: 29,
                 }
             ],
             school: [
                 {
                     name: "Crown Public School",
-                    "dgraph.type": "School",
                 }
             ]
         };
