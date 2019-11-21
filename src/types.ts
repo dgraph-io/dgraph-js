@@ -21,7 +21,14 @@ export class Payload extends messages.Payload {
             jsonStr = b64ToStr(value);
         }
 
-        return JSON.parse(jsonStr);
+        let res: any; // tslint:disable-line no-any
+        try {
+            res = JSON.parse(jsonStr);
+        } catch (e) {
+            // Upon JSON parsing exception, return jsonStr
+            res = jsonStr;
+        }
+        return res;
     }
 
     public getData_asB64(): string {

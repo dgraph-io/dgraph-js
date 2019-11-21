@@ -417,7 +417,7 @@ proto.api.Request.deserializeBinaryFromReader = function(msg, reader) {
     case 5:
       var value = msg.getVarsMap();
       reader.readMessage(value, function(message, reader) {
-        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "");
+        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "", "");
          });
       break;
     case 6:
@@ -525,9 +525,12 @@ proto.api.Request.prototype.getStartTs = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.api.Request} returns this
+ */
 proto.api.Request.prototype.setStartTs = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -540,9 +543,12 @@ proto.api.Request.prototype.getQuery = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Request} returns this
+ */
 proto.api.Request.prototype.setQuery = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -561,10 +567,11 @@ proto.api.Request.prototype.getVarsMap = function(opt_noLazyCreate) {
 
 /**
  * Clears values from the map. The map will be non-null.
+ * @return {!proto.api.Request} returns this
  */
 proto.api.Request.prototype.clearVarsMap = function() {
   this.getVarsMap().clear();
-};
+  return this;};
 
 
 /**
@@ -576,9 +583,12 @@ proto.api.Request.prototype.getReadOnly = function() {
 };
 
 
-/** @param {boolean} value */
+/**
+ * @param {boolean} value
+ * @return {!proto.api.Request} returns this
+ */
 proto.api.Request.prototype.setReadOnly = function(value) {
-  jspb.Message.setProto3BooleanField(this, 6, value);
+  return jspb.Message.setProto3BooleanField(this, 6, value);
 };
 
 
@@ -591,9 +601,12 @@ proto.api.Request.prototype.getBestEffort = function() {
 };
 
 
-/** @param {boolean} value */
+/**
+ * @param {boolean} value
+ * @return {!proto.api.Request} returns this
+ */
 proto.api.Request.prototype.setBestEffort = function(value) {
-  jspb.Message.setProto3BooleanField(this, 7, value);
+  return jspb.Message.setProto3BooleanField(this, 7, value);
 };
 
 
@@ -607,9 +620,12 @@ proto.api.Request.prototype.getMutationsList = function() {
 };
 
 
-/** @param {!Array<!proto.api.Mutation>} value */
+/**
+ * @param {!Array<!proto.api.Mutation>} value
+ * @return {!proto.api.Request} returns this
+*/
 proto.api.Request.prototype.setMutationsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 12, value);
+  return jspb.Message.setRepeatedWrapperField(this, 12, value);
 };
 
 
@@ -625,9 +641,10 @@ proto.api.Request.prototype.addMutations = function(opt_value, opt_index) {
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.api.Request} returns this
  */
 proto.api.Request.prototype.clearMutationsList = function() {
-  this.setMutationsList([]);
+  return this.setMutationsList([]);
 };
 
 
@@ -640,9 +657,12 @@ proto.api.Request.prototype.getCommitNow = function() {
 };
 
 
-/** @param {boolean} value */
+/**
+ * @param {boolean} value
+ * @return {!proto.api.Request} returns this
+ */
 proto.api.Request.prototype.setCommitNow = function(value) {
-  jspb.Message.setProto3BooleanField(this, 13, value);
+  return jspb.Message.setProto3BooleanField(this, 13, value);
 };
 
 
@@ -735,7 +755,7 @@ proto.api.Response.deserializeBinaryFromReader = function(msg, reader) {
     case 12:
       var value = msg.getUidsMap();
       reader.readMessage(value, function(message, reader) {
-        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "");
+        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "", "");
          });
       break;
     default:
@@ -830,9 +850,12 @@ proto.api.Response.prototype.getJson_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Response} returns this
+ */
 proto.api.Response.prototype.setJson = function(value) {
-  jspb.Message.setProto3BytesField(this, 1, value);
+  return jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 
@@ -846,17 +869,21 @@ proto.api.Response.prototype.getTxn = function() {
 };
 
 
-/** @param {?proto.api.TxnContext|undefined} value */
+/**
+ * @param {?proto.api.TxnContext|undefined} value
+ * @return {!proto.api.Response} returns this
+*/
 proto.api.Response.prototype.setTxn = function(value) {
-  jspb.Message.setWrapperField(this, 2, value);
+  return jspb.Message.setWrapperField(this, 2, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.api.Response} returns this
  */
 proto.api.Response.prototype.clearTxn = function() {
-  this.setTxn(undefined);
+  return this.setTxn(undefined);
 };
 
 
@@ -879,17 +906,21 @@ proto.api.Response.prototype.getLatency = function() {
 };
 
 
-/** @param {?proto.api.Latency|undefined} value */
+/**
+ * @param {?proto.api.Latency|undefined} value
+ * @return {!proto.api.Response} returns this
+*/
 proto.api.Response.prototype.setLatency = function(value) {
-  jspb.Message.setWrapperField(this, 3, value);
+  return jspb.Message.setWrapperField(this, 3, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.api.Response} returns this
  */
 proto.api.Response.prototype.clearLatency = function() {
-  this.setLatency(undefined);
+  return this.setLatency(undefined);
 };
 
 
@@ -917,10 +948,11 @@ proto.api.Response.prototype.getUidsMap = function(opt_noLazyCreate) {
 
 /**
  * Clears values from the map. The map will be non-null.
+ * @return {!proto.api.Response} returns this
  */
 proto.api.Response.prototype.clearUidsMap = function() {
   this.getUidsMap().clear();
-};
+  return this;};
 
 
 
@@ -1165,9 +1197,12 @@ proto.api.Mutation.prototype.getSetJson_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Mutation} returns this
+ */
 proto.api.Mutation.prototype.setSetJson = function(value) {
-  jspb.Message.setProto3BytesField(this, 1, value);
+  return jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 
@@ -1204,9 +1239,12 @@ proto.api.Mutation.prototype.getDeleteJson_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Mutation} returns this
+ */
 proto.api.Mutation.prototype.setDeleteJson = function(value) {
-  jspb.Message.setProto3BytesField(this, 2, value);
+  return jspb.Message.setProto3BytesField(this, 2, value);
 };
 
 
@@ -1243,9 +1281,12 @@ proto.api.Mutation.prototype.getSetNquads_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Mutation} returns this
+ */
 proto.api.Mutation.prototype.setSetNquads = function(value) {
-  jspb.Message.setProto3BytesField(this, 3, value);
+  return jspb.Message.setProto3BytesField(this, 3, value);
 };
 
 
@@ -1282,9 +1323,12 @@ proto.api.Mutation.prototype.getDelNquads_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Mutation} returns this
+ */
 proto.api.Mutation.prototype.setDelNquads = function(value) {
-  jspb.Message.setProto3BytesField(this, 4, value);
+  return jspb.Message.setProto3BytesField(this, 4, value);
 };
 
 
@@ -1298,9 +1342,12 @@ proto.api.Mutation.prototype.getSetList = function() {
 };
 
 
-/** @param {!Array<!proto.api.NQuad>} value */
+/**
+ * @param {!Array<!proto.api.NQuad>} value
+ * @return {!proto.api.Mutation} returns this
+*/
 proto.api.Mutation.prototype.setSetList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 5, value);
+  return jspb.Message.setRepeatedWrapperField(this, 5, value);
 };
 
 
@@ -1316,9 +1363,10 @@ proto.api.Mutation.prototype.addSet = function(opt_value, opt_index) {
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.api.Mutation} returns this
  */
 proto.api.Mutation.prototype.clearSetList = function() {
-  this.setSetList([]);
+  return this.setSetList([]);
 };
 
 
@@ -1332,9 +1380,12 @@ proto.api.Mutation.prototype.getDelList = function() {
 };
 
 
-/** @param {!Array<!proto.api.NQuad>} value */
+/**
+ * @param {!Array<!proto.api.NQuad>} value
+ * @return {!proto.api.Mutation} returns this
+*/
 proto.api.Mutation.prototype.setDelList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 6, value);
+  return jspb.Message.setRepeatedWrapperField(this, 6, value);
 };
 
 
@@ -1350,9 +1401,10 @@ proto.api.Mutation.prototype.addDel = function(opt_value, opt_index) {
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.api.Mutation} returns this
  */
 proto.api.Mutation.prototype.clearDelList = function() {
-  this.setDelList([]);
+  return this.setDelList([]);
 };
 
 
@@ -1365,9 +1417,12 @@ proto.api.Mutation.prototype.getCond = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Mutation} returns this
+ */
 proto.api.Mutation.prototype.setCond = function(value) {
-  jspb.Message.setProto3StringField(this, 9, value);
+  return jspb.Message.setProto3StringField(this, 9, value);
 };
 
 
@@ -1380,9 +1435,12 @@ proto.api.Mutation.prototype.getCommitNow = function() {
 };
 
 
-/** @param {boolean} value */
+/**
+ * @param {boolean} value
+ * @return {!proto.api.Mutation} returns this
+ */
 proto.api.Mutation.prototype.setCommitNow = function(value) {
-  jspb.Message.setProto3BooleanField(this, 14, value);
+  return jspb.Message.setProto3BooleanField(this, 14, value);
 };
 
 
@@ -1566,9 +1624,12 @@ proto.api.Operation.prototype.getSchema = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Operation} returns this
+ */
 proto.api.Operation.prototype.setSchema = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1581,9 +1642,12 @@ proto.api.Operation.prototype.getDropAttr = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Operation} returns this
+ */
 proto.api.Operation.prototype.setDropAttr = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -1596,9 +1660,12 @@ proto.api.Operation.prototype.getDropAll = function() {
 };
 
 
-/** @param {boolean} value */
+/**
+ * @param {boolean} value
+ * @return {!proto.api.Operation} returns this
+ */
 proto.api.Operation.prototype.setDropAll = function(value) {
-  jspb.Message.setProto3BooleanField(this, 3, value);
+  return jspb.Message.setProto3BooleanField(this, 3, value);
 };
 
 
@@ -1611,9 +1678,12 @@ proto.api.Operation.prototype.getDropOp = function() {
 };
 
 
-/** @param {!proto.api.Operation.DropOp} value */
+/**
+ * @param {!proto.api.Operation.DropOp} value
+ * @return {!proto.api.Operation} returns this
+ */
 proto.api.Operation.prototype.setDropOp = function(value) {
-  jspb.Message.setProto3EnumField(this, 4, value);
+  return jspb.Message.setProto3EnumField(this, 4, value);
 };
 
 
@@ -1626,9 +1696,12 @@ proto.api.Operation.prototype.getDropValue = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Operation} returns this
+ */
 proto.api.Operation.prototype.setDropValue = function(value) {
-  jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -1777,9 +1850,12 @@ proto.api.Payload.prototype.getData_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Payload} returns this
+ */
 proto.api.Payload.prototype.setData = function(value) {
-  jspb.Message.setProto3BytesField(this, 1, value);
+  return jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 
@@ -1959,9 +2035,12 @@ proto.api.TxnContext.prototype.getStartTs = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.api.TxnContext} returns this
+ */
 proto.api.TxnContext.prototype.setStartTs = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -1974,9 +2053,12 @@ proto.api.TxnContext.prototype.getCommitTs = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.api.TxnContext} returns this
+ */
 proto.api.TxnContext.prototype.setCommitTs = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
@@ -1989,9 +2071,12 @@ proto.api.TxnContext.prototype.getAborted = function() {
 };
 
 
-/** @param {boolean} value */
+/**
+ * @param {boolean} value
+ * @return {!proto.api.TxnContext} returns this
+ */
 proto.api.TxnContext.prototype.setAborted = function(value) {
-  jspb.Message.setProto3BooleanField(this, 3, value);
+  return jspb.Message.setProto3BooleanField(this, 3, value);
 };
 
 
@@ -2004,26 +2089,31 @@ proto.api.TxnContext.prototype.getKeysList = function() {
 };
 
 
-/** @param {!Array<string>} value */
+/**
+ * @param {!Array<string>} value
+ * @return {!proto.api.TxnContext} returns this
+ */
 proto.api.TxnContext.prototype.setKeysList = function(value) {
-  jspb.Message.setField(this, 4, value || []);
+  return jspb.Message.setField(this, 4, value || []);
 };
 
 
 /**
  * @param {string} value
  * @param {number=} opt_index
+ * @return {!proto.api.TxnContext} returns this
  */
 proto.api.TxnContext.prototype.addKeys = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 4, value, opt_index);
+  return jspb.Message.addToRepeatedField(this, 4, value, opt_index);
 };
 
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.api.TxnContext} returns this
  */
 proto.api.TxnContext.prototype.clearKeysList = function() {
-  this.setKeysList([]);
+  return this.setKeysList([]);
 };
 
 
@@ -2036,26 +2126,31 @@ proto.api.TxnContext.prototype.getPredsList = function() {
 };
 
 
-/** @param {!Array<string>} value */
+/**
+ * @param {!Array<string>} value
+ * @return {!proto.api.TxnContext} returns this
+ */
 proto.api.TxnContext.prototype.setPredsList = function(value) {
-  jspb.Message.setField(this, 5, value || []);
+  return jspb.Message.setField(this, 5, value || []);
 };
 
 
 /**
  * @param {string} value
  * @param {number=} opt_index
+ * @return {!proto.api.TxnContext} returns this
  */
 proto.api.TxnContext.prototype.addPreds = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 5, value, opt_index);
+  return jspb.Message.addToRepeatedField(this, 5, value, opt_index);
 };
 
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.api.TxnContext} returns this
  */
 proto.api.TxnContext.prototype.clearPredsList = function() {
-  this.setPredsList([]);
+  return this.setPredsList([]);
 };
 
 
@@ -2281,9 +2376,12 @@ proto.api.Version.prototype.getTag = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Version} returns this
+ */
 proto.api.Version.prototype.setTag = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -2444,9 +2542,12 @@ proto.api.Latency.prototype.getParsingNs = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.api.Latency} returns this
+ */
 proto.api.Latency.prototype.setParsingNs = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -2459,9 +2560,12 @@ proto.api.Latency.prototype.getProcessingNs = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.api.Latency} returns this
+ */
 proto.api.Latency.prototype.setProcessingNs = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
@@ -2474,9 +2578,12 @@ proto.api.Latency.prototype.getEncodingNs = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.api.Latency} returns this
+ */
 proto.api.Latency.prototype.setEncodingNs = function(value) {
-  jspb.Message.setProto3IntField(this, 3, value);
+  return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
@@ -2489,9 +2596,12 @@ proto.api.Latency.prototype.getAssignTimestampNs = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.api.Latency} returns this
+ */
 proto.api.Latency.prototype.setAssignTimestampNs = function(value) {
-  jspb.Message.setProto3IntField(this, 4, value);
+  return jspb.Message.setProto3IntField(this, 4, value);
 };
 
 
@@ -2700,9 +2810,12 @@ proto.api.NQuad.prototype.getSubject = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.NQuad} returns this
+ */
 proto.api.NQuad.prototype.setSubject = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -2715,9 +2828,12 @@ proto.api.NQuad.prototype.getPredicate = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.NQuad} returns this
+ */
 proto.api.NQuad.prototype.setPredicate = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -2730,9 +2846,12 @@ proto.api.NQuad.prototype.getObjectId = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.NQuad} returns this
+ */
 proto.api.NQuad.prototype.setObjectId = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -2746,17 +2865,21 @@ proto.api.NQuad.prototype.getObjectValue = function() {
 };
 
 
-/** @param {?proto.api.Value|undefined} value */
+/**
+ * @param {?proto.api.Value|undefined} value
+ * @return {!proto.api.NQuad} returns this
+*/
 proto.api.NQuad.prototype.setObjectValue = function(value) {
-  jspb.Message.setWrapperField(this, 4, value);
+  return jspb.Message.setWrapperField(this, 4, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.api.NQuad} returns this
  */
 proto.api.NQuad.prototype.clearObjectValue = function() {
-  this.setObjectValue(undefined);
+  return this.setObjectValue(undefined);
 };
 
 
@@ -2778,9 +2901,12 @@ proto.api.NQuad.prototype.getLabel = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.NQuad} returns this
+ */
 proto.api.NQuad.prototype.setLabel = function(value) {
-  jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -2793,9 +2919,12 @@ proto.api.NQuad.prototype.getLang = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.NQuad} returns this
+ */
 proto.api.NQuad.prototype.setLang = function(value) {
-  jspb.Message.setProto3StringField(this, 6, value);
+  return jspb.Message.setProto3StringField(this, 6, value);
 };
 
 
@@ -2809,9 +2938,12 @@ proto.api.NQuad.prototype.getFacetsList = function() {
 };
 
 
-/** @param {!Array<!proto.api.Facet>} value */
+/**
+ * @param {!Array<!proto.api.Facet>} value
+ * @return {!proto.api.NQuad} returns this
+*/
 proto.api.NQuad.prototype.setFacetsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 7, value);
+  return jspb.Message.setRepeatedWrapperField(this, 7, value);
 };
 
 
@@ -2827,9 +2959,10 @@ proto.api.NQuad.prototype.addFacets = function(opt_value, opt_index) {
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.api.NQuad} returns this
  */
 proto.api.NQuad.prototype.clearFacetsList = function() {
-  this.setFacetsList([]);
+  return this.setFacetsList([]);
 };
 
 
@@ -3109,17 +3242,21 @@ proto.api.Value.prototype.getDefaultVal = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Value} returns this
+ */
 proto.api.Value.prototype.setDefaultVal = function(value) {
-  jspb.Message.setOneofField(this, 1, proto.api.Value.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 1, proto.api.Value.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
  */
 proto.api.Value.prototype.clearDefaultVal = function() {
-  jspb.Message.setOneofField(this, 1, proto.api.Value.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 1, proto.api.Value.oneofGroups_[0], undefined);
 };
 
 
@@ -3165,17 +3302,21 @@ proto.api.Value.prototype.getBytesVal_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Value} returns this
+ */
 proto.api.Value.prototype.setBytesVal = function(value) {
-  jspb.Message.setOneofField(this, 2, proto.api.Value.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 2, proto.api.Value.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
  */
 proto.api.Value.prototype.clearBytesVal = function() {
-  jspb.Message.setOneofField(this, 2, proto.api.Value.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 2, proto.api.Value.oneofGroups_[0], undefined);
 };
 
 
@@ -3197,17 +3338,21 @@ proto.api.Value.prototype.getIntVal = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.api.Value} returns this
+ */
 proto.api.Value.prototype.setIntVal = function(value) {
-  jspb.Message.setOneofField(this, 3, proto.api.Value.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 3, proto.api.Value.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
  */
 proto.api.Value.prototype.clearIntVal = function() {
-  jspb.Message.setOneofField(this, 3, proto.api.Value.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 3, proto.api.Value.oneofGroups_[0], undefined);
 };
 
 
@@ -3229,17 +3374,21 @@ proto.api.Value.prototype.getBoolVal = function() {
 };
 
 
-/** @param {boolean} value */
+/**
+ * @param {boolean} value
+ * @return {!proto.api.Value} returns this
+ */
 proto.api.Value.prototype.setBoolVal = function(value) {
-  jspb.Message.setOneofField(this, 4, proto.api.Value.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 4, proto.api.Value.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
  */
 proto.api.Value.prototype.clearBoolVal = function() {
-  jspb.Message.setOneofField(this, 4, proto.api.Value.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 4, proto.api.Value.oneofGroups_[0], undefined);
 };
 
 
@@ -3261,17 +3410,21 @@ proto.api.Value.prototype.getStrVal = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Value} returns this
+ */
 proto.api.Value.prototype.setStrVal = function(value) {
-  jspb.Message.setOneofField(this, 5, proto.api.Value.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 5, proto.api.Value.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
  */
 proto.api.Value.prototype.clearStrVal = function() {
-  jspb.Message.setOneofField(this, 5, proto.api.Value.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 5, proto.api.Value.oneofGroups_[0], undefined);
 };
 
 
@@ -3293,17 +3446,21 @@ proto.api.Value.prototype.getDoubleVal = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.api.Value} returns this
+ */
 proto.api.Value.prototype.setDoubleVal = function(value) {
-  jspb.Message.setOneofField(this, 6, proto.api.Value.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 6, proto.api.Value.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
  */
 proto.api.Value.prototype.clearDoubleVal = function() {
-  jspb.Message.setOneofField(this, 6, proto.api.Value.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 6, proto.api.Value.oneofGroups_[0], undefined);
 };
 
 
@@ -3349,17 +3506,21 @@ proto.api.Value.prototype.getGeoVal_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Value} returns this
+ */
 proto.api.Value.prototype.setGeoVal = function(value) {
-  jspb.Message.setOneofField(this, 7, proto.api.Value.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 7, proto.api.Value.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
  */
 proto.api.Value.prototype.clearGeoVal = function() {
-  jspb.Message.setOneofField(this, 7, proto.api.Value.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 7, proto.api.Value.oneofGroups_[0], undefined);
 };
 
 
@@ -3405,17 +3566,21 @@ proto.api.Value.prototype.getDateVal_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Value} returns this
+ */
 proto.api.Value.prototype.setDateVal = function(value) {
-  jspb.Message.setOneofField(this, 8, proto.api.Value.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 8, proto.api.Value.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
  */
 proto.api.Value.prototype.clearDateVal = function() {
-  jspb.Message.setOneofField(this, 8, proto.api.Value.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 8, proto.api.Value.oneofGroups_[0], undefined);
 };
 
 
@@ -3461,17 +3626,21 @@ proto.api.Value.prototype.getDatetimeVal_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Value} returns this
+ */
 proto.api.Value.prototype.setDatetimeVal = function(value) {
-  jspb.Message.setOneofField(this, 9, proto.api.Value.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 9, proto.api.Value.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
  */
 proto.api.Value.prototype.clearDatetimeVal = function() {
-  jspb.Message.setOneofField(this, 9, proto.api.Value.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 9, proto.api.Value.oneofGroups_[0], undefined);
 };
 
 
@@ -3493,17 +3662,21 @@ proto.api.Value.prototype.getPasswordVal = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Value} returns this
+ */
 proto.api.Value.prototype.setPasswordVal = function(value) {
-  jspb.Message.setOneofField(this, 10, proto.api.Value.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 10, proto.api.Value.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
  */
 proto.api.Value.prototype.clearPasswordVal = function() {
-  jspb.Message.setOneofField(this, 10, proto.api.Value.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 10, proto.api.Value.oneofGroups_[0], undefined);
 };
 
 
@@ -3525,17 +3698,21 @@ proto.api.Value.prototype.getUidVal = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.api.Value} returns this
+ */
 proto.api.Value.prototype.setUidVal = function(value) {
-  jspb.Message.setOneofField(this, 11, proto.api.Value.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 11, proto.api.Value.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
  */
 proto.api.Value.prototype.clearUidVal = function() {
-  jspb.Message.setOneofField(this, 11, proto.api.Value.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 11, proto.api.Value.oneofGroups_[0], undefined);
 };
 
 
@@ -3735,9 +3912,12 @@ proto.api.Facet.prototype.getKey = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Facet} returns this
+ */
 proto.api.Facet.prototype.setKey = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -3774,9 +3954,12 @@ proto.api.Facet.prototype.getValue_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Facet} returns this
+ */
 proto.api.Facet.prototype.setValue = function(value) {
-  jspb.Message.setProto3BytesField(this, 2, value);
+  return jspb.Message.setProto3BytesField(this, 2, value);
 };
 
 
@@ -3789,9 +3972,12 @@ proto.api.Facet.prototype.getValType = function() {
 };
 
 
-/** @param {!proto.api.Facet.ValType} value */
+/**
+ * @param {!proto.api.Facet.ValType} value
+ * @return {!proto.api.Facet} returns this
+ */
 proto.api.Facet.prototype.setValType = function(value) {
-  jspb.Message.setProto3EnumField(this, 3, value);
+  return jspb.Message.setProto3EnumField(this, 3, value);
 };
 
 
@@ -3804,26 +3990,31 @@ proto.api.Facet.prototype.getTokensList = function() {
 };
 
 
-/** @param {!Array<string>} value */
+/**
+ * @param {!Array<string>} value
+ * @return {!proto.api.Facet} returns this
+ */
 proto.api.Facet.prototype.setTokensList = function(value) {
-  jspb.Message.setField(this, 4, value || []);
+  return jspb.Message.setField(this, 4, value || []);
 };
 
 
 /**
  * @param {string} value
  * @param {number=} opt_index
+ * @return {!proto.api.Facet} returns this
  */
 proto.api.Facet.prototype.addTokens = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 4, value, opt_index);
+  return jspb.Message.addToRepeatedField(this, 4, value, opt_index);
 };
 
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.api.Facet} returns this
  */
 proto.api.Facet.prototype.clearTokensList = function() {
-  this.setTokensList([]);
+  return this.setTokensList([]);
 };
 
 
@@ -3836,9 +4027,12 @@ proto.api.Facet.prototype.getAlias = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Facet} returns this
+ */
 proto.api.Facet.prototype.setAlias = function(value) {
-  jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -3987,9 +4181,12 @@ proto.api.LoginRequest.prototype.getUserid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.LoginRequest} returns this
+ */
 proto.api.LoginRequest.prototype.setUserid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -4002,9 +4199,12 @@ proto.api.LoginRequest.prototype.getPassword = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.LoginRequest} returns this
+ */
 proto.api.LoginRequest.prototype.setPassword = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -4017,9 +4217,12 @@ proto.api.LoginRequest.prototype.getRefreshToken = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.LoginRequest} returns this
+ */
 proto.api.LoginRequest.prototype.setRefreshToken = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -4156,9 +4359,12 @@ proto.api.Jwt.prototype.getAccessJwt = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Jwt} returns this
+ */
 proto.api.Jwt.prototype.setAccessJwt = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -4171,9 +4377,12 @@ proto.api.Jwt.prototype.getRefreshJwt = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.api.Jwt} returns this
+ */
 proto.api.Jwt.prototype.setRefreshJwt = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
