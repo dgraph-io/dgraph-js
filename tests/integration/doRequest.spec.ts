@@ -46,7 +46,7 @@ describe("doRequest", () => {
         expect(res.getJson()).toEqual({ me: [{ name: "ok 200" }, { name: "ok 300" }, { name: "ok 400" }] });
     });
 
-    it("fails with two mutations since currently only single is supported", async () => {
+    it("perform two mutations", async () => {
         const client = await setup();
         await setSchema(client, `
             name: string @index(fulltext) .
@@ -62,8 +62,7 @@ describe("doRequest", () => {
         req.setCommitNow(true);
 
         const res = client.newTxn().doRequest(req);
-        const ONLY_ONE_MUTATION_SUPPORTED = new Error(`${UNKNOWN_CODE}: Only 1 mutation per request is supported`);
-        await expect(res).rejects.toEqual(ONLY_ONE_MUTATION_SUPPORTED);
+        await expect(res).resolves.toBeDefined();
     });
 
     it("fails with zero mutations since either a mutation or a query is required", async () => {
@@ -76,7 +75,7 @@ describe("doRequest", () => {
         req.setCommitNow(true);
 
         const res = client.newTxn().doRequest(req);
-        const EMPTY_ERROR = new Error(`${UNKNOWN_CODE}: Empty query`);
+        const EMPTY_ERROR = new Error(`${UNKNOWN_CODE}: empty request`);
         await expect(res).rejects.toEqual(EMPTY_ERROR);
     });
 });
