@@ -46,7 +46,7 @@ describe("doRequest", () => {
         expect(res.getJson()).toEqual({ me: [{ name: "ok 200" }, { name: "ok 300" }, { name: "ok 400" }] });
     });
 
-    it("fails with two mutations since currently only single is supported", async () => {
+    it("fails with two mutations since multiple mutations are supported yet", async () => {
         const client = await setup();
         await setSchema(client, `
             name: string @index(fulltext) .
@@ -76,7 +76,7 @@ describe("doRequest", () => {
         req.setCommitNow(true);
 
         const res = client.newTxn().doRequest(req);
-        const EMPTY_ERROR = new Error(`${UNKNOWN_CODE}: Empty query`);
+        const EMPTY_ERROR = new Error(`${UNKNOWN_CODE}: empty request`);
         await expect(res).rejects.toEqual(EMPTY_ERROR);
     });
 });
