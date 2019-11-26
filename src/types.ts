@@ -21,7 +21,11 @@ export class Payload extends messages.Payload {
             jsonStr = b64ToStr(value);
         }
 
-        return JSON.parse(jsonStr);
+        try {
+            return JSON.parse(jsonStr);
+        } catch (e) {
+            return jsonStr;
+        }
     }
 
     public getData_asB64(): string {
