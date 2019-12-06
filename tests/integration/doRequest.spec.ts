@@ -46,7 +46,7 @@ describe("doRequest", () => {
         expect(res.getJson()).toEqual({ me: [{ name: "ok 200" }, { name: "ok 300" }, { name: "ok 400" }] });
     });
 
-    it("fails with two mutations since multiple mutations are supported yet", async () => {
+    it("performs two mutations and then query finishes successfully", async () => {
         const client = await setup();
         await setSchema(client, `
             name: string @index(fulltext) .
@@ -60,10 +60,12 @@ describe("doRequest", () => {
         const req = new dgraph.Request();
         req.setMutationsList([mu1, mu2]);
         req.setCommitNow(true);
+        const resp = client.newTxn().doRequest(req);
+        await expect(resp).resolves.toBeDefined();
 
-        const res = client.newTxn().doRequest(req);
-        const ONLY_ONE_MUTATION_SUPPORTED = new Error(`${UNKNOWN_CODE}: Only 1 mutation per request is supported`);
-        await expect(res).rejects.toEqual(ONLY_ONE_MUTATION_SUPPORTED);
+        const query = `{ me(func: has(name)) { name }}`;
+        const res = await client.newTxn().query(query);
+        expect(res.getJson()).toEqual({ me: [{ name: "ok 200" }, { name: "ok 300" }] });
     });
 
     it("fails with zero mutations since either a mutation or a query is required", async () => {

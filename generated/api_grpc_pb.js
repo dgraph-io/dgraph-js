@@ -17,8 +17,8 @@
 // limitations under the License.
 //
 // Style guide for Protocol Buffer 3.
-// Use PascalCase (camelCase with an initial capital) for message names – for example,
-// SongServerRequest. Use snake_case (underscore_separated_names) for field names – for
+// Use CamelCase (with an initial capital) for message names – for example,
+// SongServerRequest. Use underscore_separated_names for field names – for
 // example, song_name.
 //
 'use strict';

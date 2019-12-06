@@ -15,13 +15,20 @@
  */
 
 // Style guide for Protocol Buffer 3.
-// Use PascalCase (camelCase with an initial capital) for message names – for example,
-// SongServerRequest. Use snake_case (underscore_separated_names) for field names – for
+// Use CamelCase (with an initial capital) for message names – for example,
+// SongServerRequest. Use underscore_separated_names for field names – for
 // example, song_name.
 
 syntax = "proto3";
 
 package api;
+
+/* import "gogoproto/gogo.proto"; */
+
+/* option (gogoproto.marshaler_all) = true; */
+/* option (gogoproto.sizer_all) = true; */
+/* option (gogoproto.unmarshaler_all) = true; */
+/* option (gogoproto.goproto_getters_all) = true; */
 
 option java_package = "io.dgraph";
 option java_outer_classname = "DgraphProto";
@@ -47,10 +54,18 @@ message Request {
 	bool commit_now = 13;
 }
 
+message Uids {
+	repeated string uids = 1;
+}
+
 message Response {
 	bytes json = 1;
 	TxnContext txn = 2;
 	Latency latency = 3;
+	// Metrics contains all metrics related to the query.
+	Metrics metrics = 4;
+	// uids contains a mapping of blank_node => uid for the node. It only returns uids
+	// that were created as part of a mutation.
 	map<string, string> uids = 12;
 }
 
@@ -112,6 +127,12 @@ message Latency {
 	uint64 processing_ns = 2;
 	uint64 encoding_ns = 3;
 	uint64 assign_timestamp_ns = 4;
+	uint64 total_ns = 5;
+}
+
+message Metrics {
+	// num_uids is the map of number of uids processed by each attribute.
+	map<string, uint64> num_uids = 1;
 }
 
 message NQuad {
