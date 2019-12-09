@@ -48,6 +48,28 @@ export namespace Request {
   }
 }
 
+export class Uids extends jspb.Message {
+  clearUidsList(): void;
+  getUidsList(): Array<string>;
+  setUidsList(value: Array<string>): void;
+  addUids(value: string, index?: number): string;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Uids.AsObject;
+  static toObject(includeInstance: boolean, msg: Uids): Uids.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Uids, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Uids;
+  static deserializeBinaryFromReader(message: Uids, reader: jspb.BinaryReader): Uids;
+}
+
+export namespace Uids {
+  export type AsObject = {
+    uidsList: Array<string>,
+  }
+}
+
 export class Response extends jspb.Message {
   getJson(): Uint8Array | string;
   getJson_asU8(): Uint8Array;
@@ -63,6 +85,11 @@ export class Response extends jspb.Message {
   clearLatency(): void;
   getLatency(): Latency | undefined;
   setLatency(value?: Latency): void;
+
+  hasMetrics(): boolean;
+  clearMetrics(): void;
+  getMetrics(): Metrics | undefined;
+  setMetrics(value?: Metrics): void;
 
   getUidsMap(): jspb.Map<string, string>;
   clearUidsMap(): void;
@@ -81,6 +108,7 @@ export namespace Response {
     json: Uint8Array | string,
     txn?: TxnContext.AsObject,
     latency?: Latency.AsObject,
+    metrics?: Metrics.AsObject,
     uidsMap: Array<[string, string]>,
   }
 }
@@ -302,6 +330,9 @@ export class Latency extends jspb.Message {
   getAssignTimestampNs(): number;
   setAssignTimestampNs(value: number): void;
 
+  getTotalNs(): number;
+  setTotalNs(value: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Latency.AsObject;
   static toObject(includeInstance: boolean, msg: Latency): Latency.AsObject;
@@ -318,6 +349,26 @@ export namespace Latency {
     processingNs: number,
     encodingNs: number,
     assignTimestampNs: number,
+    totalNs: number,
+  }
+}
+
+export class Metrics extends jspb.Message {
+  getNumUidsMap(): jspb.Map<string, number>;
+  clearNumUidsMap(): void;
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Metrics.AsObject;
+  static toObject(includeInstance: boolean, msg: Metrics): Metrics.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Metrics, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Metrics;
+  static deserializeBinaryFromReader(message: Metrics, reader: jspb.BinaryReader): Metrics;
+}
+
+export namespace Metrics {
+  export type AsObject = {
+    numUidsMap: Array<[string, number]>,
   }
 }
 
