@@ -63,7 +63,7 @@ describe("doRequest", () => {
         const resp = client.newTxn().doRequest(req);
         await expect(resp).resolves.toBeDefined();
 
-        const query = `{ me(func: has(name)) { name }}`;
+        const query = `{ me(func: has(name), orderasc: name) { name }}`;
         const res = await client.newTxn().query(query);
         expect(res.getJson()).toEqual({ me: [{ name: "ok 200" }, { name: "ok 300" }] });
     });
