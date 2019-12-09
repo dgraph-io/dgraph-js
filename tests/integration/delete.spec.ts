@@ -2,41 +2,116 @@ import * as dgraph from "../../src";
 
 import { setSchema, setup } from "../helper";
 
+let client: dgraph.DgraphClient;
+
+async function performUpsert(mu: dgraph.Mutation, query: string, vars: object) {
+    const req = new dgraph.Request();
+    req.addMutations(mu);
+    req.setQuery(query);
+    req.setCommitNow(true);
+    if (vars !== undefined) {
+        const varsMap = req.getVarsMap();
+        req.setQuery(query);
+        Object.keys(vars).forEach((key: string) => {
+            varsMap.set(key, vars[key]);
+        });
+    }
+    await expect(client.newTxn().doRequest(req)).resolves.toBeDefined();
+}
+
+async function performMutation(mu: dgraph.Mutation, blankNodeLabel: string): Promise<string> {
+    mu.setCommitNow(true);
+    const res = await client.newTxn().mutate(mu);
+    const uid = res.getUidsMap().get(blankNodeLabel);
+    expect(uid).not.toEqual("");
+    return uid;
+}
+
+async function performJsonMutation(jsonObj: object, blankNodeLabel: string): Promise<string> {
+    const mu = new dgraph.Mutation();
+    mu.setSetJson(jsonObj);
+    return performMutation(mu, blankNodeLabel);
+}
+
+async function performNquadMutation(nquads: string, blankNodeLabel: string): Promise<string> {
+    const mu = new dgraph.Mutation();
+    mu.setSetNquads(nquads);
+    return performMutation(mu, blankNodeLabel);
+}
+
+async function performNquadDeletion(nquads: string, blankNodeLabel: string): Promise<string> {
+    const mu = new dgraph.Mutation();
+    mu.setDelNquads(nquads);
+    return performMutation(mu, blankNodeLabel);
+}
+
+async function checkIntegrity(updatedProfile: Object, query: string, vars?: object) {
+    const res = await client.newTxn().queryWithVars(query, vars);
+    const receivedObject = res.getJson().all[0];
+    expect(receivedObject).toEqual(updatedProfile);
+}
+
+async function upsertDeletionWithVars(): Promise<void> {
+    const jsonObj = {
+        uid: "_:prashant",
+        name: "Prashant",
+        "dgraph.type": "Person",
+    };
+    await performJsonMutation(jsonObj, "prashant");
+    const expectedObj = {
+        name: "Prashant",
+    };
+    const query = `{
+        all(func: has(name)) {
+            name
+        }
+    }`;
+    await checkIntegrity(expectedObj, query);
+    const deleteJsonObj = {
+        uid: "uid(user)",
+    };
+    const query2 = `query all($userName: string) {
+        user as all(func: eq(name, $userName))
+    }`;
+    const vars = {
+        $userName: "Prashant",
+    };
+    const mu = new dgraph.Mutation();
+    mu.setDeleteJson(deleteJsonObj);
+    await performUpsert(mu, query2, vars);
+    await checkIntegrity(undefined, query);
+}
+
 describe("delete", () => {
     it("should delete node", async () => {
-        const client = await setup();
+        client = await setup();
 
-        let mu = new dgraph.Mutation();
-        mu.setSetNquads('_:alice <name> "Alice" .');
-        mu.setCommitNow(true);
-        const ag = await client.newTxn().mutate(mu);
-        const uid = ag.getUidsMap().get("alice");
+        const nquads = '_:alice <name> "Alice" .';
+        const uid = await performNquadMutation(nquads, "alice");
 
         const q = `{
-            find_bob(func: uid(${uid})) {
+            all(func: uid(${uid})) {
                 name
             }
         }`;
-        let res = await client.newTxn().query(q);
-        // tslint:disable-next-line no-unsafe-any
-        expect(res.getJson().find_bob[0].name).toEqual("Alice");
+        const expectedJson = {
+            name: "Alice",
+        };
+        await checkIntegrity(expectedJson, q);
 
-        mu = new dgraph.Mutation();
-        mu.setDelNquads(`<${uid}> <name> * .`);
-        mu.setCommitNow(true);
-        await client.newTxn().mutate(mu);
+        const nquads2 = `<${uid}> <name> * .`;
+        await performNquadDeletion(nquads2, uid.toString());
 
-        res = await client.newTxn().query(q);
+        const res = await client.newTxn().query(q);
         // tslint:disable-next-line no-unsafe-any
-        expect(res.getJson().find_bob).toHaveLength(0);
+        expect(res.getJson().all).toHaveLength(0);
     });
 
     it("should delete edges", async () => {
-        const client = await setup();
+        client = await setup();
         await setSchema(client, "age: int .\nmarried: bool .");
 
-        let mu = new dgraph.Mutation();
-        mu.setSetJson({
+        const jsonObj = {
             uid: "_:alice",
             name: "Alice",
             age: 26,
@@ -57,40 +132,48 @@ describe("delete", () => {
                     age: 29,
                 },
             ],
-        });
-        mu.setCommitNow(true);
-        const ag = await client.newTxn().mutate(mu);
-        const uid = ag.getUidsMap().get("alice");
+        };
+        const uid = await performJsonMutation(jsonObj, "alice");
 
-        const q = `{
-            me(func: uid(${uid})) {
-                uid
+        const expectedJson = jsonObj;
+        // tslint:disable-next-line no-dynamic-delete no-string-literal
+        delete expectedJson["uid"];
+        const query = `{
+            all(func: uid(${uid})) {
                 name
                 age
                 loc
                 married
+                schools {
+                    name
+                }
                 friends {
-                    uid
                     name
                     age
                 }
-                schools {
-                    uid
-                    name
-                }
             }
         }`;
-        let res = await client.newTxn().query(q);
-        // tslint:disable-next-line no-unsafe-any
-        expect(res.getJson().me[0].friends.length).toBe(2);
+        await checkIntegrity(expectedJson, query);
 
-        mu = new dgraph.Mutation();
+        const mu = new dgraph.Mutation();
         dgraph.deleteEdges(mu, uid, "friends");
         mu.setCommitNow(true);
         await client.newTxn().mutate(mu);
 
-        res = await client.newTxn().query(q);
+        const res = await client.newTxn().query(query);
         // tslint:disable-next-line no-unsafe-any
-        expect(res.getJson().me[0].friends).toBeFalsy();
+        expect(res.getJson().all[0].friends).toBeFalsy();
+    });
+
+    it("should delete a node with upsert using graphql", async () => {
+        client = await setup();
+        await setSchema(client, `
+            name: string @index(hash) .
+
+            type Person {
+                name: string
+            }
+        `);
+        await upsertDeletionWithVars();
     });
 });

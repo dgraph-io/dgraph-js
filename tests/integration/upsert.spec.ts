@@ -313,6 +313,66 @@ async function checkUpsertIntegrity(): Promise<void> {
     expect(receivedObject).toEqual(expectedObject);
 }
 
+async function doInsertUpsertWithVars(): Promise<void> {
+    await performMutation(profiles[0]);
+    const jsonObj = {
+        uid: "uid(person)",
+        name: "Prashant Shahi",
+        email: "prashantshahi@dgraph.io",
+        age: "24",
+    };
+    const query = `query q($email: string) {
+        person as q(func: eq(email, $email))
+    }`;
+    const vars = {
+        $email: "prashant@dgraph.io",
+    };
+
+    const txn = client.newTxn();
+    const mu = new dgraph.Mutation();
+    mu.setSetJson(jsonObj);
+
+    const req = new dgraph.Request();
+    const varsMap = req.getVarsMap();
+    req.setQuery(query);
+    Object.keys(vars).forEach((key: string) => {
+        varsMap.set(key, vars[key]);
+    });
+    req.addMutations(mu);
+    req.setCommitNow(true);
+
+    try {
+        // Update account only if matching uid found.
+        const response = await txn.doRequest(req);
+        const uid = response.getUidsMap().get("uid(person)");
+        expect(uid).not.toEqual("");
+    } finally {
+        await txn.discard();
+    }
+
+    const updatedProfile: Profile = {
+        name: "Prashant Shahi",
+        email: "prashantshahi@dgraph.io",
+        age: 24,
+    };
+    const query2 = `query q($email: string) {
+        all(func: eq(email, $email)) {
+            name
+            email
+            age
+        }
+    }`;
+    const vars2 = {
+        $email: "prashantshahi@dgraph.io",
+    };
+    const res = await client.newTxn().queryWithVars(query2, vars2);
+    const data: {
+        all: Profile[];
+    } = res.getJson(); // tslint:disable-line no-unsafe-any
+    const receivedObject: Profile = data.all[0];
+    expect(receivedObject).toEqual(updatedProfile);
+}
+
 describe("upsert using doRequest", () => {
     it("update existing data with upsert", async () => {
         client = await setup();
@@ -332,6 +392,16 @@ describe("upsert using doRequest", () => {
             age:    int   @index(int) .
         `);
         await doInsertUpsert();
+    });
+
+    it("create new data with GraphQL variables", async () => {
+        client = await setup();
+        await setSchema(client, `
+            name:   string   @index(term) .
+            email:  string   @index(exact) .
+            age:    int   @index(int) .
+        `);
+        await doInsertUpsertWithVars();
     });
 
     it("successfully performs upsert loadset", async () => {
