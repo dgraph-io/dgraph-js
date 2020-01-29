@@ -22,15 +22,12 @@ const DEV_GROUP = "dev";
 // tslint:disable-next-line mocha-no-side-effect-code
 const execute = promisify(exec);
 
-// tslint:disable-next-line mocha-no-side-effect-code
-const QUERY_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
- unauthorized to query the predicate: unauthorized to do Read on predicate name");
  // tslint:disable-next-line mocha-no-side-effect-code
-const MUTATE_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
- unauthorized to mutate the predicate: unauthorized to do Write on predicate name");
+const MUTATE_PERMISSION_DENIED = new Error(`7 PERMISSION_DENIED:\
+ unauthorized to mutate following predicates: ${PRED} \n`);
  // tslint:disable-next-line mocha-no-side-effect-code
-const ALTER_PERMISSION_DENIED = new Error("7 PERMISSION_DENIED:\
- unauthorized to alter the predicate: unauthorized to do Modify on predicate name");
+const ALTER_PERMISSION_DENIED = new Error(`7 PERMISSION_DENIED:\
+ unauthorized to alter following predicates: ${PRED} \n`);
 
 async function cmd(command: string) {
     try {
@@ -104,17 +101,18 @@ async function tryReading(): Promise<Boolean> {
     const txn = aclClient.newTxn();
     const query = `{
         me(func: has(${PRED})) {
-            uid
             ${PRED}
         }
     }`;
-    try {
-        const res: dgraph.Response = await txn.query(query);
-        expect(res.getJson().me).not.toHaveLength(0);
-        success = true;
-    } catch (e) {
-        expect(e).toEqual(QUERY_PERMISSION_DENIED);
+
+    const res: dgraph.Response = await txn.query(query);
+    const data = res.getJson();
+    if (data.me === undefined) {
+        expect(data).toEqual({});
         success = false;
+    } else {
+        expect(data.me).not.toHaveLength(0);
+        success = true;
     }
     return success;
 }
@@ -156,6 +154,13 @@ async function tryAltering(): Promise<Boolean> {
 }
 
 describe("ACL tests", () => {
+    it("has no access", async () => {
+        await aclSetup();
+        await expect(tryReading()).resolves.toBe(false);
+        await expect(tryWriting()).resolves.toBe(false);
+        await expect(tryAltering()).resolves.toBe(false);
+    });
+
     it("only has read access", async () => {
         await aclSetup();
         await changePermission(4);
