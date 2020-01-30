@@ -9,30 +9,41 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Resolved JSON parse issue of Payload response. Fixes #43 (#94)
-- Updating ACL tests to sync up changes with Dgraph v1.2 (#103)
+- Resolved JSON parse issue of Payload response. Fixes [#43][] ([#94][])
+- Updating ACL tests to sync up changes with Dgraph v1.2 ([#103][])
 
 ### Added
 
-- Adding tests for upsert with graphql variables (#101)
+- Adding tests for upsert with graphql variables ([#101][])
 
 ### Changed
 
-- Synced proto files to the latest version (#99)
+- Synced proto files to the latest version ([#99][])
+
+[#43]: https://github.com/dgraph-io/dgraph-js/issues/43
+[#94]: https://github.com/dgraph-io/dgraph-js/issues/94
+[#103]: https://github.com/dgraph-io/dgraph-js/issues/103
+[#101]: https://github.com/dgraph-io/dgraph-js/issues/101
+[#99]: https://github.com/dgraph-io/dgraph-js/issues/99
 
 ## [v2.0.2] - 2019-10-01
 
 ### Changed
-- Upgrade google-protobuf dependency version to 3.8.0+ (#80)
+- Upgrade google-protobuf dependency version to 3.8.0+ ([#80][])
 
 ### Fixed
 - Added logic to catch exceptions when `dgraphClient` fails to be created
-  due to invalid gRPC address (#71)
+  due to invalid gRPC address ([#71][])
+
+[#80]: https://github.com/dgraph-io/dgraph-js/issues/80
+[#71]: https://github.com/dgraph-io/dgraph-js/issues/71
 
 ## [v2.0.1] - 2019-09-10
 
 ### Fixed
-- Added function to refresh JWT token if expired (#56)
+- Added function to refresh JWT token if expired ([#56][])
+
+[#56]: https://github.com/dgraph-io/dgraph-js/issues/56
 
 ## [v2.0.0] - 2019-09-06
 
@@ -82,7 +93,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Function `u8ToStr` which was leading to json parse errors
-  (#17)
+  ([#17][])
+
+[#17]: https://github.com/dgraph-io/dgraph-js/issues/17
 
 ## [v1.1.0] - 2018-02-06
 
