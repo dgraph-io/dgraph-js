@@ -147,7 +147,7 @@ describe("delete", () => {
                 schools {
                     name
                 }
-                friends {
+                friends (orderasc: name) {
                     name
                     age
                 }
