@@ -10,8 +10,8 @@ cluster (1 Dgraph Zero and 1 Dgraph Alpha) configured with mutual TLS.
 
 ### Install Dgraph
 
-You will need to [install Dgraph v1.0.10 or
-above](https://docs.dgraph.io/get-started/#step-1-install-dgraph).
+You will need to [install Dgraph v1.1.0 or
+above](https://github.com/dgraph-io/dgraph/releases) and run it.
 
 A quick-start installation script is available for Linux and Mac:
 
@@ -122,10 +122,10 @@ Your output should look something like this (uid values may be different):
 Created person named "Alice" with uid = 0x7569
 
 All created nodes (map from blank node names to uids):
-blank-0: 0x7569
-blank-1: 0x756a
-blank-2: 0x756b
-blank-3: 0x756c
+alice => 0x7569
+dg.1310839545.1 => 0x756a
+dg.1310839545.2 => 0x756b
+dg.1310839545.3 => 0x756c
 
 Number of people named "Alice": 1
 { uid: '0x7569',
