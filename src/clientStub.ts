@@ -160,7 +160,8 @@ export class DgraphClientStub {
 
 function ensureCallOptions(options?: grpc.CallOptions): grpc.CallOptions {
     return (options === undefined) ? {
-        propagate_flags: grpc.propagate.DEFAULTS,
+        // @ts-ignore
+        propagate_flags: grpc.propagate ? grpc.propagate.DEFAULTS : 4,
         credentials: undefined,
     } : options;
 }
