@@ -20,6 +20,7 @@ and understand how to run and work with Dgraph.
 ## Table of contents
 
 - [Install](#install)
+- [Supported Versions](#supported-versions)
 - [Quickstart](#quickstart)
 - [Using a Client](#using-a-client)
   - [Creating a Client](#creating-a-client)
@@ -55,11 +56,7 @@ yarn add dgraph-js grpc
 # yarn add @types/google-protobuf @types/protobufjs --dev
 ```
 
-## Quickstart
-
-Build and run the [simple][] project in the `examples` folder, which
-contains an end-to-end example of using the Dgraph JavaScript client. Follow the
-instructions in the README of that project.
+## Supported Versions
 
 Depending on the version of Dgraph that you are connecting to, you will have to
 use a different version of this client.
@@ -72,6 +69,12 @@ use a different version of this client.
 Note: Only API breakage from *v1.X.Y* to *v2.X.Y* is in
 the function `DgraphClient.newTxn().mutate()`. This function returns a `messages.Assigned`
 type in *v1.X* but a `messages.Response` type in *v2.X*.
+
+## Quickstart
+
+Build and run the [simple][] project in the `examples` folder, which
+contains an end-to-end example of using the Dgraph JavaScript client. Follow the
+instructions in the README of that project.
 
 ## Using a Client
 
