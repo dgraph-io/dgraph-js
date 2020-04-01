@@ -1899,6 +1899,24 @@ proto.api.Operation.prototype.setRunInBackground = function(value) {
 };
 
 
+/**
+ * optional bool run_in_background = 6;
+ * @return {boolean}
+ */
+proto.api.Operation.prototype.getRunInBackground = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 6, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.api.Operation} returns this
+ */
+proto.api.Operation.prototype.setRunInBackground = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 6, value);
+};
+
+
 
 
 
