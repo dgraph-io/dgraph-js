@@ -65,6 +65,7 @@ use a different version of this client.
 |:--------------:|:-----------------:|
 |     1.0.X      |      *1.X.Y*      |
 |     1.1.X      |      *2.X.Y*      |
+|    20.03.0     |     *20.03.0*     |
 
 Note: Only API breakage from *v1.X.Y* to *v2.X.Y* is in
 the function `DgraphClient.newTxn().mutate()`. This function returns a `messages.Assigned`
