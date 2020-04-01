@@ -113,6 +113,19 @@ op.setSchema(schema);
 await dgraphClient.alter(op);
 ```
 
+Starting Dgraph version 20.03.0, indexes can be computed in the background.
+You can set `setRunInBackground` field of the `Operation` object to `true`
+before passing it to the ``DgraphClient#alter(Operation)` method. You can find more details
+[here](https://docs.dgraph.io/master/query-language/#indexes-in-background).
+
+```js
+const schema = "name: string @index(exact) .";
+const op = new dgraph.Operation();
+op.setSchema(schema);
+op.setRunInBackground(true);
+await dgraphClient.alter(op);
+```
+
 > NOTE: Many of the examples here use the `await` keyword which requires
 > `async/await` support which is available on Node.js >= v7.6.0. For prior versions,
 > the expressions following `await` can be used just like normal `Promise`:
@@ -420,3 +433,4 @@ Make sure you have a Dgraph server running on localhost before you run this task
 ```sh
 npm test
 ```
+
