@@ -65,6 +65,7 @@ use a different version of this client.
 |:--------------:|:-----------------:|
 |     1.0.X      |      *1.X.Y*      |
 |     1.1.X      |      *2.X.Y*      |
+|    20.03.0     |     *20.03.0*     |
 
 Note: Only API breakage from *v1.X.Y* to *v2.X.Y* is in
 the function `DgraphClient.newTxn().mutate()`. This function returns a `messages.Assigned`
@@ -110,6 +111,19 @@ To set the schema, create an `Operation` object, set the schema and pass it to
 const schema = "name: string @index(exact) .";
 const op = new dgraph.Operation();
 op.setSchema(schema);
+await dgraphClient.alter(op);
+```
+
+Starting Dgraph version 20.03.0, indexes can be computed in the background.
+You can set `setRunInBackground` field of the `Operation` object to `true`
+before passing it to the `DgraphClient#alter(Operation)` method. You can find more details
+[here](https://docs.dgraph.io/master/query-language/#indexes-in-background).
+
+```js
+const schema = "name: string @index(exact) .";
+const op = new dgraph.Operation();
+op.setSchema(schema);
+op.setRunInBackground(true);
 await dgraphClient.alter(op);
 ```
 
@@ -420,3 +434,4 @@ Make sure you have a Dgraph server running on localhost before you run this task
 ```sh
 npm test
 ```
+

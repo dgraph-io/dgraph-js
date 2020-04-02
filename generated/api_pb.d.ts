@@ -189,6 +189,9 @@ export class Operation extends jspb.Message {
   getDropValue(): string;
   setDropValue(value: string): void;
 
+  getRunInBackground(): boolean;
+  setRunInBackground(value: boolean): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Operation.AsObject;
   static toObject(includeInstance: boolean, msg: Operation): Operation.AsObject;
@@ -206,6 +209,7 @@ export namespace Operation {
     dropAll: boolean,
     dropOp: Operation.DropOpMap[keyof Operation.DropOpMap],
     dropValue: string,
+    runInBackground: boolean,
   }
 
   export interface DropOpMap {
