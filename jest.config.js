@@ -1,5 +1,6 @@
 module.exports = {
     testEnvironment: "node",
+    testResultsProcessor: "jest-teamcity",
     transform: {
       ".(ts|tsx)": "ts-jest"
     },

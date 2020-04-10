@@ -33,24 +33,25 @@
   },
   "devDependencies": {
     "@types/google-protobuf": "^3.2.7",
-    "@types/jest": "^24.0.13",
-    "@types/node": "^12.0.7",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.11.1",
     "coveralls": "^3.0.0",
     "grpc-tools": "^1.6.6",
     "grpc_tools_node_protoc_ts": "^2.5.3",
     "install-peers": "^1.0.2",
-    "jest": "^24.8.0",
-    "rimraf": "^2.6.2",
-    "ts-jest": "^24.0.2",
-    "ts-protoc-gen": "^0.10.0",
-    "tslint": "^5.9.1",
+    "jest": "^25.3.0",
+    "jest-teamcity": "^1.7.0",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^25.3.1",
+    "ts-protoc-gen": "^0.12.0",
+    "tslint": "^6.1.1",
     "tslint-microsoft-contrib": "^6.2.0",
     "typescript": "^3.5.1"
   },
   "dependencies": {
     "google-protobuf": "^3.8.0",
     "grpc": "^1.21.1",
-    "is-base64": "^0.1.0"
+    "is-base64": "^1.1.0"
   },
   "peerDependencies": {
     "grpc": ">=1.7.0 <2.0.0"

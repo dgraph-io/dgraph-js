@@ -38,13 +38,7 @@ export async function setup(): Promise<dgraph.DgraphClient> {
 
 export function wait(time: number): Promise<void> {
     return new Promise((resolve: (value?: void | PromiseLike<void>) => void): void => {
-        const id = setTimeout(
-            () => {
-                clearTimeout(id);
-                resolve();
-            },
-            time,
-        );
+        setTimeout(resolve, time);
     });
 }
 
