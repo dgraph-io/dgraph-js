@@ -11,7 +11,6 @@ const WAIT_FOR_SIX_SECONDS = 6 * 1000;  // 6 seconds in milliseconds
 jest.setTimeout(JEST_TIMEOUT);
 
 let client: dgraph.DgraphClient;
-let aclClient: dgraph.DgraphClient;
 
 const GROOT_PWD = "password";
 const USERID = "alice";
@@ -39,18 +38,14 @@ async function cmd(command: string) {
 
 async function insertSampleData() {
     const txn = client.newTxn();
-    try {
-        const mu = new dgraph.Mutation();
-        mu.setSetNquads(`
-            _:prashant <${PRED}> "Prashant" .
-        `);
-        mu.setCommitNow(true);
-        const res = await txn.mutate(mu);
-        const uid = res.getUidsMap().get("prashant");
-        expect(uid).toBeDefined();
-    } finally {
-        await txn.discard();
-    }
+    const mu = new dgraph.Mutation();
+    mu.setSetNquads(`
+        _:prashant <${PRED}> "Prashant" .
+    `);
+    mu.setCommitNow(true);
+    const res = await txn.mutate(mu);
+    const uid = res.getUidsMap().get("prashant");
+    expect(uid).toBeDefined();
 }
 
 async function loginUser(): Promise<dgraph.DgraphClient> {
@@ -72,7 +67,7 @@ async function aclSetup() {
     await addUser();
     await addGroup();
     await addUserToGroup();
-    aclClient = await loginUser();
+    return loginUser();
 }
 
 async function addUser() {
@@ -96,29 +91,24 @@ async function changePermission(permission: number) {
     await wait(WAIT_FOR_SIX_SECONDS);
 }
 
-async function tryReading(): Promise<Boolean> {
-    let success: Boolean;
+async function tryReading(aclClient: dgraph.DgraphClient): Promise<Boolean> {
     const txn = aclClient.newTxn();
-    const query = `{
+    const res: dgraph.Response = await txn.query(`{
         me(func: has(${PRED})) {
             ${PRED}
         }
-    }`;
-
-    const res: dgraph.Response = await txn.query(query);
+    }`);
     const data = res.getJson();
     if (data.me === undefined) {
         expect(data).toEqual({});
-        success = false;
+        return false;
     } else {
         expect(data.me).not.toHaveLength(0);
-        success = true;
+        return true;
     }
-    return success;
 }
 
-async function tryWriting(): Promise<Boolean> {
-    let success: Boolean;
+async function tryWriting(aclClient: dgraph.DgraphClient): Promise<Boolean> {
     const txn = aclClient.newTxn();
     try {
         const mu = new dgraph.Mutation();
@@ -129,63 +119,57 @@ async function tryWriting(): Promise<Boolean> {
         const res = await txn.mutate(mu);
         const uid = res.getUidsMap().get("ashish");
         expect(uid).toBeDefined();
-        success = true;
+        return true;
     } catch (e) {
         expect(e).toEqual(MUTATE_PERMISSION_DENIED);
-        success = false;
+        return false;
     }
-    return success;
 }
 
-async function tryAltering(): Promise<Boolean> {
-    let success: Boolean;
+async function tryAltering(aclClient: dgraph.DgraphClient): Promise<Boolean> {
     try {
         const operation = new dgraph.Operation();
         operation.setSchema(`
             ${PRED}: string @index(exact, term) .
         `);
         await aclClient.alter(operation);
-        success = true;
+        return true;
     } catch (e) {
         expect(e).toEqual(ALTER_PERMISSION_DENIED);
-        success = false;
+        return false;
     }
-    return success;
 }
 
 describe("ACL tests", () => {
     it("has no access", async () => {
-        await aclSetup();
-        await expect(tryReading()).resolves.toBe(false);
-        await expect(tryWriting()).resolves.toBe(false);
-        await expect(tryAltering()).resolves.toBe(false);
+        const aclClient = await aclSetup();
+        await changePermission(0);
+        await expect(tryReading(aclClient)).resolves.toBe(false);
+        await expect(tryWriting(aclClient)).resolves.toBe(false);
+        await expect(tryAltering(aclClient)).resolves.toBe(false);
     });
 
     it("only has read access", async () => {
-        await aclSetup();
+        const aclClient = await aclSetup();
         await changePermission(4);
-        await expect(tryReading()).resolves.toBe(true);
-        await expect(tryWriting()).resolves.toBe(false);
-        await expect(tryAltering()).resolves.toBe(false);
+        await expect(tryReading(aclClient)).resolves.toBe(true);
+        await expect(tryWriting(aclClient)).resolves.toBe(false);
+        await expect(tryAltering(aclClient)).resolves.toBe(false);
     });
 
     it("only has write access", async () => {
-        await aclSetup();
-        await changePermission(2);
-        await expect(tryReading()).resolves.toBe(false);
-        await expect(tryWriting()).resolves.toBe(true);
-        await expect(tryAltering()).resolves.toBe(false);
+      const aclClient = await aclSetup();
+      await changePermission(2);
+      await expect(tryReading(aclClient)).resolves.toBe(false);
+      await expect(tryWriting(aclClient)).resolves.toBe(true);
+      await expect(tryAltering(aclClient)).resolves.toBe(false);
     });
 
     it("only has modify access", async () => {
-        await aclSetup();
+        const aclClient = await aclSetup();
         await changePermission(1);
-        await expect(tryReading()).resolves.toBe(false);
-        await expect(tryWriting()).resolves.toBe(false);
-        await expect(tryAltering()).resolves.toBe(true);
-    });
-
-    afterEach(async () => {
-        await changePermission(0);
+        await expect(tryReading(aclClient)).resolves.toBe(false);
+        await expect(tryWriting(aclClient)).resolves.toBe(false);
+        await expect(tryAltering(aclClient)).resolves.toBe(true);
     });
 });
