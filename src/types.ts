@@ -67,7 +67,7 @@ export function createPayload(oldPayload: messages.Payload): Payload {
 // Mutation and Query classes.
 
 /**
- * Response represents the return value of a mutatin or query operation.
+ * Response represents the return value of a mutation or query operations.
  */
 export class Response extends messages.Response {
     public getJson(): any { // tslint:disable-line no-any
