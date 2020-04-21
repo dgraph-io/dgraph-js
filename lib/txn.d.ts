@@ -18,8 +18,8 @@ export declare class Txn {
     queryWithVars(q: string, vars?: {
         [k: string]: any;
     }, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
-    mutate(mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Response>;
-    doRequest(req: messages.Request, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Response>;
+    mutate(mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
+    doRequest(req: messages.Request, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
     commit(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void>;
     discard(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void>;
     private mergeContext;

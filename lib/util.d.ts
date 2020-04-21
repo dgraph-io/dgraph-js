@@ -14,3 +14,4 @@ export declare function strToB64(str: string): string;
 export declare function strToU8(str: string): Uint8Array;
 export declare function b64ToStr(b64Str: string): string;
 export declare function u8ToStr(arr: Uint8Array): string;
+export declare function strToJson(jsonStr: string): any;

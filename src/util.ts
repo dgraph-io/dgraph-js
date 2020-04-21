@@ -96,3 +96,11 @@ export function u8ToStr(arr: Uint8Array): string {
 
     return buf.toString();
 }
+
+export function strToJson(jsonStr: string): any { // tslint:disable-line no-any
+    try {
+        return JSON.parse(jsonStr);
+    } catch (e) {
+        return {};
+    }
+}
