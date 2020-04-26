@@ -2,7 +2,7 @@ import * as jspb from "google-protobuf";
 
 import * as messages from "../generated/api_pb";
 
-import { b64ToStr, isBase64, strToB64, strToU8, u8ToStr } from "./util";
+import { b64ToStr, isBase64, strToB64, strToJson, strToU8, u8ToStr } from "./util";
 
 // tslint:disable max-classes-per-file
 
@@ -21,11 +21,7 @@ export class Payload extends messages.Payload {
             jsonStr = b64ToStr(value);
         }
 
-        try {
-            return JSON.parse(jsonStr);
-        } catch (e) {
-            return jsonStr;
-        }
+        return strToJson(jsonStr);
     }
 
     public getData_asB64(): string {
@@ -68,10 +64,10 @@ export function createPayload(oldPayload: messages.Payload): Payload {
     );
 }
 
-// Query classes.
+// Mutation and Query classes.
 
 /**
- * Response represents the return value of a query operation.
+ * Response represents the return value of a mutation or query operations.
  */
 export class Response extends messages.Response {
     public getJson(): any { // tslint:disable-line no-any
@@ -83,7 +79,7 @@ export class Response extends messages.Response {
             jsonStr = b64ToStr(value);
         }
 
-        return JSON.parse(jsonStr);
+        return strToJson(jsonStr);
     }
 
     public getJson_asB64(): string {
@@ -141,7 +137,7 @@ export class Mutation extends messages.Mutation {
             jsonStr = b64ToStr(value);
         }
 
-        return JSON.parse(jsonStr);
+        return strToJson(jsonStr);
     }
 
     public getSetJson_asB64(): string {
@@ -185,7 +181,7 @@ export class Mutation extends messages.Mutation {
             jsonStr = b64ToStr(value);
         }
 
-        return JSON.parse(jsonStr);
+        return strToJson(jsonStr);
     }
 
     public getDeleteJson_asB64(): string {

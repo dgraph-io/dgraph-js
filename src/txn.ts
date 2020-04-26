@@ -106,7 +106,7 @@ export class Txn {
      * operations on it will fail.
      */
     public async mutate(
-        mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Response> {
+        mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response> {
 
         const req = new messages.Request();
         req.setStartTs(this.ctx.getStartTs());
@@ -117,7 +117,7 @@ export class Txn {
     }
 
     public async doRequest(
-        req: messages.Request, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<messages.Response> {
+        req: messages.Request, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response> {
         const mutationList = req.getMutationsList();
         if (this.finished) {
             this.dc.debug(`Do request (ERR_FINISHED):\nquery = ${req.getQuery()}\nvars = ${req.getVarsMap()}`);
