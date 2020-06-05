@@ -122,7 +122,7 @@ async function queryData(dgraphClient) {
         }
     }`;
     const vars = { $a: "Alice" };
-    const res = await dgraphClient.newTxn().queryWithVars(query, vars);
+    const res = await dgraphClient.newTxn({ readOnly: true }).queryWithVars(query, vars);
     const ppl = res.getJson();
 
     // Print results.

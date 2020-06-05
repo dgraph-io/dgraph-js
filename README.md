@@ -169,6 +169,23 @@ try {
 }
 ```
 
+To create a read-only transaction, set `readOnly` boolean to `true` while calling
+`DgraphClient#newTxn()` method. Read-only transactions cannot contain mutations and
+trying to call `Txn#mutate()` or `Txn#commit()` will result in an error. Calling
+`Txn.Discard()` will be a no-op.
+
+You can optionally set the `bestEffort` boolean to `true`. This may yield improved
+latencies in read-bound workloads where linearizable reads are not strictly needed.
+
+```js
+const txn = dgraphClient.newTxn({
+  readOnly: true,
+  bestEffort: false
+});
+// ...
+const res = await txn.queryWithVars(query, vars);
+```
+
 ### Running a Mutation
 
 `Txn#mutate(Mutation)` runs a mutation. It takes in a `Mutation` object, which
