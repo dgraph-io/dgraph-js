@@ -3,7 +3,7 @@
 Official Dgraph client implementation for JavaScript (Node.js v6 and above),
 using [gRPC].
 
-**Use [Discuss Issues](https://discuss.dgraph.io/tags/c/issues/35/dgraph-js) for reporting issues about this repository.**
+**Use [Discuss Issues](https://discuss.dgraph.io/tags/c/issues/35/clients/46) for reporting issues about this repository.**
 
 **Looking for browser support? Check out [dgraph-js-http].**
 
