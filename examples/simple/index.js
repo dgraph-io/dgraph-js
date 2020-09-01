@@ -3,7 +3,7 @@ const grpc = require("grpc");
 
 // Create a client stub.
 function newClientStub() {
-    return new dgraph.DgraphClientStub("localhost:9080", grpc.credentials.createInsecure());
+    return new dgraph.DgraphClientStub("localhost:9080");
 }
 
 // Create a client.
@@ -11,10 +11,17 @@ function newClient(clientStub) {
     return new dgraph.DgraphClient(clientStub);
 }
 
-// Drop All - discard all data and start from a clean slate.
+// Drop All - discard all data, schema and start from a clean slate.
 async function dropAll(dgraphClient) {
     const op = new dgraph.Operation();
     op.setDropAll(true);
+    await dgraphClient.alter(op);
+}
+
+// Drop All Data, but keep the schema.
+async function dropData(dgraphClient) {
+    const op = new dgraph.Operation();
+    op.setDropOp(dgraph.Operation.DropOp.DATA);
     await dgraphClient.alter(op);
 }
 
@@ -123,6 +130,10 @@ async function main() {
     const dgraphClient = newClient(dgraphClientStub);
     await dropAll(dgraphClient);
     await setSchema(dgraphClient);
+    await createData(dgraphClient);
+    await queryData(dgraphClient);
+    await dropData(dgraphClient);
+    await queryData(dgraphClient);
     await createData(dgraphClient);
     await queryData(dgraphClient);
 
