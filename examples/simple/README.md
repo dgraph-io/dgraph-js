@@ -73,6 +73,24 @@ Number of people named "Alice": 1
   dob: '1980-02-01T17:30:00Z',
   friend: [ { name: 'Bob', age: 24 }, { name: 'Charlie', age: 29 } ],
   school: [ { name: 'Crown Public School' } ] }
+Number of people named "Alice": 0
+Created person named "Alice" with uid = 0x19
+
+All created nodes (map from blank node names to uids):
+alice => 0x19
+dg.3973478125.10 => 0x16
+dg.3973478125.11 => 0x17
+dg.3973478125.12 => 0x18
+
+Number of people named "Alice": 1
+{ uid: '0x19',
+  name: 'Alice',
+  age: 26,
+  married: true,
+  loc: { type: 'Point', coordinates: [ 1.1, 2 ] },
+  dob: '1980-02-01T17:30:00Z',
+  friend: [ { name: 'Bob', age: 24 }, { name: 'Charlie', age: 29 } ],
+  school: [ { name: 'Crown Public School' } ] }
 
 DONE!
 ```
