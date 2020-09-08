@@ -21,24 +21,25 @@ and understand how to run and work with Dgraph.
 
 ## Table of contents
 
-- [Install](#install)
-- [Supported Versions](#supported-versions)
-- [Quickstart](#quickstart)
-- [Using a Client](#using-a-client)
-  - [Creating a Client](#creating-a-client)
-  - [Altering the Database](#altering-the-database)
-  - [Creating a Transaction](#creating-a-transaction)
-  - [Running a Mutation](#running-a-mutation)
-  - [Running a Query](#running-a-query)
-  - [Running an Upsert: Query + Mutation](#running-an-upsert-query--mutation)
-  - [Running a Conditional Upsert](#running-a-conditional-upsert)
-  - [Committing a Transaction](#committing-a-transaction)
-  - [Cleanup Resources](#cleanup-resources)
-  - [Debug mode](#debug-mode)
-- [Examples](#examples)
-- [Development](#development)
-  - [Building the source](#building-the-source)
-  - [Running tests](#running-tests)
+  - [Install](#install)
+  - [Supported Versions](#supported-versions)
+  - [Quickstart](#quickstart)
+  - [Using a Client](#using-a-client)
+    - [Creating a Client](#creating-a-client)
+    - [Altering the Database](#altering-the-database)
+    - [Creating a Transaction](#creating-a-transaction)
+    - [Running a Mutation](#running-a-mutation)
+    - [Running a Query](#running-a-query)
+    - [Running an Upsert: Query + Mutation](#running-an-upsert-query--mutation)
+    - [Running a Conditional Upsert](#running-a-conditional-upsert)
+    - [Committing a Transaction](#committing-a-transaction)
+    - [Cleanup Resources](#cleanup-resources)
+    - [Debug mode](#debug-mode)
+    - [Setting Metadata Headers](#setting-metadata-headers)
+  - [Examples](#examples)
+  - [Development](#development)
+    - [Building the source](#building-the-source)
+    - [Running tests](#running-tests)
 
 ## Install
 
@@ -418,6 +419,19 @@ dgraphClient.setDebugMode(true);
 dgraphClient.setDebugMode(false);
 ```
 
+### Setting Metadata Headers
+
+Metadata headers such as authentication tokens can be set through the context of gRPC methods. Below is an example of how to set a header named "auth-token".
+
+```js
+// The following piece of code shows how one can set metadata with
+// auth-token, to allow Alter operation, if the server requires it.
+
+var meta = new grpc.Metadata();
+meta.add('auth-token', 'mySuperSecret');
+
+await dgraphClient.alter(op, meta);
+```
 
 ## Examples
 
