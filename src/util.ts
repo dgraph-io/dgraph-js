@@ -1,12 +1,13 @@
 import * as jspb from "google-protobuf";
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
 
-export function errorCode(err: any): { valid: boolean; code: number } { // tslint:disable-line no-any
+export function errorCode(err: any): { valid: boolean; code: number } {
+    // tslint:disable-line no-any
     if (
         err === undefined ||
         typeof err !== "object" ||
         !err.hasOwnProperty("code") || // tslint:disable-line no-unsafe-any
-        typeof err.code !== "number"   // tslint:disable-line no-unsafe-any
+        typeof err.code !== "number" // tslint:disable-line no-unsafe-any
     ) {
         return {
             valid: false,
@@ -20,52 +21,72 @@ export function errorCode(err: any): { valid: boolean; code: number } { // tslin
     };
 }
 
-export function isAbortedError(err: any): boolean { // tslint:disable-line no-any
+export function isAbortedError(err: any): boolean {
+    // tslint:disable-line no-any
     const ec = errorCode(err);
     return ec.valid && ec.code === grpc.status.ABORTED;
 }
 
-export function isConflictError(err: any): boolean { // tslint:disable-line no-any
+export function isConflictError(err: any): boolean {
+    // tslint:disable-line no-any
     const ec = errorCode(err);
-    return ec.valid && (ec.code === grpc.status.ABORTED || ec.code === grpc.status.FAILED_PRECONDITION);
+    return (
+        ec.valid &&
+        (ec.code === grpc.status.ABORTED ||
+            ec.code === grpc.status.FAILED_PRECONDITION)
+    );
 }
 
-export function isUnauthenticatedError(err: any): boolean { // tslint:disable-line no-any
+export function isUnauthenticatedError(err: any): boolean {
+    // tslint:disable-line no-any
     const ec = errorCode(err);
-    return ec.valid && (ec.code === grpc.status.UNAUTHENTICATED);
+    return ec.valid && ec.code === grpc.status.UNAUTHENTICATED;
 }
 
 export function promisify1<A, T>(
     f: (arg: A, cb: (err?: Error, res?: T) => void) => void,
-    thisContext?: any, // tslint:disable-line no-any
+    thisContext?: any // tslint:disable-line no-any
 ): (arg: A) => Promise<T> {
     return (arg: A) => {
         // tslint:disable-next-line no-any
-        return new Promise((resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void): void => {
-            f.call(
-                thisContext,
-                arg,
-                (err?: Error, result?: T): void => (err !== undefined && err !== null) ? reject(err) : resolve(result),
-            );
-        });
+        return new Promise(
+            (
+                resolve: (value?: T | PromiseLike<T>) => void,
+                reject: (reason?: any) => void
+            ): void => {
+                f.call(thisContext, arg, (err?: Error, result?: T): void =>
+                    err !== undefined && err !== null
+                        ? reject(err)
+                        : resolve(result)
+                );
+            }
+        );
     };
 }
 
 export function promisify3<A, B, C, T>(
     f: (argA: A, argB: B, argC: C, cb: (err?: Error, res?: T) => void) => void,
-    thisContext?: any, // tslint:disable-line no-any
+    thisContext?: any // tslint:disable-line no-any
 ): (argA: A, argB: B, argC: C) => Promise<T> {
     return (argA: A, argB: B, argC: C) => {
         // tslint:disable-next-line no-any
-        return new Promise((resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void): void => {
-            f.call(
-                thisContext,
-                argA,
-                argB,
-                argC,
-                (err?: Error, result?: T): void => (err !== undefined && err !== null) ? reject(err) : resolve(result),
-            );
-        });
+        return new Promise(
+            (
+                resolve: (value?: T | PromiseLike<T>) => void,
+                reject: (reason?: any) => void
+            ): void => {
+                f.call(
+                    thisContext,
+                    argA,
+                    argB,
+                    argC,
+                    (err?: Error, result?: T): void =>
+                        err !== undefined && err !== null
+                            ? reject(err)
+                            : resolve(result)
+                );
+            }
+        );
     };
 }
 
@@ -97,7 +118,8 @@ export function u8ToStr(arr: Uint8Array): string {
     return buf.toString();
 }
 
-export function strToJson(jsonStr: string): any { // tslint:disable-line no-any
+export function strToJson(jsonStr: string): any {
+    // tslint:disable-line no-any
     try {
         return JSON.parse(jsonStr);
     } catch (e) {

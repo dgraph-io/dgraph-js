@@ -1,4 +1,4 @@
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
 
 import * as messages from "../generated/api_pb";
 
@@ -39,7 +39,11 @@ export class DgraphClient {
      *
      * 3. Drop the database.
      */
-    public async alter(op: messages.Operation, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): Promise<types.Payload> {
+    public async alter(
+        op: messages.Operation,
+        metadata?: grpc.Metadata | null,
+        options?: grpc.CallOptions | null
+    ): Promise<types.Payload> {
         this.debug(`Alter request:\n${stringifyMessage(op)}`);
 
         const c = this.anyClient();
@@ -92,7 +96,8 @@ export class DgraphClient {
 }
 
 // isJwtExpired returns true if the error indicates that the jwt has expired.
-export function isJwtExpired(err: any): Boolean { // tslint:disable-line no-any
+export function isJwtExpired(err: any): Boolean {
+    // tslint:disable-line no-any
     if (!err) {
         return false;
     }
@@ -106,7 +111,11 @@ export function isJwtExpired(err: any): Boolean { // tslint:disable-line no-any
  * This helper function doesn't run the mutation on the server. It must be done
  * by the user after the function returns.
  */
-export function deleteEdges(mu: types.Mutation, uid: string, ...predicates: string[]): void {
+export function deleteEdges(
+    mu: types.Mutation,
+    uid: string,
+    ...predicates: string[]
+): void {
     for (const predicate of predicates) {
         const nquad = new messages.NQuad();
         nquad.setSubject(uid);

@@ -49,8 +49,8 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.1.7",
     "google-protobuf": "^3.8.0",
-    "grpc": "^1.21.1",
     "is-base64": "^1.1.0"
   },
   "peerDependencies": {

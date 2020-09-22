@@ -10,12 +10,18 @@ function newClientStub() {
     //     $ dgraph cert
     //     $ dgraph cert -n localhost
     //     $ dgraph cert -c user
-    const rootCaCert = fs.readFileSync(path.join(__dirname, 'tls', 'ca.crt'));
-    const clientCertKey = fs.readFileSync(path.join(__dirname, 'tls', 'client.user.key'));
-    const clientCert = fs.readFileSync(path.join(__dirname, 'tls', 'client.user.crt'));
+    console.log(path.join(__dirname, "tls", "ca.crt"));
+    const rootCaCert = fs.readFileSync(path.join(__dirname, "tls", "ca.crt"));
+    const clientCertKey = fs.readFileSync(
+        path.join(__dirname, "tls", "client.user.key")
+    );
+    const clientCert = fs.readFileSync(
+        path.join(__dirname, "tls", "client.user.crt")
+    );
     return new dgraph.DgraphClientStub(
         "localhost:9080",
-        grpc.credentials.createSsl(rootCaCert, clientCertKey, clientCert));
+        grpc.credentials.createSsl(rootCaCert, clientCertKey, clientCert)
+    );
 }
 
 // Create a client.
@@ -69,13 +75,13 @@ async function createData(dgraphClient) {
                 {
                     name: "Charlie",
                     age: 29,
-                }
+                },
             ],
             school: [
                 {
                     name: "Crown Public School",
-                }
-            ]
+                },
+            ],
         };
 
         // Run mutation.
@@ -89,10 +95,16 @@ async function createData(dgraphClient) {
         // Get uid of the outermost object (person named "Alice").
         // Response#getUidsMap() returns a map from blank node names to uids.
         // For a json mutation, blank node label is used for the name of the created nodes.
-        console.log(`Created person named "Alice" with uid = ${response.getUidsMap().get("alice")}\n`);
+        console.log(
+            `Created person named "Alice" with uid = ${response
+                .getUidsMap()
+                .get("alice")}\n`
+        );
 
         console.log("All created nodes (map from blank node names to uids):");
-        response.getUidsMap().forEach((uid, key) => console.log(`${key} => ${uid}`));
+        response
+            .getUidsMap()
+            .forEach((uid, key) => console.log(`${key} => ${uid}`));
         console.log();
     } finally {
         // Clean up. Calling this after txn.commit() is a no-op
@@ -122,7 +134,9 @@ async function queryData(dgraphClient) {
         }
     }`;
     const vars = { $a: "Alice" };
-    const res = await dgraphClient.newTxn({ readOnly: true }).queryWithVars(query, vars);
+    const res = await dgraphClient
+        .newTxn({ readOnly: true })
+        .queryWithVars(query, vars);
     const ppl = res.getJson();
 
     // Print results.
@@ -142,8 +156,10 @@ async function main() {
     dgraphClientStub.close();
 }
 
-main().then(() => {
-    console.log("\nDONE!");
-}).catch((e) => {
-    console.log("ERROR: ", e);
-});
+main()
+    .then(() => {
+        console.log("\nDONE!");
+    })
+    .catch((e) => {
+        console.log("ERROR: ", e);
+    });
