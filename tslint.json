@@ -15,6 +15,7 @@
     "insecure-random": false,
     "no-multiline-string": false,
     "newline-per-chained-call": false,
+    "no-default-export": false,
     "trailing-comma": [
       true,
       {
