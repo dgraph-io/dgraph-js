@@ -96,8 +96,7 @@ export class DgraphClient {
 }
 
 // isJwtExpired returns true if the error indicates that the jwt has expired.
-export function isJwtExpired(err: any): Boolean {
-    // tslint:disable-line no-any
+export function isJwtExpired(err: any): Boolean { // tslint:disable-line no-any
     if (!err) {
         return false;
     }
