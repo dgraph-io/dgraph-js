@@ -11,7 +11,7 @@ import {
 
 function fnAddThisVal1(
     a: number,
-    cb: (err?: Error, res?: number) => void
+    cb: (err?: Error, res?: number) => void,
 ): void {
     // tslint:disable-next-line no-invalid-this
     cb(undefined, (<{ val: number }>this).val + a);
@@ -21,7 +21,7 @@ function fnAddThisVal3(
     a: number,
     b: number,
     c: number,
-    cb: (err?: Error, res?: number) => void
+    cb: (err?: Error, res?: number) => void,
 ): void {
     // tslint:disable-next-line no-invalid-this
     cb(undefined, (<{ val: number }>this).val + a + b + c);
@@ -79,7 +79,7 @@ describe("util", () => {
                 _a: number,
                 b: number,
                 _c: number,
-                cb: (err?: Error, res?: number) => void
+                cb: (err?: Error, res?: number) => void,
             ) => {
                 cb(undefined, b);
             };
@@ -95,7 +95,7 @@ describe("util", () => {
                 _a: number,
                 _b: number,
                 _c: number,
-                cb: (err?: Error, res?: number) => void
+                cb: (err?: Error, res?: number) => void,
             ) => {
                 cb(e);
             };
@@ -110,7 +110,7 @@ describe("util", () => {
                 _a: number,
                 b: number,
                 _c: number,
-                cb: (err?: Error, res?: number) => void
+                cb: (err?: Error, res?: number) => void,
             ) => {
                 cb(e, b);
             };
@@ -124,13 +124,13 @@ describe("util", () => {
                 _a: number,
                 _b: number,
                 _c: number,
-                cb: (err?: Error, res?: number) => void
+                cb: (err?: Error, res?: number) => void,
             ) => {
                 cb();
             };
 
             await expect(
-                promisify3(f, undefined)(1, 2, 3)
+                promisify3(f, undefined)(1, 2, 3),
             ).resolves.toBeUndefined();
         });
 
@@ -140,7 +140,7 @@ describe("util", () => {
             };
 
             await expect(
-                promisify3(fnAddThisVal3, o)(5, 10, 15)
+                promisify3(fnAddThisVal3, o)(5, 10, 15),
             ).resolves.toEqual(75);
         });
     });
@@ -159,7 +159,7 @@ describe("util", () => {
         it("should return true for objects correct having correct code value", () => {
             expect(isAbortedError({ code: grpc.status.ABORTED })).toBe(true);
             expect(
-                isAbortedError({ code: grpc.status.FAILED_PRECONDITION })
+                isAbortedError({ code: grpc.status.FAILED_PRECONDITION }),
             ).toBe(false);
             expect(isAbortedError({ code: grpc.status.OK })).toBe(false);
         });
@@ -179,7 +179,7 @@ describe("util", () => {
         it("should return true for objects correct having correct code value", () => {
             expect(isConflictError({ code: grpc.status.ABORTED })).toBe(true);
             expect(
-                isConflictError({ code: grpc.status.FAILED_PRECONDITION })
+                isConflictError({ code: grpc.status.FAILED_PRECONDITION }),
             ).toBe(true);
             expect(isConflictError({ code: grpc.status.OK })).toBe(false);
         });

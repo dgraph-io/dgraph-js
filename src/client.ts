@@ -42,7 +42,7 @@ export class DgraphClient {
     public async alter(
         op: messages.Operation,
         metadata?: grpc.Metadata | null,
-        options?: grpc.CallOptions | null
+        options?: grpc.CallOptions | null,
     ): Promise<types.Payload> {
         this.debug(`Alter request:\n${stringifyMessage(op)}`);
 
@@ -96,7 +96,7 @@ export class DgraphClient {
 }
 
 // isJwtExpired returns true if the error indicates that the jwt has expired.
-export function isJwtExpired(err: any): Boolean {
+export function isJwtExpired(err: error): Boolean {
     // tslint:disable-line no-any
     if (!err) {
         return false;

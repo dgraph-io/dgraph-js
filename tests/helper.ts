@@ -11,14 +11,14 @@ export function createClientStub(): dgraph.DgraphClientStub {
 }
 
 export function createClient(
-    clientStub: dgraph.DgraphClientStub
+    clientStub: dgraph.DgraphClientStub,
 ): dgraph.DgraphClient {
     return new dgraph.DgraphClient(clientStub);
 }
 
 export function setSchema(
     c: dgraph.DgraphClient,
-    schema: string
+    schema: string,
 ): Promise<dgraph.Payload> {
     const op = new dgraph.Operation();
     op.setSchema(schema);
@@ -45,7 +45,7 @@ export function wait(time: number): Promise<void> {
     return new Promise(
         (resolve: (value?: void | PromiseLike<void>) => void): void => {
             setTimeout(resolve, time);
-        }
+        },
     );
 }
 
@@ -53,7 +53,7 @@ export async function tryUpsert(
     client: dgraph.DgraphClient,
     query: string,
     mutation: dgraph.Mutation,
-    blankNodeLabel: string
+    blankNodeLabel: string,
 ): Promise<void> {
     const txn = client.newTxn();
 

@@ -1,5 +1,5 @@
-import * as jspb from "google-protobuf";
 import * as grpc from "@grpc/grpc-js";
+import * as jspb from "google-protobuf";
 
 export function errorCode(err: any): { valid: boolean; code: number } {
     // tslint:disable-line no-any
@@ -45,35 +45,35 @@ export function isUnauthenticatedError(err: any): boolean {
 
 export function promisify1<A, T>(
     f: (arg: A, cb: (err?: Error, res?: T) => void) => void,
-    thisContext?: any // tslint:disable-line no-any
+    thisContext?: any, // tslint:disable-line no-any
 ): (arg: A) => Promise<T> {
     return (arg: A) => {
         // tslint:disable-next-line no-any
         return new Promise(
             (
                 resolve: (value?: T | PromiseLike<T>) => void,
-                reject: (reason?: any) => void
+                reject: (reason?: any) => void,
             ): void => {
                 f.call(thisContext, arg, (err?: Error, result?: T): void =>
                     err !== undefined && err !== null
                         ? reject(err)
-                        : resolve(result)
+                        : resolve(result),
                 );
-            }
+            },
         );
     };
 }
 
 export function promisify3<A, B, C, T>(
     f: (argA: A, argB: B, argC: C, cb: (err?: Error, res?: T) => void) => void,
-    thisContext?: any // tslint:disable-line no-any
+    thisContext?: any, // tslint:disable-line no-any
 ): (argA: A, argB: B, argC: C) => Promise<T> {
     return (argA: A, argB: B, argC: C) => {
         // tslint:disable-next-line no-any
         return new Promise(
             (
                 resolve: (value?: T | PromiseLike<T>) => void,
-                reject: (reason?: any) => void
+                reject: (reason?: any) => void,
             ): void => {
                 f.call(
                     thisContext,
@@ -83,9 +83,9 @@ export function promisify3<A, B, C, T>(
                     (err?: Error, result?: T): void =>
                         err !== undefined && err !== null
                             ? reject(err)
-                            : resolve(result)
+                            : resolve(result),
                 );
-            }
+            },
         );
     };
 }

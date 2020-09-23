@@ -21,7 +21,7 @@ describe("clientStub", () => {
             const stub = client.anyClient();
 
             await expect(
-                stub.login("groot", "password")
+                stub.login("groot", "password"),
             ).resolves.toBeDefined();
         });
     });
@@ -35,20 +35,20 @@ describe("clientStub", () => {
         it("should check version with metadata", async () => {
             const clientStub = new dgraph.DgraphClientStub(
                 SERVER_ADDR,
-                SERVER_CREDENTIALS
+                SERVER_CREDENTIALS,
             );
             validateVersionObject(
                 await clientStub.checkVersion(
                     new dgraph.Check(),
-                    new grpc.Metadata()
-                )
+                    new grpc.Metadata(),
+                ),
             );
         });
 
         it("should check version with call options", async () => {
             const clientStub = new dgraph.DgraphClientStub(
                 SERVER_ADDR,
-                SERVER_CREDENTIALS
+                SERVER_CREDENTIALS,
             );
             const p = clientStub.checkVersion(new dgraph.Check(), undefined, {
                 credentials: undefined,
@@ -64,7 +64,7 @@ describe("clientStub", () => {
         it("should provide a promisified version of grpc.Client#waitForReady", async () => {
             const clientStub = new dgraph.DgraphClientStub(
                 SERVER_ADDR,
-                SERVER_CREDENTIALS
+                SERVER_CREDENTIALS,
             );
             await clientStub.waitForReady(Date.now() + 500);
             await checkVersion(clientStub);
@@ -75,7 +75,7 @@ describe("clientStub", () => {
         it("should close channel", async () => {
             const clientStub = new dgraph.DgraphClientStub(
                 SERVER_ADDR,
-                SERVER_CREDENTIALS
+                SERVER_CREDENTIALS,
             );
             clientStub.close();
             const p = clientStub.checkVersion(new dgraph.Check());
@@ -87,7 +87,7 @@ describe("clientStub", () => {
         it("should close channel if grpc client is closed", async () => {
             const clientStub = new dgraph.DgraphClientStub(
                 SERVER_ADDR,
-                SERVER_CREDENTIALS
+                SERVER_CREDENTIALS,
             );
             clientStub.grpcClient().close();
             const p = clientStub.checkVersion(new dgraph.Check());
