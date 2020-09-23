@@ -76,9 +76,9 @@ describe("util", () => {
         it("should handle valid response in callback", async () => {
             // tslint:disable-next-line variable-name
             const f = (
-                _a: number,
+                _A: number,
                 b: number,
-                _c: number,
+                _C: number,
                 cb: (err?: Error, res?: number) => void,
             ) => {
                 cb(undefined, b);
@@ -92,9 +92,9 @@ describe("util", () => {
             const e = new Error();
             // tslint:disable-next-line variable-name
             const f = (
-                _a: number,
-                _b: number,
-                _c: number,
+                _A: number,
+                _B: number,
+                _C: number,
                 cb: (err?: Error, res?: number) => void,
             ) => {
                 cb(e);
@@ -107,9 +107,9 @@ describe("util", () => {
             const e = new Error();
             // tslint:disable-next-line variable-name
             const f = (
-                _a: number,
+                _A: number,
                 b: number,
-                _c: number,
+                _C: number,
                 cb: (err?: Error, res?: number) => void,
             ) => {
                 cb(e, b);
@@ -121,9 +121,9 @@ describe("util", () => {
         it("should handle callback called without arguments", async () => {
             // tslint:disable-next-line variable-name
             const f = (
-                _a: number,
-                _b: number,
-                _c: number,
+                _A: number,
+                _B: number,
+                _C: number,
                 cb: (err?: Error, res?: number) => void,
             ) => {
                 cb();

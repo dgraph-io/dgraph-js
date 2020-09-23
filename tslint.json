@@ -1,7 +1,5 @@
 {
-  "extends": [
-    "tslint-microsoft-contrib"
-  ],
+  "extends": ["tslint-microsoft-contrib"],
   "rules": {
     "missing-jsdoc": false,
     "no-relative-imports": false,
@@ -17,7 +15,7 @@
     "newline-per-chained-call": false,
     "no-default-export": false,
     "trailing-comma": [
-      true,
+      false,
       {
         "multiline": "always",
         "singleline": "never"
@@ -30,10 +28,6 @@
       "property-declaration",
       "member-variable-declaration"
     ],
-    "quotemark": [
-      true,
-      "double",
-      "avoid-escape"
-    ]
+    "quotemark": [true, "double", "avoid-escape"]
   }
 }
