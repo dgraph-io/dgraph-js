@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 
 const dgraph = require("dgraph-js");
-const grpc = require("grpc");
 
 // Create a client stub.
 function newClientStub() {
@@ -20,7 +19,7 @@ function newClientStub() {
     );
     return new dgraph.DgraphClientStub(
         "localhost:9080",
-        grpc.credentials.createSsl(rootCaCert, clientCertKey, clientCert)
+        dgraph.grpc.credentials.createSsl(rootCaCert, clientCertKey, clientCert)
     );
 }
 

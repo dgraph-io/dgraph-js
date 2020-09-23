@@ -23,3 +23,5 @@ export * from "./txn";
 
 // Export error constants.
 export * from "./errors";
+
+export * as grpc from "@grpc/grpc-js";
