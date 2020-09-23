@@ -14,33 +14,13 @@ export declare class Txn {
     private readonly useReadOnly;
     private readonly useBestEffort;
     constructor(dc: DgraphClient, txnOpts?: TxnOptions);
-    query(
-        q: string,
-        metadata?: grpc.Metadata,
-        options?: grpc.CallOptions
-    ): Promise<types.Response>;
-    queryWithVars(
-        q: string,
-        vars?: {
-            [k: string]: any;
-        },
-        metadata?: grpc.Metadata,
-        options?: grpc.CallOptions
-    ): Promise<types.Response>;
-    mutate(
-        mu: types.Mutation,
-        metadata?: grpc.Metadata,
-        options?: grpc.CallOptions
-    ): Promise<types.Response>;
-    doRequest(
-        req: messages.Request,
-        metadata?: grpc.Metadata,
-        options?: grpc.CallOptions
-    ): Promise<types.Response>;
+    query(q: string, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
+    queryWithVars(q: string, vars?: {
+        [k: string]: any;
+    }, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
+    mutate(mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
+    doRequest(req: messages.Request, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
     commit(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void>;
-    discard(
-        metadata?: grpc.Metadata,
-        options?: grpc.CallOptions
-    ): Promise<void>;
+    discard(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void>;
     private mergeContext;
 }
