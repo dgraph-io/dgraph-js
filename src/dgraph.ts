@@ -18,6 +18,9 @@ export * from "./clientStub";
 // Export DgraphClient class and deleteEdges function.
 export * from "./client";
 
+//Export clientStubFromSlashGraphQLEndpoint function.
+export * from "./clientStubFromSlash";
+
 // Export Txn class.
 export * from "./txn";
 

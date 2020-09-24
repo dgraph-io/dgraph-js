@@ -1,5 +1,4 @@
 const dgraph = require("dgraph-js");
-const grpc = require("grpc");
 
 // Create a client stub.
 function newClientStub() {
@@ -87,7 +86,7 @@ async function createData(dgraphClient) {
         console.log(
             `Created person named "Alice" with uid = ${response
                 .getUidsMap()
-                .get("alice")}\n`
+                .get("alice")}\n`,
         );
 
         console.log("All created nodes (map from blank node names to uids):");
