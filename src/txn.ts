@@ -1,15 +1,16 @@
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
 
 import * as messages from "../generated/api_pb";
 
 import { DgraphClient, isJwtExpired } from "./client";
-import { ERR_ABORTED, ERR_BEST_EFFORT_REQUIRED_READ_ONLY, ERR_FINISHED, ERR_READ_ONLY } from "./errors";
-import * as types from "./types";
 import {
-    isAbortedError,
-    isConflictError,
-    stringifyMessage,
-} from "./util";
+    ERR_ABORTED,
+    ERR_BEST_EFFORT_REQUIRED_READ_ONLY,
+    ERR_FINISHED,
+    ERR_READ_ONLY,
+} from "./errors";
+import * as types from "./types";
+import { isAbortedError, isConflictError, stringifyMessage } from "./util";
 
 export type TxnOptions = {
     readOnly?: boolean;
@@ -41,11 +42,17 @@ export class Txn {
     constructor(dc: DgraphClient, txnOpts?: TxnOptions) {
         this.dc = dc;
         this.ctx = new messages.TxnContext();
-        const defaultedTxnOpts = {readOnly: false, bestEffort: false, ...txnOpts};
+        const defaultedTxnOpts = {
+            readOnly: false,
+            bestEffort: false,
+            ...txnOpts,
+        };
         this.useReadOnly = defaultedTxnOpts.readOnly;
         this.useBestEffort = defaultedTxnOpts.bestEffort;
         if (this.useBestEffort && !this.useReadOnly) {
-            this.dc.debug(`Client attempted to query using best-effort without setting the transaction to read-only`);
+            this.dc.debug(
+                `Client attempted to query using best-effort without setting the transaction to read-only`,
+            );
             throw ERR_BEST_EFFORT_REQUIRED_READ_ONLY;
         }
     }
@@ -55,7 +62,11 @@ export class Txn {
      * need to be made in the same transaction, it's convenient to chain the method,
      * e.g. client.newTxn().query("...").
      */
-    public query(q: string, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response> {
+    public query(
+        q: string,
+        metadata?: grpc.Metadata,
+        options?: grpc.CallOptions,
+    ): Promise<types.Response> {
         return this.queryWithVars(q, undefined, metadata, options);
     }
 
@@ -70,7 +81,9 @@ export class Txn {
         options?: grpc.CallOptions,
     ): Promise<types.Response> {
         if (this.finished) {
-            this.dc.debug(`Query request (ERR_FINISHED):\nquery = ${q}\nvars = ${vars}`);
+            this.dc.debug(
+                `Query request (ERR_FINISHED):\nquery = ${q}\nvars = ${vars}`,
+            );
             throw ERR_FINISHED;
         }
 
@@ -106,8 +119,10 @@ export class Txn {
      * operations on it will fail.
      */
     public async mutate(
-        mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response> {
-
+        mu: types.Mutation,
+        metadata?: grpc.Metadata,
+        options?: grpc.CallOptions,
+    ): Promise<types.Response> {
         const req = new messages.Request();
         req.setStartTs(this.ctx.getStartTs());
         req.setMutationsList([<messages.Mutation>mu]);
@@ -117,17 +132,30 @@ export class Txn {
     }
 
     public async doRequest(
-        req: messages.Request, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response> {
+        req: messages.Request,
+        metadata?: grpc.Metadata,
+        options?: grpc.CallOptions,
+    ): Promise<types.Response> {
         const mutationList = req.getMutationsList();
         if (this.finished) {
-            this.dc.debug(`Do request (ERR_FINISHED):\nquery = ${req.getQuery()}\nvars = ${req.getVarsMap()}`);
-            this.dc.debug(`Do request (ERR_FINISHED):\nmutation = ${stringifyMessage(mutationList[0])}`);
+            this.dc.debug(
+                `Do request (ERR_FINISHED):\nquery = ${req.getQuery()}\nvars = ${req.getVarsMap()}`,
+            );
+            this.dc.debug(
+                `Do request (ERR_FINISHED):\nmutation = ${stringifyMessage(
+                    mutationList[0],
+                )}`,
+            );
             throw ERR_FINISHED;
         }
 
         if (mutationList.length > 0) {
             if (this.useReadOnly) {
-                this.dc.debug(`Do request (ERR_READ_ONLY):\nmutation = ${stringifyMessage(mutationList[0])}`);
+                this.dc.debug(
+                    `Do request (ERR_READ_ONLY):\nmutation = ${stringifyMessage(
+                        mutationList[0],
+                    )}`,
+                );
                 throw ERR_READ_ONLY;
             }
             this.mutated = true;
@@ -138,7 +166,7 @@ export class Txn {
 
         let resp: types.Response;
         const c = this.dc.anyClient();
-        const operation = async() => c.query(req, metadata, options);
+        const operation = async () => c.query(req, metadata, options);
         try {
             resp = types.createResponse(await operation());
         } catch (e) {
@@ -158,7 +186,7 @@ export class Txn {
                 // Transaction could be aborted(status.ABORTED) if commitNow was true, or server
                 // could send a message that this mutation conflicts(status.FAILED_PRECONDITION)
                 // with another transaction.
-                throw (isAbortedError(e) || isConflictError(e)) ? ERR_ABORTED : e;
+                throw isAbortedError(e) || isConflictError(e) ? ERR_ABORTED : e;
             }
         }
 
@@ -181,7 +209,10 @@ export class Txn {
      * It's up to the user to decide if they wish to retry. In this case, the user
      * should create a new transaction.
      */
-    public async commit(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void> {
+    public async commit(
+        metadata?: grpc.Metadata,
+        options?: grpc.CallOptions,
+    ): Promise<void> {
         if (this.finished) {
             throw ERR_FINISHED;
         }
@@ -192,7 +223,8 @@ export class Txn {
         }
 
         const c = this.dc.anyClient();
-        const operation = async () => c.commitOrAbort(this.ctx, metadata, options);
+        const operation = async () =>
+            c.commitOrAbort(this.ctx, metadata, options);
         try {
             await operation();
         } catch (e) {
@@ -215,7 +247,10 @@ export class Txn {
      * is unavailable. In these cases, the server will eventually do the transaction
      * clean up.
      */
-    public async discard(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void> {
+    public async discard(
+        metadata?: grpc.Metadata,
+        options?: grpc.CallOptions,
+    ): Promise<void> {
         if (this.finished) {
             return;
         }
@@ -227,7 +262,8 @@ export class Txn {
 
         this.ctx.setAborted(true);
         const c = this.dc.anyClient();
-        const operation = async () => c.commitOrAbort(this.ctx, metadata, options);
+        const operation = async () =>
+            c.commitOrAbort(this.ctx, metadata, options);
         try {
             await operation();
         } catch (e) {

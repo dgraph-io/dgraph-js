@@ -1,12 +1,12 @@
+import * as grpc from "@grpc/grpc-js";
 import * as jspb from "google-protobuf";
-import * as grpc from "grpc";
 
 export function errorCode(err: any): { valid: boolean; code: number } { // tslint:disable-line no-any
     if (
         err === undefined ||
         typeof err !== "object" ||
         !err.hasOwnProperty("code") || // tslint:disable-line no-unsafe-any
-        typeof err.code !== "number"   // tslint:disable-line no-unsafe-any
+        typeof err.code !== "number" // tslint:disable-line no-unsafe-any
     ) {
         return {
             valid: false,
@@ -27,12 +27,16 @@ export function isAbortedError(err: any): boolean { // tslint:disable-line no-an
 
 export function isConflictError(err: any): boolean { // tslint:disable-line no-any
     const ec = errorCode(err);
-    return ec.valid && (ec.code === grpc.status.ABORTED || ec.code === grpc.status.FAILED_PRECONDITION);
+    return (
+        ec.valid &&
+        (ec.code === grpc.status.ABORTED ||
+            ec.code === grpc.status.FAILED_PRECONDITION)
+    );
 }
 
 export function isUnauthenticatedError(err: any): boolean { // tslint:disable-line no-any
     const ec = errorCode(err);
-    return ec.valid && (ec.code === grpc.status.UNAUTHENTICATED);
+    return ec.valid && ec.code === grpc.status.UNAUTHENTICATED;
 }
 
 export function promisify1<A, T>(
@@ -41,13 +45,18 @@ export function promisify1<A, T>(
 ): (arg: A) => Promise<T> {
     return (arg: A) => {
         // tslint:disable-next-line no-any
-        return new Promise((resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void): void => {
-            f.call(
-                thisContext,
-                arg,
-                (err?: Error, result?: T): void => (err !== undefined && err !== null) ? reject(err) : resolve(result),
-            );
-        });
+        return new Promise(
+            (
+                resolve: (value?: T | PromiseLike<T>) => void,
+                reject: (reason?: any) => void // tslint:disable-line no-any
+            ): void => {
+                f.call(thisContext, arg, (err?: Error, result?: T): void =>
+                    err !== undefined && err !== null
+                        ? reject(err)
+                        : resolve(result)
+                );
+            }
+        );
     };
 }
 
@@ -57,15 +66,23 @@ export function promisify3<A, B, C, T>(
 ): (argA: A, argB: B, argC: C) => Promise<T> {
     return (argA: A, argB: B, argC: C) => {
         // tslint:disable-next-line no-any
-        return new Promise((resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void): void => {
-            f.call(
-                thisContext,
-                argA,
-                argB,
-                argC,
-                (err?: Error, result?: T): void => (err !== undefined && err !== null) ? reject(err) : resolve(result),
-            );
-        });
+        return new Promise(
+            (
+                resolve: (value?: T | PromiseLike<T>) => void,
+                reject: (reason?: any) => void, // tslint:disable-line no-any
+            ): void => {
+                f.call(
+                    thisContext,
+                    argA,
+                    argB,
+                    argC,
+                    (err?: Error, result?: T): void =>
+                        err !== undefined && err !== null
+                            ? reject(err)
+                            : resolve(result),
+                );
+            },
+        );
     };
 }
 

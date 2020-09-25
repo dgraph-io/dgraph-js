@@ -1,4 +1,4 @@
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
 import * as messages from "../generated/api_pb";
 import { DgraphClientStub } from "./clientStub";
 import { Txn, TxnOptions } from "./txn";

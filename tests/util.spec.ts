@@ -1,14 +1,28 @@
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
 
 // Non-exported functions.
-import { isAbortedError, isBase64, isConflictError, promisify1, promisify3 } from "../src/util";
+import {
+    isAbortedError,
+    isBase64,
+    isConflictError,
+    promisify1,
+    promisify3,
+} from "../src/util";
 
-function fnAddThisVal1(a: number, cb: (err?: Error, res?: number) => void): void {
+function fnAddThisVal1(
+    a: number,
+    cb: (err?: Error, res?: number) => void,
+): void {
     // tslint:disable-next-line no-invalid-this
     cb(undefined, (<{ val: number }>this).val + a);
 }
 
-function fnAddThisVal3(a: number, b: number, c: number, cb: (err?: Error, res?: number) => void): void {
+function fnAddThisVal3(
+    a: number,
+    b: number,
+    c: number,
+    cb: (err?: Error, res?: number) => void,
+): void {
     // tslint:disable-next-line no-invalid-this
     cb(undefined, (<{ val: number }>this).val + a + b + c);
 }
@@ -60,8 +74,13 @@ describe("util", () => {
 
     describe("promisify3", () => {
         it("should handle valid response in callback", async () => {
-          // tslint:disable-next-line variable-name
-            const f = (_a: number, b: number, _c: number, cb: (err?: Error, res?: number) => void) => {
+            // tslint:disable-next-line variable-name
+            const f = (
+                _A: number,
+                b: number,
+                _C: number,
+                cb: (err?: Error, res?: number) => void,
+            ) => {
                 cb(undefined, b);
             };
 
@@ -72,7 +91,12 @@ describe("util", () => {
         it("should handle error in callback", async () => {
             const e = new Error();
             // tslint:disable-next-line variable-name
-            const f = (_a: number , _b: number, _c: number, cb: (err?: Error, res?: number) => void) => {
+            const f = (
+                _A: number,
+                _B: number,
+                _C: number,
+                cb: (err?: Error, res?: number) => void,
+            ) => {
                 cb(e);
             };
 
@@ -82,7 +106,12 @@ describe("util", () => {
         it("should handle error if valid response is also present in callback", async () => {
             const e = new Error();
             // tslint:disable-next-line variable-name
-            const f = (_a: number, b: number, _c: number, cb: (err?: Error, res?: number) => void) => {
+            const f = (
+                _A: number,
+                b: number,
+                _C: number,
+                cb: (err?: Error, res?: number) => void,
+            ) => {
                 cb(e, b);
             };
 
@@ -91,11 +120,18 @@ describe("util", () => {
 
         it("should handle callback called without arguments", async () => {
             // tslint:disable-next-line variable-name
-            const f = (_a: number, _b: number, _c: number, cb: (err?: Error, res?: number) => void) => {
+            const f = (
+                _A: number,
+                _B: number,
+                _C: number,
+                cb: (err?: Error, res?: number) => void,
+            ) => {
                 cb();
             };
 
-            await expect(promisify3(f, undefined)(1, 2, 3)).resolves.toBeUndefined();
+            await expect(
+                promisify3(f, undefined)(1, 2, 3),
+            ).resolves.toBeUndefined();
         });
 
         it("should handle thisContext argument", async () => {
@@ -103,7 +139,9 @@ describe("util", () => {
                 val: 45,
             };
 
-            await expect(promisify3(fnAddThisVal3, o)(5, 10, 15)).resolves.toEqual(75);
+            await expect(
+                promisify3(fnAddThisVal3, o)(5, 10, 15),
+            ).resolves.toEqual(75);
         });
     });
 
@@ -120,7 +158,9 @@ describe("util", () => {
 
         it("should return true for objects correct having correct code value", () => {
             expect(isAbortedError({ code: grpc.status.ABORTED })).toBe(true);
-            expect(isAbortedError({ code: grpc.status.FAILED_PRECONDITION })).toBe(false);
+            expect(
+                isAbortedError({ code: grpc.status.FAILED_PRECONDITION }),
+            ).toBe(false);
             expect(isAbortedError({ code: grpc.status.OK })).toBe(false);
         });
     });
@@ -138,7 +178,9 @@ describe("util", () => {
 
         it("should return true for objects correct having correct code value", () => {
             expect(isConflictError({ code: grpc.status.ABORTED })).toBe(true);
-            expect(isConflictError({ code: grpc.status.FAILED_PRECONDITION })).toBe(true);
+            expect(
+                isConflictError({ code: grpc.status.FAILED_PRECONDITION }),
+            ).toBe(true);
             expect(isConflictError({ code: grpc.status.OK })).toBe(false);
         });
     });
