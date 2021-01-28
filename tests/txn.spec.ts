@@ -11,6 +11,7 @@ let client: dgraph.DgraphClient;
 
 describe("txn", () => {
     describe("queryWithVars", () => {
+        let uid : any;
         beforeAll(async () => {
             client = await setup();
             await setSchema(client, "name: string @index(exact) .");
@@ -18,7 +19,8 @@ describe("txn", () => {
             const mu = new dgraph.Mutation();
             mu.setCommitNow(true);
             mu.setSetNquads('_:alice <name> "Alice" .');
-            await client.newTxn().mutate(mu);
+            const mutres = await client.newTxn().mutate(mu);
+            uid = mutres.getUidsMap().get("alice")
         });
 
         it("should query with variables", async () => {
@@ -57,7 +59,9 @@ describe("txn", () => {
                 );
             let resRdf = res.getRdf_asB64();
             let buff = Buffer.from(resRdf, "base64");
-            expect(buff.toString("utf-8")).toEqual("Alice");
+            expect(buff.toString("utf-8")).toEqual(
+                "<" + uid + '> <name> "Alice" .\n'
+            );
 
             res = await client
                 .newTxn()
@@ -67,10 +71,13 @@ describe("txn", () => {
                         $a: new String("Alice"), // tslint:disable-line no-construct
                         $b: true, // non-string properties are ignored
                     }
-                );
+            );
+            
             resRdf = res.getRdf_asB64();
             buff = Buffer.from(resRdf, "base64");
-            expect(buff.toString("utf-8")).toEqual("Alice");
+            expect(buff.toString("utf-8")).toEqual(
+                "<" + uid + '> <name> "Alice" .\n'
+            );
         });
 
         it("should ignore properties with non-string values", async () => {
