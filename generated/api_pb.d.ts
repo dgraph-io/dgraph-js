@@ -26,6 +26,9 @@ export class Request extends jspb.Message {
   getCommitNow(): boolean;
   setCommitNow(value: boolean): void;
 
+  getRespFormat(): Request.RespFormatMap[keyof Request.RespFormatMap];
+  setRespFormat(value: Request.RespFormatMap[keyof Request.RespFormatMap]): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Request.AsObject;
   static toObject(includeInstance: boolean, msg: Request): Request.AsObject;
@@ -45,7 +48,15 @@ export namespace Request {
     bestEffort: boolean,
     mutationsList: Array<Mutation.AsObject>,
     commitNow: boolean,
+    respFormat: Request.RespFormatMap[keyof Request.RespFormatMap],
   }
+
+  export interface RespFormatMap {
+    JSON: 0;
+    RDF: 1;
+  }
+
+  export const RespFormat: RespFormatMap;
 }
 
 export class Uids extends jspb.Message {
@@ -67,6 +78,28 @@ export class Uids extends jspb.Message {
 export namespace Uids {
   export type AsObject = {
     uidsList: Array<string>,
+  }
+}
+
+export class ListOfString extends jspb.Message {
+  clearValueList(): void;
+  getValueList(): Array<string>;
+  setValueList(value: Array<string>): void;
+  addValue(value: string, index?: number): string;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ListOfString.AsObject;
+  static toObject(includeInstance: boolean, msg: ListOfString): ListOfString.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: ListOfString, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ListOfString;
+  static deserializeBinaryFromReader(message: ListOfString, reader: jspb.BinaryReader): ListOfString;
+}
+
+export namespace ListOfString {
+  export type AsObject = {
+    valueList: Array<string>,
   }
 }
 
@@ -93,6 +126,13 @@ export class Response extends jspb.Message {
 
   getUidsMap(): jspb.Map<string, string>;
   clearUidsMap(): void;
+  getRdf(): Uint8Array | string;
+  getRdf_asU8(): Uint8Array;
+  getRdf_asB64(): string;
+  setRdf(value: Uint8Array | string): void;
+
+  getHdrsMap(): jspb.Map<string, ListOfString>;
+  clearHdrsMap(): void;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Response.AsObject;
   static toObject(includeInstance: boolean, msg: Response): Response.AsObject;
@@ -110,6 +150,8 @@ export namespace Response {
     latency?: Latency.AsObject,
     metrics?: Metrics.AsObject,
     uidsMap: Array<[string, string]>,
+    rdf: Uint8Array | string,
+    hdrsMap: Array<[string, ListOfString.AsObject]>,
   }
 }
 

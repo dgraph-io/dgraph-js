@@ -18,6 +18,10 @@ export declare class Txn {
     queryWithVars(q: string, vars?: {
         [k: string]: any;
     }, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
+    queryRDF(q: string, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
+    queryRDFWithVars(q: string, vars?: {
+        [k: string]: any;
+    }, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
     mutate(mu: types.Mutation, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
     doRequest(req: messages.Request, metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<types.Response>;
     commit(metadata?: grpc.Metadata, options?: grpc.CallOptions): Promise<void>;

@@ -46,6 +46,33 @@ describe("txn", () => {
             expect(resJson.me[0].name).toEqual("Alice");
         });
 
+        it("should query with variables RDF", async () => {
+            let res = await client
+                .newTxn()
+                .queryRDFWithVars(
+                    "query me($a: string) { me(func: eq(name, $a)) { name }}",
+                    {
+                        $a: "Alice",
+                    }
+                );
+            let resRdf = res.getRdf_asB64();
+            let buff = Buffer.from(resRdf, "base64");
+            expect(buff).toEqual("Alice");
+
+            res = await client
+                .newTxn()
+                .queryRDFWithVars(
+                    "query me($a: string) { me(func: eq(name, $a)) { name }}",
+                    {
+                        $a: new String("Alice"), // tslint:disable-line no-construct
+                        $b: true, // non-string properties are ignored
+                    }
+                );
+            resRdf = res.getRdf_asB64();
+            buff = Buffer.from(resRdf, "base64");
+            expect(buff).toEqual("Alice");
+        });
+
         it("should ignore properties with non-string values", async () => {
             const res = await client.newTxn().queryWithVars(
                 "query me($a: string) { me(func: eq(name, $a)) { name }}",
