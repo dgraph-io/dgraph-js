@@ -11,7 +11,7 @@ let client: dgraph.DgraphClient;
 
 describe("txn", () => {
     describe("queryWithVars", () => {
-        let uid : any;
+        let uid;
         beforeAll(async () => {
             client = await setup();
             await setSchema(client, "name: string @index(exact) .");
@@ -20,7 +20,7 @@ describe("txn", () => {
             mu.setCommitNow(true);
             mu.setSetNquads('_:alice <name> "Alice" .');
             const mutres = await client.newTxn().mutate(mu);
-            uid = mutres.getUidsMap().get("alice")
+            uid = mutres.getUidsMap().get("alice");
         });
 
         it("should query with variables", async () => {
@@ -60,7 +60,7 @@ describe("txn", () => {
             let resRdf = res.getRdf_asB64();
             let buff = Buffer.from(resRdf, "base64");
             expect(buff.toString("utf-8")).toEqual(
-                "<" + uid + '> <name> "Alice" .\n'
+                `<${uid}> <name> \"Alice\" .\n`
             );
 
             res = await client
@@ -72,11 +72,10 @@ describe("txn", () => {
                         $b: true, // non-string properties are ignored
                     }
             );
-            
             resRdf = res.getRdf_asB64();
             buff = Buffer.from(resRdf, "base64");
             expect(buff.toString("utf-8")).toEqual(
-                "<" + uid + '> <name> "Alice" .\n'
+                `<${uid}> <name> \"Alice\" .\n`
             );
         });
 
