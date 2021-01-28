@@ -57,7 +57,7 @@ describe("txn", () => {
                 );
             let resRdf = res.getRdf_asB64();
             let buff = Buffer.from(resRdf, "base64");
-            expect(buff).toEqual("Alice");
+            expect(buff.toString("utf-8")).toEqual("Alice");
 
             res = await client
                 .newTxn()
@@ -70,7 +70,7 @@ describe("txn", () => {
                 );
             resRdf = res.getRdf_asB64();
             buff = Buffer.from(resRdf, "base64");
-            expect(buff).toEqual("Alice");
+            expect(buff.toString("utf-8")).toEqual("Alice");
         });
 
         it("should ignore properties with non-string values", async () => {
