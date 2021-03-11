@@ -193,7 +193,7 @@ export class Txn {
             );
             this.dc.debug(
                 `Do request (ERR_FINISHED):\nmutation = ${stringifyMessage(
-                    mutationList[0]
+                    mutationList[0],
                 )}`,
             );
             throw ERR_FINISHED;
