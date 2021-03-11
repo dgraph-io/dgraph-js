@@ -78,7 +78,7 @@ export class Txn {
         q: string,
         vars?: { [k: string]: any }, // tslint:disable-line no-any
         metadata?: grpc.Metadata,
-        options?: grpc.CallOptions
+        options?: grpc.CallOptions,
     ): Promise<types.Response> {
         if (this.finished) {
             this.dc.debug(
@@ -189,7 +189,7 @@ export class Txn {
         const mutationList = req.getMutationsList();
         if (this.finished) {
             this.dc.debug(
-                `Do request (ERR_FINISHED):\nquery = ${req.getQuery()}\nvars = ${req.getVarsMap()}`
+                `Do request (ERR_FINISHED):\nquery = ${req.getQuery()}\nvars = ${req.getVarsMap()}`,
             );
             this.dc.debug(
                 `Do request (ERR_FINISHED):\nmutation = ${stringifyMessage(
@@ -203,7 +203,7 @@ export class Txn {
             if (this.useReadOnly) {
                 this.dc.debug(
                     `Do request (ERR_READ_ONLY):\nmutation = ${stringifyMessage(
-                        mutationList[0]
+                        mutationList[0],
                     )}`,
                 );
                 throw ERR_READ_ONLY;
@@ -299,7 +299,7 @@ export class Txn {
      */
     public async discard(
         metadata?: grpc.Metadata,
-        options?: grpc.CallOptions
+        options?: grpc.CallOptions,
     ): Promise<void> {
         if (this.finished) {
             return;
