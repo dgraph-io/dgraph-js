@@ -51,7 +51,7 @@ export class Txn {
         this.useBestEffort = defaultedTxnOpts.bestEffort;
         if (this.useBestEffort && !this.useReadOnly) {
             this.dc.debug(
-                `Client attempted to query using best-effort without setting the transaction to read-only`
+                `Client attempted to query using best-effort without setting the transaction to read-only`,
             );
             throw ERR_BEST_EFFORT_REQUIRED_READ_ONLY;
         }
@@ -65,7 +65,7 @@ export class Txn {
     public query(
         q: string,
         metadata?: grpc.Metadata,
-        options?: grpc.CallOptions
+        options?: grpc.CallOptions,
     ): Promise<types.Response> {
         return this.queryWithVars(q, undefined, metadata, options);
     }
@@ -82,7 +82,7 @@ export class Txn {
     ): Promise<types.Response> {
         if (this.finished) {
             this.dc.debug(
-                `Query request (ERR_FINISHED):\nquery = ${q}\nvars = ${vars}`
+                `Query request (ERR_FINISHED):\nquery = ${q}\nvars = ${vars}`,
             );
             throw ERR_FINISHED;
         }
@@ -171,7 +171,7 @@ export class Txn {
     public async mutate(
         mu: types.Mutation,
         metadata?: grpc.Metadata,
-        options?: grpc.CallOptions
+        options?: grpc.CallOptions,
     ): Promise<types.Response> {
         const req = new messages.Request();
         req.setStartTs(this.ctx.getStartTs());
@@ -184,7 +184,7 @@ export class Txn {
     public async doRequest(
         req: messages.Request,
         metadata?: grpc.Metadata,
-        options?: grpc.CallOptions
+        options?: grpc.CallOptions,
     ): Promise<types.Response> {
         const mutationList = req.getMutationsList();
         if (this.finished) {
@@ -194,7 +194,7 @@ export class Txn {
             this.dc.debug(
                 `Do request (ERR_FINISHED):\nmutation = ${stringifyMessage(
                     mutationList[0]
-                )}`
+                )}`,
             );
             throw ERR_FINISHED;
         }
@@ -204,7 +204,7 @@ export class Txn {
                 this.dc.debug(
                     `Do request (ERR_READ_ONLY):\nmutation = ${stringifyMessage(
                         mutationList[0]
-                    )}`
+                    )}`,
                 );
                 throw ERR_READ_ONLY;
             }
@@ -261,7 +261,7 @@ export class Txn {
      */
     public async commit(
         metadata?: grpc.Metadata,
-        options?: grpc.CallOptions
+        options?: grpc.CallOptions,
     ): Promise<void> {
         if (this.finished) {
             throw ERR_FINISHED;
