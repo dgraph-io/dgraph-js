@@ -444,6 +444,9 @@ export class NQuad extends jspb.Message {
   setFacetsList(value: Array<Facet>): void;
   addFacets(value?: Facet, index?: number): Facet;
 
+  getNamespace(): number;
+  setNamespace(value: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): NQuad.AsObject;
   static toObject(includeInstance: boolean, msg: NQuad): NQuad.AsObject;
@@ -463,6 +466,7 @@ export namespace NQuad {
     label: string,
     lang: string,
     facetsList: Array<Facet.AsObject>,
+    namespace: number,
   }
 }
 
@@ -632,6 +636,9 @@ export class LoginRequest extends jspb.Message {
   getRefreshToken(): string;
   setRefreshToken(value: string): void;
 
+  getNamespace(): number;
+  setNamespace(value: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): LoginRequest.AsObject;
   static toObject(includeInstance: boolean, msg: LoginRequest): LoginRequest.AsObject;
@@ -647,6 +654,7 @@ export namespace LoginRequest {
     userid: string,
     password: string,
     refreshToken: string,
+    namespace: number,
   }
 }
 

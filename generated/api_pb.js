@@ -3401,7 +3401,8 @@ proto.api.NQuad.toObject = function(includeInstance, msg) {
     label: jspb.Message.getFieldWithDefault(msg, 5, ""),
     lang: jspb.Message.getFieldWithDefault(msg, 6, ""),
     facetsList: jspb.Message.toObjectList(msg.getFacetsList(),
-    proto.api.Facet.toObject, includeInstance)
+    proto.api.Facet.toObject, includeInstance),
+    namespace: jspb.Message.getFieldWithDefault(msg, 8, 0)
   };
 
   if (includeInstance) {
@@ -3467,6 +3468,10 @@ proto.api.NQuad.deserializeBinaryFromReader = function(msg, reader) {
       var value = new proto.api.Facet;
       reader.readMessage(value,proto.api.Facet.deserializeBinaryFromReader);
       msg.addFacets(value);
+      break;
+    case 8:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setNamespace(value);
       break;
     default:
       reader.skipField();
@@ -3546,6 +3551,13 @@ proto.api.NQuad.serializeBinaryToWriter = function(message, writer) {
       7,
       f,
       proto.api.Facet.serializeBinaryToWriter
+    );
+  }
+  f = message.getNamespace();
+  if (f !== 0) {
+    writer.writeUint64(
+      8,
+      f
     );
   }
 };
@@ -3713,6 +3725,24 @@ proto.api.NQuad.prototype.addFacets = function(opt_value, opt_index) {
  */
 proto.api.NQuad.prototype.clearFacetsList = function() {
   return this.setFacetsList([]);
+};
+
+
+/**
+ * optional uint64 namespace = 8;
+ * @return {number}
+ */
+proto.api.NQuad.prototype.getNamespace = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.api.NQuad} returns this
+ */
+proto.api.NQuad.prototype.setNamespace = function(value) {
+  return jspb.Message.setProto3IntField(this, 8, value);
 };
 
 
@@ -4820,7 +4850,8 @@ proto.api.LoginRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     userid: jspb.Message.getFieldWithDefault(msg, 1, ""),
     password: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    refreshToken: jspb.Message.getFieldWithDefault(msg, 3, "")
+    refreshToken: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    namespace: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
   if (includeInstance) {
@@ -4869,6 +4900,10 @@ proto.api.LoginRequest.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {string} */ (reader.readString());
       msg.setRefreshToken(value);
       break;
+    case 4:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setNamespace(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -4916,6 +4951,13 @@ proto.api.LoginRequest.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeString(
       3,
+      f
+    );
+  }
+  f = message.getNamespace();
+  if (f !== 0) {
+    writer.writeUint64(
+      4,
       f
     );
   }
@@ -4973,6 +5015,24 @@ proto.api.LoginRequest.prototype.getRefreshToken = function() {
  */
 proto.api.LoginRequest.prototype.setRefreshToken = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional uint64 namespace = 4;
+ * @return {number}
+ */
+proto.api.LoginRequest.prototype.getNamespace = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.api.LoginRequest} returns this
+ */
+proto.api.LoginRequest.prototype.setNamespace = function(value) {
+  return jspb.Message.setProto3IntField(this, 4, value);
 };
 
 
