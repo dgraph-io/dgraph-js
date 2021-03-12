@@ -92,6 +92,37 @@ export class DgraphClientStub {
         if (userid !== undefined) {
             req.setUserid(userid);
             req.setPassword(password);
+            req.setNamespace(0);
+        } else if (refreshJwt !== undefined) {
+            // Use the caller-supplied refreshJwt
+            req.setRefreshToken(refreshJwt);
+        } else {
+            req.setRefreshToken(this.refreshJwt);
+        }
+        const resp = await this.promisified.login(
+            req,
+            this.ensureMetadata(metadata),
+            ensureCallOptions(options),
+        );
+        const jwtResponse = messages.Jwt.deserializeBinary(resp.getJson_asU8());
+        this.accessJwt = jwtResponse.getAccessJwt();
+        this.refreshJwt = jwtResponse.getRefreshJwt();
+        return jwtResponse;
+    }
+
+    public async loginIntoNamespace(
+        userid?: string,
+        password?: string,
+        namespace?: number,
+        refreshJwt?: string,
+        metadata?: grpc.Metadata,
+        options?: grpc.CallOptions,
+    ): Promise<messages.Jwt> {
+        const req = new messages.LoginRequest();
+        if (userid !== undefined) {
+            req.setUserid(userid);
+            req.setPassword(password);
+            req.setNamespace(namespace);
         } else if (refreshJwt !== undefined) {
             // Use the caller-supplied refreshJwt
             req.setRefreshToken(refreshJwt);
