@@ -2,8 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Calendar Versioning](https://calver.org/) starting v20.03.0.
+
+## [v20.11] - 2021-03-16
+
+### Added
+
+- Add support for RDF response ([#129])
+
+### Changed
+
+- Bumped gRPC libs
+
+## [v20.03.1] - 2020-10-04
+
+### Added
+
+- Extend support to connect to dgraph client via Slash endpoints and apiKey ([#125])
+
+### Changed
+
+- Migrate from `grpc` npm module to `grpc-js` in lieu of the deprecation of the former.
 
 ## [v20.03.0] - 2020-04-01
 
