@@ -11,6 +11,7 @@ let client: dgraph.DgraphClient;
 
 describe("txn", () => {
     describe("queryWithVars", () => {
+        let uid;
         beforeAll(async () => {
             client = await setup();
             await setSchema(client, "name: string @index(exact) .");
@@ -18,7 +19,8 @@ describe("txn", () => {
             const mu = new dgraph.Mutation();
             mu.setCommitNow(true);
             mu.setSetNquads('_:alice <name> "Alice" .');
-            await client.newTxn().mutate(mu);
+            const mutres = await client.newTxn().mutate(mu);
+            uid = mutres.getUidsMap().get("alice");
         });
 
         it("should query with variables", async () => {
@@ -44,6 +46,37 @@ describe("txn", () => {
             resJson = res.getJson(); // tslint:disable-line no-unsafe-any
             expect(resJson.me).toHaveLength(1);
             expect(resJson.me[0].name).toEqual("Alice");
+        });
+
+        it("should query with variables RDF", async () => {
+            let res = await client
+                .newTxn()
+                .queryRDFWithVars(
+                    "query me($a: string) { me(func: eq(name, $a)) { name }}",
+                    {
+                        $a: "Alice",
+                    }
+                );
+            let resRdf = res.getRdf_asB64();
+            let buff = Buffer.from(resRdf, "base64");
+            expect(buff.toString("utf-8")).toEqual(
+                `<${uid}> <name> \"Alice\" .\n`
+            );
+
+            res = await client
+                .newTxn()
+                .queryRDFWithVars(
+                    "query me($a: string) { me(func: eq(name, $a)) { name }}",
+                    {
+                        $a: new String("Alice"), // tslint:disable-line no-construct
+                        $b: true, // non-string properties are ignored
+                    }
+            );
+            resRdf = res.getRdf_asB64();
+            buff = Buffer.from(resRdf, "base64");
+            expect(buff.toString("utf-8")).toEqual(
+                `<${uid}> <name> \"Alice\" .\n`
+            );
         });
 
         it("should ignore properties with non-string values", async () => {

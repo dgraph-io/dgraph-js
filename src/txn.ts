@@ -107,6 +107,56 @@ export class Txn {
     }
 
     /**
+     * query sends a query to one of the connected Dgraph instances. If no mutations
+     * need to be made in the same transaction, it's convenient to chain the method,
+     * e.g. client.newTxn().query("...").
+     */
+    public queryRDF(
+        q: string,
+        metadata?: grpc.Metadata,
+        options?: grpc.CallOptions
+    ): Promise<types.Response> {
+        return this.queryRDFWithVars(q, undefined, metadata, options);
+    }
+
+    /**
+     * queryRDFWithVars is like query, but allows a variable map to be used. This can
+     * provide safety against injection attacks.
+     */
+    public async queryRDFWithVars(
+        q: string,
+        vars?: { [k: string]: any }, // tslint:disable-line no-any
+        metadata?: grpc.Metadata,
+        options?: grpc.CallOptions
+    ): Promise<types.Response> {
+        if (this.finished) {
+            this.dc.debug(
+                `Query request (ERR_FINISHED):\nquery = ${q}\nvars = ${vars}`
+            );
+            throw ERR_FINISHED;
+        }
+
+        const req = new messages.Request();
+        req.setQuery(q);
+        req.setStartTs(this.ctx.getStartTs());
+        req.setReadOnly(this.useReadOnly);
+        req.setBestEffort(this.useBestEffort);
+        req.setRespFormat(messages.Request.RespFormat.RDF);
+
+        if (vars !== undefined) {
+            const varsMap = req.getVarsMap();
+            Object.keys(vars).forEach((key: string) => {
+                const value = vars[key];
+                if (typeof value === "string" || value instanceof String) {
+                    varsMap.set(key, value.toString());
+                }
+            });
+        }
+
+        return this.doRequest(req, metadata, options);
+    }
+
+    /**
      * mutate allows data stored on Dgraph instances to be modified. The fields in
      * Mutation come in pairs, set and delete. Mutations can either be encoded as
      * JSON or as RDFs.
