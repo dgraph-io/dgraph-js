@@ -88,10 +88,22 @@ export class DgraphClientStub {
         metadata?: grpc.Metadata,
         options?: grpc.CallOptions,
     ): Promise<messages.Jwt> {
+        return this.loginIntoNamespace(userid, password, 0, refreshJwt, metadata, options);
+    }
+
+    public async loginIntoNamespace(
+        userid?: string,
+        password?: string,
+        namespace?: number,
+        refreshJwt?: string,
+        metadata?: grpc.Metadata,
+        options?: grpc.CallOptions,
+    ): Promise<messages.Jwt> {
         const req = new messages.LoginRequest();
         if (userid !== undefined) {
             req.setUserid(userid);
             req.setPassword(password);
+            req.setNamespace(namespace);
         } else if (refreshJwt !== undefined) {
             // Use the caller-supplied refreshJwt
             req.setRefreshToken(refreshJwt);
