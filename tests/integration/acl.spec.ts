@@ -12,7 +12,7 @@ jest.setTimeout(JEST_TIMEOUT);
 
 let client: dgraph.DgraphClient;
 
-const GROOT_PWD = "password";
+const GUARDIAN_CREDS = "user=groot;password=password;namespace=0";
 const USERID = "alice";
 const USERPWD = "alicepassword";
 const PRED = "name";
@@ -71,22 +71,22 @@ async function aclSetup() {
 }
 
 async function addUser() {
-    const command = `dgraph acl -a ${SERVER_ADDR} add -u ${USERID} -p ${USERPWD} -x ${GROOT_PWD}`;
+    const command = `dgraph acl -a ${SERVER_ADDR} add -u ${USERID} -p ${USERPWD} --guardian-creds ${GUARDIAN_CREDS}`;
     await cmd(command);
 }
 
 async function addGroup() {
-    const command = `dgraph acl -a ${SERVER_ADDR} add -g ${DEV_GROUP} -x ${GROOT_PWD}`;
+    const command = `dgraph acl -a ${SERVER_ADDR} add -g ${DEV_GROUP} --guardian-creds ${GUARDIAN_CREDS}`;
     await cmd(command);
 }
 
 async function addUserToGroup() {
-    const command = `dgraph acl -a ${SERVER_ADDR} mod -u ${USERID} -l ${DEV_GROUP} -x ${GROOT_PWD}`;
+    const command = `dgraph acl -a ${SERVER_ADDR} mod -u ${USERID} -l ${DEV_GROUP} --guardian-creds ${GUARDIAN_CREDS}`;
     await cmd(command);
 }
 
 async function changePermission(permission: number) {
-    const command = `dgraph acl -a ${SERVER_ADDR} mod -g ${DEV_GROUP} -p ${PRED} -m ${permission} -x ${GROOT_PWD}`;
+    const command = `dgraph acl -a ${SERVER_ADDR} mod -g ${DEV_GROUP} -p ${PRED} -m ${permission} ---guardian-creds ${GUARDIAN_CREDS}`;
     await cmd(command);
     await wait(WAIT_FOR_SIX_SECONDS);
 }
