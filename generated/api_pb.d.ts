@@ -29,6 +29,9 @@ export class Request extends jspb.Message {
   getRespFormat(): Request.RespFormatMap[keyof Request.RespFormatMap];
   setRespFormat(value: Request.RespFormatMap[keyof Request.RespFormatMap]): void;
 
+  getHash(): string;
+  setHash(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Request.AsObject;
   static toObject(includeInstance: boolean, msg: Request): Request.AsObject;
@@ -49,6 +52,7 @@ export namespace Request {
     mutationsList: Array<Mutation.AsObject>,
     commitNow: boolean,
     respFormat: Request.RespFormatMap[keyof Request.RespFormatMap],
+    hash: string,
   }
 
   export interface RespFormatMap {
@@ -307,6 +311,9 @@ export class TxnContext extends jspb.Message {
   setPredsList(value: Array<string>): void;
   addPreds(value: string, index?: number): string;
 
+  getHash(): string;
+  setHash(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TxnContext.AsObject;
   static toObject(includeInstance: boolean, msg: TxnContext): TxnContext.AsObject;
@@ -324,6 +331,7 @@ export namespace TxnContext {
     aborted: boolean,
     keysList: Array<string>,
     predsList: Array<string>,
+    hash: string,
   }
 }
 

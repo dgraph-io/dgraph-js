@@ -3,10 +3,15 @@ import * as Url from "url-parse";
 import { DgraphClientStub } from "./clientStub";
 
 const PORT = "443";
+/** 
+* @deprecated since v21.3 and will be removed in v21.07 release.
+*/
+
 export function clientStubFromSlashGraphQLEndpoint(
     graphqlEndpoint: string,
     apiKey: string,
 ) {
+    console.warn("This method is deprecated and will be removed in v21.07 release.");
     const url = new Url(graphqlEndpoint);
     const urlParts = url.host.split(".");
     const firstHalf = urlParts[0];
