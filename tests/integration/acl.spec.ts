@@ -86,7 +86,7 @@ async function addUserToGroup() {
 }
 
 async function changePermission(permission: number) {
-    const command = `dgraph acl -a ${SERVER_ADDR} mod -g ${DEV_GROUP} -p ${PRED} -m ${permission} ---guardian-creds ${GUARDIAN_CREDS}`;
+    const command = `dgraph acl -a ${SERVER_ADDR} mod -g ${DEV_GROUP} -p ${PRED} -m ${permission} --guardian-creds ${GUARDIAN_CREDS}`;
     await cmd(command);
     await wait(WAIT_FOR_SIX_SECONDS);
 }
