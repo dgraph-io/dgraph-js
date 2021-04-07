@@ -441,9 +441,6 @@ export class NQuad extends jspb.Message {
   getObjectValue(): Value | undefined;
   setObjectValue(value?: Value): void;
 
-  getLabel(): string;
-  setLabel(value: string): void;
-
   getLang(): string;
   setLang(value: string): void;
 
@@ -471,7 +468,6 @@ export namespace NQuad {
     predicate: string,
     objectId: string,
     objectValue?: Value.AsObject,
-    label: string,
     lang: string,
     facetsList: Array<Facet.AsObject>,
     namespace: number,

@@ -3458,7 +3458,6 @@ proto.api.NQuad.toObject = function(includeInstance, msg) {
     predicate: jspb.Message.getFieldWithDefault(msg, 2, ""),
     objectId: jspb.Message.getFieldWithDefault(msg, 3, ""),
     objectValue: (f = msg.getObjectValue()) && proto.api.Value.toObject(includeInstance, f),
-    label: jspb.Message.getFieldWithDefault(msg, 5, ""),
     lang: jspb.Message.getFieldWithDefault(msg, 6, ""),
     facetsList: jspb.Message.toObjectList(msg.getFacetsList(),
     proto.api.Facet.toObject, includeInstance),
@@ -3515,10 +3514,6 @@ proto.api.NQuad.deserializeBinaryFromReader = function(msg, reader) {
       var value = new proto.api.Value;
       reader.readMessage(value,proto.api.Value.deserializeBinaryFromReader);
       msg.setObjectValue(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setLabel(value);
       break;
     case 6:
       var value = /** @type {string} */ (reader.readString());
@@ -3589,13 +3584,6 @@ proto.api.NQuad.serializeBinaryToWriter = function(message, writer) {
       4,
       f,
       proto.api.Value.serializeBinaryToWriter
-    );
-  }
-  f = message.getLabel();
-  if (f.length > 0) {
-    writer.writeString(
-      5,
-      f
     );
   }
   f = message.getLang();
@@ -3711,24 +3699,6 @@ proto.api.NQuad.prototype.clearObjectValue = function() {
  */
 proto.api.NQuad.prototype.hasObjectValue = function() {
   return jspb.Message.getField(this, 4) != null;
-};
-
-
-/**
- * optional string label = 5;
- * @return {string}
- */
-proto.api.NQuad.prototype.getLabel = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.api.NQuad} returns this
- */
-proto.api.NQuad.prototype.setLabel = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
