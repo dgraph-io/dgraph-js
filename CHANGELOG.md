@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/) starting v20.03.0.
 
+## [v21.03.0] - 2021-04-08
+
+### Added
+
+- LoginIntoNamespace API 
+
+### Removed
+
+- Nquad does not have `label`
+
+The `clientStubFromSlashGraphQLEndpoint` API is deprecated and will be removed in the next release.
+
 ## [v20.11] - 2021-03-16
 
 ### Added
