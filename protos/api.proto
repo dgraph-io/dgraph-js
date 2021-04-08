@@ -57,6 +57,7 @@ message Request {
 		RDF = 1;
 	}
 	RespFormat resp_format = 14;
+	string hash = 15;
 }
 
 message Uids {
@@ -128,6 +129,7 @@ message TxnContext {
 	bool aborted = 3;
 	repeated string keys = 4;  // List of keys to be used for conflict detection.
 	repeated string preds = 5; // List of predicates involved in this transaction.
+	string hash = 6;
 }
 
 message Check {}
@@ -150,11 +152,11 @@ message Metrics {
 }
 
 message NQuad {
+	reserved 5; // This was used for label.
 	string subject = 1;
 	string predicate = 2;
 	string object_id = 3;
 	Value object_value = 4;
-	string label = 5;
 	string lang = 6;
 	repeated Facet facets = 7;
 	uint64 namespace = 8;

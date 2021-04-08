@@ -212,6 +212,7 @@ export class Txn {
         }
 
         req.setStartTs(this.ctx.getStartTs());
+        req.setHash(this.ctx.getHash());
         this.dc.debug(`Do request:\n${stringifyMessage(req)}`);
 
         let resp: types.Response;
@@ -331,6 +332,8 @@ export class Txn {
             // This condition will be true only if the server doesn't return a txn context after a query or mutation.
             return;
         }
+
+        this.ctx.setHash(src.getHash());
 
         if (this.ctx.getStartTs() === 0) {
             this.ctx.setStartTs(src.getStartTs());

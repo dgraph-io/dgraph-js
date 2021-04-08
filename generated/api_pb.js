@@ -439,7 +439,8 @@ proto.api.Request.toObject = function(includeInstance, msg) {
     mutationsList: jspb.Message.toObjectList(msg.getMutationsList(),
     proto.api.Mutation.toObject, includeInstance),
     commitNow: jspb.Message.getBooleanFieldWithDefault(msg, 13, false),
-    respFormat: jspb.Message.getFieldWithDefault(msg, 14, 0)
+    respFormat: jspb.Message.getFieldWithDefault(msg, 14, 0),
+    hash: jspb.Message.getFieldWithDefault(msg, 15, "")
   };
 
   if (includeInstance) {
@@ -510,6 +511,10 @@ proto.api.Request.deserializeBinaryFromReader = function(msg, reader) {
     case 14:
       var value = /** @type {!proto.api.Request.RespFormat} */ (reader.readEnum());
       msg.setRespFormat(value);
+      break;
+    case 15:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setHash(value);
       break;
     default:
       reader.skipField();
@@ -591,6 +596,13 @@ proto.api.Request.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0.0) {
     writer.writeEnum(
       14,
+      f
+    );
+  }
+  f = message.getHash();
+  if (f.length > 0) {
+    writer.writeString(
+      15,
       f
     );
   }
@@ -770,6 +782,24 @@ proto.api.Request.prototype.getRespFormat = function() {
  */
 proto.api.Request.prototype.setRespFormat = function(value) {
   return jspb.Message.setProto3EnumField(this, 14, value);
+};
+
+
+/**
+ * optional string hash = 15;
+ * @return {string}
+ */
+proto.api.Request.prototype.getHash = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 15, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.api.Request} returns this
+ */
+proto.api.Request.prototype.setHash = function(value) {
+  return jspb.Message.setProto3StringField(this, 15, value);
 };
 
 
@@ -2489,7 +2519,8 @@ proto.api.TxnContext.toObject = function(includeInstance, msg) {
     commitTs: jspb.Message.getFieldWithDefault(msg, 2, 0),
     aborted: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
     keysList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
-    predsList: (f = jspb.Message.getRepeatedField(msg, 5)) == null ? undefined : f
+    predsList: (f = jspb.Message.getRepeatedField(msg, 5)) == null ? undefined : f,
+    hash: jspb.Message.getFieldWithDefault(msg, 6, "")
   };
 
   if (includeInstance) {
@@ -2545,6 +2576,10 @@ proto.api.TxnContext.deserializeBinaryFromReader = function(msg, reader) {
     case 5:
       var value = /** @type {string} */ (reader.readString());
       msg.addPreds(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setHash(value);
       break;
     default:
       reader.skipField();
@@ -2607,6 +2642,13 @@ proto.api.TxnContext.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeRepeatedString(
       5,
+      f
+    );
+  }
+  f = message.getHash();
+  if (f.length > 0) {
+    writer.writeString(
+      6,
       f
     );
   }
@@ -2738,6 +2780,24 @@ proto.api.TxnContext.prototype.addPreds = function(value, opt_index) {
  */
 proto.api.TxnContext.prototype.clearPredsList = function() {
   return this.setPredsList([]);
+};
+
+
+/**
+ * optional string hash = 6;
+ * @return {string}
+ */
+proto.api.TxnContext.prototype.getHash = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.api.TxnContext} returns this
+ */
+proto.api.TxnContext.prototype.setHash = function(value) {
+  return jspb.Message.setProto3StringField(this, 6, value);
 };
 
 
@@ -3398,7 +3458,6 @@ proto.api.NQuad.toObject = function(includeInstance, msg) {
     predicate: jspb.Message.getFieldWithDefault(msg, 2, ""),
     objectId: jspb.Message.getFieldWithDefault(msg, 3, ""),
     objectValue: (f = msg.getObjectValue()) && proto.api.Value.toObject(includeInstance, f),
-    label: jspb.Message.getFieldWithDefault(msg, 5, ""),
     lang: jspb.Message.getFieldWithDefault(msg, 6, ""),
     facetsList: jspb.Message.toObjectList(msg.getFacetsList(),
     proto.api.Facet.toObject, includeInstance),
@@ -3455,10 +3514,6 @@ proto.api.NQuad.deserializeBinaryFromReader = function(msg, reader) {
       var value = new proto.api.Value;
       reader.readMessage(value,proto.api.Value.deserializeBinaryFromReader);
       msg.setObjectValue(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setLabel(value);
       break;
     case 6:
       var value = /** @type {string} */ (reader.readString());
@@ -3529,13 +3584,6 @@ proto.api.NQuad.serializeBinaryToWriter = function(message, writer) {
       4,
       f,
       proto.api.Value.serializeBinaryToWriter
-    );
-  }
-  f = message.getLabel();
-  if (f.length > 0) {
-    writer.writeString(
-      5,
-      f
     );
   }
   f = message.getLang();
@@ -3651,24 +3699,6 @@ proto.api.NQuad.prototype.clearObjectValue = function() {
  */
 proto.api.NQuad.prototype.hasObjectValue = function() {
   return jspb.Message.getField(this, 4) != null;
-};
-
-
-/**
- * optional string label = 5;
- * @return {string}
- */
-proto.api.NQuad.prototype.getLabel = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.api.NQuad} returns this
- */
-proto.api.NQuad.prototype.setLabel = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
