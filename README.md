@@ -135,6 +135,8 @@ const clientStub = dgraph.clientStubFromSlashGraphQLEndpoint(
 const dgraphClient = new dgraph.DgraphClient(clientStub);
 ```
 
+**Note:** the `clientStubFromSlashGraphQLEndpoint` method is deprecated and will be removed in the next release.
+
 ### Altering the Database
 
 To set the schema, create an `Operation` object, set the schema and pass it to
