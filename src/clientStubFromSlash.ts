@@ -4,11 +4,18 @@ import { DgraphClientStub } from "./clientStub";
 
 const PORT = "443";
 /**
- * @deprecated since v21.3 and will be removed in v21.07 release. For more details, see:
- *     https://discuss.dgraph.io/t/regarding-slash-cloud-dgraph-endpoints-in-the-clients/13492
+ * @deprecated since v21.3 and will be removed in v21.07 release.
+ *     Please use {@link clientStubFromCloudEndpoint} instead.
  */
 
 export function clientStubFromSlashGraphQLEndpoint(
+    graphqlEndpoint: string,
+    apiKey: string,
+) {
+    return clientStubFromCloudEndpoint(graphqlEndpoint, apiKey);
+}
+
+export function clientStubFromCloudEndpoint(
     graphqlEndpoint: string,
     apiKey: string,
 ) {

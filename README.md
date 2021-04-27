@@ -128,14 +128,14 @@ If you want to connect to Dgraph running on your [Dgraph Cloud](https://cloud.dg
 ```js
 const dgraph = require("dgraph-js");
 
-const clientStub = dgraph.clientStubFromSlashGraphQLEndpoint(
+const clientStub = dgraph.clientStubFromCloudEndpoint(
   "https://frozen-mango.eu-central-1.aws.cloud.dgraph.io/graphql",
   "<api-key>"
 );
 const dgraphClient = new dgraph.DgraphClient(clientStub);
 ```
 
-**Note:** the `clientStubFromSlashGraphQLEndpoint` method is deprecated and will be removed in the next release.
+**Note:** the `clientStubFromSlashGraphQLEndpoint` method is deprecated and will be removed in the next release. Instead use `clientStubFromCloudEndpoint` method.
 
 ### Altering the Database
 
@@ -499,4 +499,3 @@ Make sure you have a Dgraph server running on localhost before you run this task
 ```sh
 npm test
 ```
-
