@@ -1,5 +1,5 @@
 const dgraph = require("dgraph-js");
-const grpc = require("grpc");
+const grpc = require("@grpc/grpc-js");
 
 // Create a client stub.
 function newClientStub() {

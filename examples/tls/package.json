@@ -1,7 +1,7 @@
 {
   "name": "tls",
   "dependencies": {
-    "dgraph-js": "^2.1.0",
-    "grpc": "^1.23.3"
+    "@grpc/grpc-js": "^1.3.2",
+    "dgraph-js": "^21.3.0"
   }
 }
