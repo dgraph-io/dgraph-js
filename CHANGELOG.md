@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/) starting v20.03.0.
 
+## [21.03.1] - 2021-05-19
+### Added
+* fix(deprecation): add clientStubFromCloudEndpoint method ([#138])
+
+[#138]: https://github.com/dgraph-io/dgraph-js/pull/138
+
 ## [v21.03.0] - 2021-04-08
 
 ### Added
