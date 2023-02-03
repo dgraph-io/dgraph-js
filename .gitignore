@@ -35,3 +35,11 @@ coverage/
 # Misc
 .DS_Store
 Thumbs.db
+
+# Dgraph
+
+tls/
+p/
+w/
+zw/
+*.buf

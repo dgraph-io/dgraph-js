@@ -5,6 +5,8 @@ for Dgraph.
 
 [dgraph-js]:https://github.com/dgraph-io/dgraph-js
 
+PS. This was tested with node v18.7.0 and npm 8.18.0
+
 ## Running
 
 ### Start Dgraph server
@@ -50,7 +52,9 @@ npm install
 For Node.js, run:
 
 ```sh
-node index.js
+npm run run
+or
+yarn run
 ```
 
 Your output should look something like this (uid values may be different):
