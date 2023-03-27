@@ -31,5 +31,5 @@ jobs:
         chmod +x ./scripts/build.sh
         chmod +x ./scripts/install_dgraph.sh
         bash ./scripts/install_dgraph.sh
-    # - run: npm ci --legacy-peer-deps
+    - run: npm ci --legacy-peer-deps
     - run: ./scripts/build.sh
