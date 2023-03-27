@@ -35,3 +35,8 @@ coverage/
 # Misc
 .DS_Store
 Thumbs.db
+
+# Dgraph
+
+*/data/*
+t

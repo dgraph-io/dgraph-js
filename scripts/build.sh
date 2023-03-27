@@ -3,7 +3,7 @@
 set -e
 set -x
 
-source scripts/functions.sh
+source ./scripts/functions.sh
 
 init
 startZero
