@@ -5,14 +5,16 @@ name: ci-dgraph-js
 
 on:
   push:
-    branches: [ "master" ]
+    branches: 
+    - master
   pull_request:
     types:
     - opened
     - reopened
     - synchronize
     - ready_for_review
-    branches: [ "master" ]
+    branches: 
+    - master
 
 jobs:
   build:
