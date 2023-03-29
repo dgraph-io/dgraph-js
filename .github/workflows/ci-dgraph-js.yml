@@ -1,0 +1,39 @@
+
+name: ci-dgraph-js-tests
+
+on:
+  push:
+    branches: 
+    - master
+  pull_request:
+    types:
+    - opened
+    - reopened
+    - synchronize
+    - ready_for_review
+    branches: 
+    - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        node-version: [18.x, 19.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Install Dependencies
+      run: bash ./scripts/install_dgraph.sh
+    - name: run tests
+      run: | 
+        npm ci --legacy-peer-deps
+        bash ./scripts/build.sh
