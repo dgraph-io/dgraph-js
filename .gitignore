@@ -38,8 +38,12 @@ Thumbs.db
 
 # Dgraph
 
+
 tls/
 p/
 w/
 zw/
 *.buf
+*/data/*
+t
+

@@ -3,11 +3,18 @@
 set -e
 set -x
 
+source ./scripts/functions.sh
+
+init
+startZero
+start
+
+sleep 10 # Dgraph need some time to create Groot user
+
 npm run build
+
+curl http://localhost:8080/health
+
 npm test
 
-echo "Shutting down dgraph via Docker"
-docker stop zero && docker container rm zero
-docker stop alpha && docker container rm alpha
-
-exit 0
+quit 0
