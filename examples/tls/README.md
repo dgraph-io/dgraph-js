@@ -113,7 +113,9 @@ npm install
 Then run the example
 
 ```sh
-node index.js
+npm run run
+or
+yarn run
 ```
 
 Your output should look something like this (uid values may be different):
