@@ -3,6 +3,13 @@ name: ci-dgraph-js-tests
 
 on:
   push:
+    paths-ignore:
+      - '**/**.dockerignore'
+      - '**/**.gitignore'
+      - '**/**.md'
+      - '**/**.png'
+      - '**/**.gif'
+      - '**/**.ini'
     branches: 
     - master
   pull_request:
