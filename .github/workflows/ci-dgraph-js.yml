@@ -56,4 +56,4 @@ jobs:
       working-directory: dgraph-js
       run: | 
         npm ci --legacy-peer-deps
-        bash scripts/build.sh
+        bash scripts/run-tests.sh
