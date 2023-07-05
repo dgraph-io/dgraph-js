@@ -46,4 +46,5 @@ zw/
 *.buf
 */data/*
 t
+tmp
 
