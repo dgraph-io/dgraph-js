@@ -5,37 +5,35 @@ for Dgraph.
 
 [dgraph-js]:https://github.com/dgraph-io/dgraph-js
 
-PS. This was tested with node v18.7.0 and npm 8.18.0
-
 ## Running
 
-### Start Dgraph server
+### Starting Local Dgraph Cluster
 
-You will need to install [Dgraph v20.03.0 or above][releases] and run it.
+You will need to install [Dgraph v21.3.2 or above][releases] and run it.
 
 [releases]: https://github.com/dgraph-io/dgraph/releases
 
-You can run the commands below to start a clean Dgraph server every time for testing
-and exploration.
+You can run the commands below to start a clean Dgraph server every time, for
+testing and exploration.
 
 First, create two separate directories for `dgraph zero` and `dgraph alpha`.
 
 ```sh
-mkdir -p dgraphdata/zero dgraphdata/data
+mkdir -p local-dgraph-data/zero local-dgraph-data/data
 ```
 
 Then start `dgraph zero`:
 
 ```sh
-cd dgraphdata/zero
+cd local-dgraph-data/zero
 rm -r zw; dgraph zero
 ```
 
 Finally, start the `dgraph alpha`:
 
 ```sh
-cd dgraphdata/data
-rm -r p w; dgraph alpha --lru_mb=1024 --zero localhost:5080
+cd local-dgraph-data/data
+rm -r p w; dgraph alpha --zero localhost:5080
 ```
 
 For more configuration options, and other details, refer to
