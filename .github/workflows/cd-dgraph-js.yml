@@ -1,0 +1,80 @@
+name: cd-dgraph-js
+on:
+  workflow_dispatch:
+    inputs:
+      releasetag:
+        description: "git tag to checkout and version to publish to npm"
+        required: true
+        type: string
+      releasetype:
+        description: "specify how to tag release on npm"
+        required: true
+        type: choice
+        options:
+          - latest
+          - rc
+          - beta
+jobs:
+  dgraph-js-tests:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: true
+      matrix:
+        node-version: [16.x, 18.x, 19.x, 20.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+    - name: Checkout dgraph-js repo
+      uses: actions/checkout@v3
+      with:
+        path: dgraph-js
+        repository: dgraph-io/dgraph-js
+        ref: ${{ github.event.inputs.releasetag }}
+    - name: Checkout dgraph repo
+      uses: actions/checkout@v3
+      with:
+        path: dgraph
+        repository: dgraph-io/dgraph
+        ref: main
+    - name: Get Go Version
+      run: |
+        #!/bin/bash
+        cd dgraph
+        GOVERSION=$({ [ -f .go-version ] && cat .go-version; })
+        echo "GOVERSION=$GOVERSION" >> $GITHUB_ENV
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: ${{ env.GOVERSION }}
+    - name: Build dgraph binary
+      run: cd dgraph && make docker-image # also builds dgraph binary
+    - name: Move dgraph binary to gopath
+      run: cd dgraph && mv dgraph/dgraph ~/go/bin/dgraph
+    - name: Setup node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: dgraph-js/package-lock.json
+    - name: Run dgraph-js tests
+      working-directory: dgraph-js
+      run: |
+        npm ci --legacy-peer-deps
+        bash scripts/run-tests.sh
+
+  dgraph-js-publish-npm:
+    needs: [dgraph-js-tests]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout dgraph-js repo
+        uses: actions/checkout@v3
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Build dgraph-js package
+        run: npm ci --legacy-peer-deps
+      - run: npm publish --tag '${{ github.event.inputs.releasetype }}'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_DGRAPH_JS_TOKEN }}
+

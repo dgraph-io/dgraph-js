@@ -4,7 +4,7 @@
     "dgraph-js": "^21.3.1"
   },
   "scripts": {
-    "run": "echo \"Starting... PS. This was tested with node v18.7.0 and npm 8.18.0\" && node index.js",
-    "clean": "rm -fr node_modules"
+    "example": "node index.js",
+    "clean": "rm -rf node_modules"
   }
 }

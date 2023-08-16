@@ -10,14 +10,7 @@ cluster (1 Dgraph Zero and 1 Dgraph Alpha) configured with mutual TLS.
 
 ### Install Dgraph
 
-You will need to [install Dgraph v20.03.0 or
-above](https://github.com/dgraph-io/dgraph/releases) and run it.
-
-A quick-start installation script is available for Linux and Mac:
-
-```sh
-curl -sSf https://get.dgraph.io | bash
-```
+Download and install [Dgraph](https://github.com/dgraph-io/dgraph/releases) on your local path.
 
 ### Create TLS certificates
 
@@ -89,16 +82,28 @@ Expiration: 21 Feb 24 01:00 UTC
 
 ### Start Dgraph cluster
 
-Start Dgraph Zero:
+First, create two separate directories for `dgraph zero` and `dgraph alpha`.
 
 ```sh
-dgraph zero
+mkdir -p local-dgraph-data/zero local-dgraph-data/data
+```
+
+Then start `dgraph zero`:
+
+```sh
+rm -rf local-dgraph-data/zero/zw
+dgraph zero --wal local-dgraph-data/zero/zw
 ```
 
 Start Dgraph Alpha with TLS options. `REQUIREANDVERIFY` sets mutual TLS (server authentication and client authentication):
 
 ```sh
-dgraph alpha --lru_mb=1024 --zero=localhost:5080 --tls_dir=./tls --tls_client_auth=REQUIREANDVERIFY
+dgraph alpha \
+--zero=localhost:5080 \
+--postings local-dgraph-data/data/p \
+--wal local-dgraph-data/data/w \
+--tmp local-dgraph-data/data/t \
+--tls "client-auth-type=REQUIREANDVERIFY;ca-cert=./tls/ca.crt;server-cert=./tls/node.crt;server-key=./tls/node.key"
 ```
 
 ### Run example
@@ -113,9 +118,7 @@ npm install
 Then run the example
 
 ```sh
-npm run run
-or
-yarn run
+npm run example
 ```
 
 Your output should look something like this (uid values may be different):
