@@ -76,7 +76,7 @@ export class Txn {
      */
     public async queryWithVars(
         q: string,
-        vars?: { [k: string]: any }, // tslint:disable-line no-any
+        vars?: { [k: string]: number | string | boolean | String },
         metadata?: grpc.Metadata,
         options?: grpc.CallOptions,
     ): Promise<types.Response> {
@@ -96,10 +96,7 @@ export class Txn {
         if (vars !== undefined) {
             const varsMap = req.getVarsMap();
             Object.keys(vars).forEach((key: string) => {
-                const value = vars[key];
-                if (typeof value === "string" || value instanceof String) {
-                    varsMap.set(key, value.toString());
-                }
+                varsMap.set(key, `${vars[key]}`);
             });
         }
 
