@@ -1,8 +1,9 @@
 import * as grpc from "@grpc/grpc-js";
 import * as Url from "url-parse";
-import { DgraphClientStub } from "./clientStub";
+import {DgraphClientStub} from "./clientStub";
 
 const PORT = "443";
+
 /**
  * @deprecated since v21.3 and will be removed in v21.07 release.
  *     Please use {@link clientStubFromCloudEndpoint} instead.
@@ -39,5 +40,9 @@ export function clientStubFromCloudEndpoint(
         grpc.credentials.createSsl(),
         metaCreds,
     );
-    return new DgraphClientStub(backenedURL, credentials);
+    return new DgraphClientStub(backenedURL, credentials, {
+        "grpc.keepalive_time_ms": 60 * 1000,
+        "grpc.keepalive_timeout_ms": 10 * 1000,
+        "grpc.keepalive_permit_without_calls": 1,
+    });
 }
