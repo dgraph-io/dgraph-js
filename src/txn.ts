@@ -217,7 +217,7 @@ export class Txn {
 
         let resp: types.Response;
         const c = this.dc.anyClient();
-        const operation = async () => c.query(req, metadata, options);
+        const operation = async (): Promise<messages.Response> => c.query(req, metadata, options);
         try {
             resp = types.createResponse(await operation());
         } catch (e) {
@@ -274,7 +274,7 @@ export class Txn {
         }
 
         const c = this.dc.anyClient();
-        const operation = async () =>
+        const operation = async (): Promise<messages.TxnContext> =>
             c.commitOrAbort(this.ctx, metadata, options);
         try {
             await operation();
@@ -313,7 +313,7 @@ export class Txn {
 
         this.ctx.setAborted(true);
         const c = this.dc.anyClient();
-        const operation = async () =>
+        const operation = async (): Promise<messages.TxnContext> =>
             c.commitOrAbort(this.ctx, metadata, options);
         try {
             await operation();

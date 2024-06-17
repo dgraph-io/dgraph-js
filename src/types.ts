@@ -248,7 +248,6 @@ export class Mutation extends messages.Mutation {
             super.setSetNquads(value);
             return;
         }
-        // tslint:disable-next-line no-unsafe-any
         if (isBase64(value)) {
             super.setSetNquads(value);
             return;
@@ -289,7 +288,6 @@ export class Mutation extends messages.Mutation {
             super.setDelNquads(value);
             return;
         }
-        // tslint:disable-next-line no-unsafe-any
         if (isBase64(value)) {
             super.setDelNquads(value);
             return;

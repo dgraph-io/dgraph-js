@@ -28,7 +28,7 @@ const MUTATE_PERMISSION_DENIED = new Error(`7 PERMISSION_DENIED:\
 const ALTER_PERMISSION_DENIED = new Error(`7 PERMISSION_DENIED:\
  unauthorized to alter following predicates: ${PRED} \n`);
 
-async function cmd(command: string) {
+async function cmd(command: string): Promise<void>{
     try {
         await execute(command);
     } catch (err) {
@@ -36,7 +36,7 @@ async function cmd(command: string) {
     }
 }
 
-async function insertSampleData() {
+async function insertSampleData(): Promise<void> {
     const txn = client.newTxn();
     const mu = new dgraph.Mutation();
     mu.setSetNquads(`
@@ -58,7 +58,7 @@ async function loginUser(): Promise<dgraph.DgraphClient> {
     return createClient(aclClientStub);
 }
 
-async function aclSetup() {
+async function aclSetup(): Promise<dgraph.DgraphClient> {
     client = await setup();
     await setSchema(client, `
         ${PRED}: string .
@@ -70,23 +70,24 @@ async function aclSetup() {
     return loginUser();
 }
 
-async function addUser() {
+async function addUser(): Promise<void> {
     const command = `dgraph acl -a \'${SERVER_ADDR}\' add -u \'${USERID}\' -p \'${USERPWD}\' --guardian-creds \'${GUARDIAN_CREDS}\'`;
     await cmd(command);
 }
 
-async function addGroup() {
+async function addGroup(): Promise<void> {
     const command = `dgraph acl -a \'${SERVER_ADDR}\' add -g \'${DEV_GROUP}\' --guardian-creds \'${GUARDIAN_CREDS}\'`;
     await cmd(command);
 }
 
-async function addUserToGroup() {
+async function addUserToGroup(): Promise<void> {
     const command = `dgraph acl -a \'${SERVER_ADDR}\' mod -u \'${USERID}\' -l \'${DEV_GROUP}\' --guardian-creds \'${GUARDIAN_CREDS}\'`;
     await cmd(command);
 }
 
-async function changePermission(permission: number) {
-    const command = `dgraph acl -a \'${SERVER_ADDR}\' mod -g \'${DEV_GROUP}\' -p \'${PRED}\' -m \'${permission}\' --guardian-creds \'${GUARDIAN_CREDS}\'`;
+async function changePermission(permission: number): Promise<void> {
+    const command = `dgraph acl -a \'${SERVER_ADDR}\' mod -g \'${DEV_GROUP}\' -p \'${PRED}\' -m \'${permission}\'
+     --guardian-creds \'${GUARDIAN_CREDS}\'`;
     await cmd(command);
     await wait(WAIT_FOR_SIX_SECONDS);
 }

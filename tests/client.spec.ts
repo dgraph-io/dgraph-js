@@ -2,14 +2,14 @@ import * as dgraph from "../src";
 
 import { createClient, createClientStub } from "./helper";
 
-// tslint:disable no-console
+/* eslint-disable no-console */
 describe("client", () => {
     describe("constructor", () => {
         it("should throw no clients error if no client stubs are passed", () => {
             expect.assertions(1);
 
             try {
-                // tslint:disable-next-line no-unused-expression
+                // eslint-disable-next-line no-unused-expressions
                 new dgraph.DgraphClient();
             } catch (e) {
                 expect(e).toBe(dgraph.ERR_NO_CLIENTS);

@@ -103,7 +103,6 @@ describe("delete", () => {
         await performNquadDeletion(nquads2, uid.toString());
 
         const res = await client.newTxn().query(q);
-        // tslint:disable-next-line no-unsafe-any
         expect(res.getJson().all).toHaveLength(0);
     });
 
@@ -161,7 +160,6 @@ describe("delete", () => {
         await client.newTxn().mutate(mu);
 
         const res = await client.newTxn().query(query);
-        // tslint:disable-next-line no-unsafe-any
         expect(res.getJson().all[0].friends).toBeFalsy();
     });
 

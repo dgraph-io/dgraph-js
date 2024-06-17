@@ -58,10 +58,9 @@ async function runTotal(): Promise<void> {
             bal: sum(val(b))
         }
       }`);
-    // tslint:disable-next-line no-unsafe-any
     expect(res.getJson().total[0].bal).toBe(uids.length * initialBalance);
 
-    // tslint:disable-next-line no-console
+    // eslint-disable-next-line no-console
     console.log(`Runs: ${runs}, Aborts: ${aborts}, Total Time: ${new Date().getTime() - startStatus} ms`);
 }
 
@@ -80,7 +79,7 @@ async function runTotalInLoop(): Promise<void> {
 async function runTxn(): Promise<void> {
     let fromUid: string;
     let toUid: string;
-    // tslint:disable-next-line no-constant-condition
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         fromUid = uids[Math.floor(Math.random() * uids.length)];
         toUid = uids[Math.floor(Math.random() * uids.length)];
@@ -96,7 +95,7 @@ async function runTxn(): Promise<void> {
         const accountsWithUid: {
             uid: string;
             bal: number;
-        }[] = res.getJson().both; // tslint:disable-line no-unsafe-any
+        }[] = res.getJson().both; // eslint-disable-line @typescript-eslint/tslint/config
         expect(accountsWithUid).toHaveLength(2);
 
         accountsWithUid[0].bal += 5;
