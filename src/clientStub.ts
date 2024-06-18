@@ -61,11 +61,11 @@ export class DgraphClientStub {
         options?: object,
     ) {
         if (addr === undefined) {
-            // tslint:disable-next-line no-parameter-reassignment
+            // eslint-disable-next-line no-param-reassign
             addr = "localhost:9080";
         }
         if (credentials === undefined) {
-            // tslint:disable-next-line no-parameter-reassignment
+            // eslint-disable-next-line no-param-reassign
             credentials = grpc.credentials.createInsecure();
         }
 

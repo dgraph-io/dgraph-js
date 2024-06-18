@@ -32,7 +32,7 @@ describe("txn", () => {
             );
             let resJson: {
                 me: { name: string }[];
-            } = res.getJson(); // tslint:disable-line no-unsafe-any
+            } = res.getJson(); // eslint-disable-line @typescript-eslint/tslint/config
             expect(resJson.me).toHaveLength(1);
             expect(resJson.me[0].name).toEqual("Alice");
 
@@ -43,7 +43,7 @@ describe("txn", () => {
                     $b: true, // non-string properties are ignored
                 },
             );
-            resJson = res.getJson(); // tslint:disable-line no-unsafe-any
+            resJson = res.getJson(); // eslint-disable-line @typescript-eslint/tslint/config
             expect(resJson.me).toHaveLength(1);
             expect(resJson.me[0].name).toEqual("Alice");
         });
@@ -88,7 +88,7 @@ describe("txn", () => {
             );
             const resJson: {
                 me: { name: string }[];
-            } = res.getJson(); // tslint:disable-line no-unsafe-any
+            } = res.getJson(); // eslint-disable-line @typescript-eslint/tslint/config
             expect(resJson.me).toHaveLength(0);
         });
 

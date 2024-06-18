@@ -42,7 +42,7 @@ async function tryUpsert(account: Account): Promise<void> {
         const res = await txn.query(q);
         const resJson: {
             find: { uid: string }[];
-        } = res.getJson(); // tslint:disable-line no-unsafe-any
+        } = res.getJson(); // eslint-disable-line @typescript-eslint/tslint/config
         expect(resJson.find.length).toBeLessThanOrEqual(1);
 
         let mu: dgraph.Mutation;
@@ -83,7 +83,7 @@ let retryCount = 0;
 function conditionalLog(): void {
     const now = new Date().getTime();
     if (now - lastStatus > 1000 && !cancelled) {
-        // tslint:disable-next-line no-console
+        // eslint-disable-next-line no-console
         console.log(`Success: ${successCount}, Retries: ${retryCount}, Total Time: ${now - startStatus} ms`);
         lastStatus = now;
     }
@@ -141,7 +141,7 @@ async function checkIntegrity(): Promise<void> {
 
     const data: {
         all: Account[];
-    } = res.getJson(); // tslint:disable-line no-unsafe-any
+    } = res.getJson(); // eslint-disable-line @typescript-eslint/tslint/config
 
     const accountSet: { [key: string]: boolean } = {};
     for (const account of data.all) {

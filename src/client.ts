@@ -85,7 +85,7 @@ export class DgraphClient {
      */
     public debug(msg: string): void {
         if (this.debugMode) {
-            // tslint:disable-next-line no-console
+            // eslint-disable-next-line no-console
             console.log(msg);
         }
     }

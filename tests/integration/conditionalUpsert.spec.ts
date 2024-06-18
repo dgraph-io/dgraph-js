@@ -82,7 +82,7 @@ async function checkUpsertIntegrity(expectedObject: Profile): Promise<void> {
 
     const data: {
         all: Profile[];
-    } = res.getJson(); // tslint:disable-line no-unsafe-any
+    } = res.getJson(); // eslint-disable-line @typescript-eslint/tslint/config
 
     const profileSet: { [key: string]: boolean } = {};
     for (const profile of data.all) {

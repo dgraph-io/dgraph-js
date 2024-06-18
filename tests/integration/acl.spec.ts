@@ -1,3 +1,4 @@
+import { fail } from "assert";
 import { exec } from "child_process";
 import { promisify } from "util";
 
@@ -28,7 +29,7 @@ const MUTATE_PERMISSION_DENIED = new Error(`7 PERMISSION_DENIED:\
 const ALTER_PERMISSION_DENIED = new Error(`7 PERMISSION_DENIED:\
  unauthorized to alter following predicates: ${PRED} \n`);
 
-async function cmd(command: string) {
+async function cmd(command: string){
     try {
         await execute(command);
     } catch (err) {

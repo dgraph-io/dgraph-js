@@ -13,7 +13,7 @@ function fnAddThisVal1(
     a: number,
     cb: (err?: Error, res?: number) => void,
 ): void {
-    // tslint:disable-next-line no-invalid-this
+    // eslint-disable-next-line no-invalid-this
     cb(undefined, (<{ val: number }>this).val + a);
 }
 
@@ -23,7 +23,7 @@ function fnAddThisVal3(
     c: number,
     cb: (err?: Error, res?: number) => void,
 ): void {
-    // tslint:disable-next-line no-invalid-this
+    // eslint-disable-next-line no-invalid-this
     cb(undefined, (<{ val: number }>this).val + a + b + c);
 }
 

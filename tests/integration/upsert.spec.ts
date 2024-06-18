@@ -39,7 +39,7 @@ let retryCount = 0;
 function conditionalLog(): void {
     const now = new Date().getTime();
     if (now - lastStatus > 1000 && !cancelled) {
-        // tslint:disable-next-line no-console
+        // eslint-disable-next-line no-console
         console.log(`Success: ${successCount}, Retries: ${retryCount}, Total Time: ${now - startStatus} ms`);
         lastStatus = now;
     }
@@ -107,7 +107,7 @@ async function checkIntegrity(): Promise<void> {
 
     const data: {
         all: Account[];
-    } = res.getJson(); // tslint:disable-line no-unsafe-any
+    } = res.getJson(); // eslint-disable-line @typescript-eslint/tslint/config
 
     const accountSet: { [key: string]: boolean } = {};
     for (const account of data.all) {
@@ -245,9 +245,8 @@ async function performJsonUpsert(profile: Profile): Promise<void> {
     req.setMutationsList([mu]);
     req.setCommitNow(true);
 
-    let uid: string;
     const response = await client.newTxn().doRequest(req);
-    uid = response.getUidsMap().get(blankNodeLabel);
+    const uid = response.getUidsMap().get(blankNodeLabel);
     expect(uid).not.toEqual("");
 }
 
@@ -264,7 +263,7 @@ async function checkMutationIntegrity(ourProfiles: Profile[]): Promise<void> {
 
     const data: {
         all: Profile[];
-    } = res.getJson(); // tslint:disable-line no-unsafe-any
+    } = res.getJson(); // eslint-disable-line @typescript-eslint/tslint/config
 
     const profileSet: { [key: string]: boolean } = {};
     for (const profile of data.all) {
@@ -292,7 +291,7 @@ async function checkUpsertIntegrity(): Promise<void> {
 
     const data: {
         all: Profile[];
-    } = res.getJson(); // tslint:disable-line no-unsafe-any
+    } = res.getJson(); // eslint-disable-line @typescript-eslint/tslint/config
 
     const profileSet: { [key: string]: boolean } = {};
     for (const profile of data.all) {
@@ -368,7 +367,7 @@ async function doInsertUpsertWithVars(): Promise<void> {
     const res = await client.newTxn().queryWithVars(query2, vars2);
     const data: {
         all: Profile[];
-    } = res.getJson(); // tslint:disable-line no-unsafe-any
+    } = res.getJson(); // eslint-disable-line @typescript-eslint/tslint/config
     const receivedObject: Profile = data.all[0];
     expect(receivedObject).toEqual(updatedProfile);
 }

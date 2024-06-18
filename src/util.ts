@@ -5,8 +5,8 @@ export function errorCode(err: any): { valid: boolean; code: number } { // tslin
     if (
         err === undefined ||
         typeof err !== "object" ||
-        !err.hasOwnProperty("code") || // tslint:disable-line no-unsafe-any
-        typeof err.code !== "number" // tslint:disable-line no-unsafe-any
+        !err.hasOwnProperty("code") || // eslint-disable-line @typescript-eslint/tslint/config
+        typeof err.code !== "number" // eslint-disable-line @typescript-eslint/tslint/config
     ) {
         return {
             valid: false,
