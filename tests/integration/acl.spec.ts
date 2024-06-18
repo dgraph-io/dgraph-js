@@ -49,7 +49,7 @@ async function insertSampleData() {
     expect(uid).toBeDefined();
 }
 
-async function loginUser() {
+async function loginUser(): Promise<dgraph.DgraphClient> {
     const aclClientStub = createClientStub();
     try {
         await aclClientStub.login(USERID, USERPWD);
@@ -76,7 +76,7 @@ async function addUser() {
     await cmd(command);
 }
 
-async function addGroup(){
+async function addGroup() {
     const command = `dgraph acl -a \'${SERVER_ADDR}\' add -g \'${DEV_GROUP}\' --guardian-creds \'${GUARDIAN_CREDS}\'`;
     await cmd(command);
 }
@@ -86,7 +86,7 @@ async function addUserToGroup() {
     await cmd(command);
 }
 
-async function changePermission(permission: number){
+async function changePermission(permission: number) {
     const command = `dgraph acl -a \'${SERVER_ADDR}\' mod -g \'${DEV_GROUP}\' -p \'${PRED}\' -m \'${permission}\' --guardian-creds \'${GUARDIAN_CREDS}\'`;
     await cmd(command);
     await wait(WAIT_FOR_SIX_SECONDS);
