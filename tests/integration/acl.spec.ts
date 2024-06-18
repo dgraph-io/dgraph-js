@@ -1,3 +1,4 @@
+import { fail } from "assert";
 import { exec } from "child_process";
 import { promisify } from "util";
 
@@ -28,7 +29,7 @@ const MUTATE_PERMISSION_DENIED = new Error(`7 PERMISSION_DENIED:\
 const ALTER_PERMISSION_DENIED = new Error(`7 PERMISSION_DENIED:\
  unauthorized to alter following predicates: ${PRED} \n`);
 
-async function cmd(command: string): Promise<void>{
+async function cmd(command: string){
     try {
         await execute(command);
     } catch (err) {
@@ -36,7 +37,7 @@ async function cmd(command: string): Promise<void>{
     }
 }
 
-async function insertSampleData(): Promise<void> {
+async function insertSampleData() {
     const txn = client.newTxn();
     const mu = new dgraph.Mutation();
     mu.setSetNquads(`
@@ -48,7 +49,7 @@ async function insertSampleData(): Promise<void> {
     expect(uid).toBeDefined();
 }
 
-async function loginUser(): Promise<dgraph.DgraphClient> {
+async function loginUser() {
     const aclClientStub = createClientStub();
     try {
         await aclClientStub.login(USERID, USERPWD);
@@ -58,7 +59,7 @@ async function loginUser(): Promise<dgraph.DgraphClient> {
     return createClient(aclClientStub);
 }
 
-async function aclSetup(): Promise<dgraph.DgraphClient> {
+async function aclSetup() {
     client = await setup();
     await setSchema(client, `
         ${PRED}: string .
@@ -70,24 +71,23 @@ async function aclSetup(): Promise<dgraph.DgraphClient> {
     return loginUser();
 }
 
-async function addUser(): Promise<void> {
+async function addUser() {
     const command = `dgraph acl -a \'${SERVER_ADDR}\' add -u \'${USERID}\' -p \'${USERPWD}\' --guardian-creds \'${GUARDIAN_CREDS}\'`;
     await cmd(command);
 }
 
-async function addGroup(): Promise<void> {
+async function addGroup(){
     const command = `dgraph acl -a \'${SERVER_ADDR}\' add -g \'${DEV_GROUP}\' --guardian-creds \'${GUARDIAN_CREDS}\'`;
     await cmd(command);
 }
 
-async function addUserToGroup(): Promise<void> {
+async function addUserToGroup() {
     const command = `dgraph acl -a \'${SERVER_ADDR}\' mod -u \'${USERID}\' -l \'${DEV_GROUP}\' --guardian-creds \'${GUARDIAN_CREDS}\'`;
     await cmd(command);
 }
 
-async function changePermission(permission: number): Promise<void> {
-    const command = `dgraph acl -a \'${SERVER_ADDR}\' mod -g \'${DEV_GROUP}\' -p \'${PRED}\' -m \'${permission}\'
-     --guardian-creds \'${GUARDIAN_CREDS}\'`;
+async function changePermission(permission: number){
+    const command = `dgraph acl -a \'${SERVER_ADDR}\' mod -g \'${DEV_GROUP}\' -p \'${PRED}\' -m \'${permission}\' --guardian-creds \'${GUARDIAN_CREDS}\'`;
     await cmd(command);
     await wait(WAIT_FOR_SIX_SECONDS);
 }

@@ -11,14 +11,14 @@ const PORT = "443";
 export function clientStubFromSlashGraphQLEndpoint(
     graphqlEndpoint: string,
     apiKey: string,
-): DgraphClientStub {
+) {
     return clientStubFromCloudEndpoint(graphqlEndpoint, apiKey);
 }
 
 export function clientStubFromCloudEndpoint(
     graphqlEndpoint: string,
     apiKey: string,
-): DgraphClientStub  {
+) {
     const url = new Url(graphqlEndpoint);
     const urlParts = url.host.split(".");
     const firstHalf = urlParts[0];

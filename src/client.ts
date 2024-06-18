@@ -48,7 +48,7 @@ export class DgraphClient {
 
         const c = this.anyClient();
         let payload: messages.Payload;
-        const operation = async (): Promise<messages.Payload> => c.alter(op, metadata, options);
+        const operation = async () => c.alter(op, metadata, options);
         try {
             payload = await operation();
         } catch (e) {

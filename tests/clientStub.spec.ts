@@ -4,7 +4,7 @@ import * as dgraph from "../src";
 
 import { SERVER_ADDR, SERVER_CREDENTIALS, setup } from "./helper";
 
-function validateVersionObject(version: dgraph.Version): void {
+function validateVersionObject(version: dgraph.Version){
     const tag = version.getTag();
     expect(typeof tag).toEqual("string");
     expect(tag).toBeDefined();
