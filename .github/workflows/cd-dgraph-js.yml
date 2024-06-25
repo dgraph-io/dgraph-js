@@ -50,7 +50,7 @@ jobs:
     - name: Move dgraph binary to gopath
       run: cd dgraph && mv dgraph/dgraph ~/go/bin/dgraph
     - name: Setup node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
@@ -68,7 +68,7 @@ jobs:
       - name: Checkout dgraph-js repo
         uses: actions/checkout@v4
       - name: Setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
