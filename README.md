@@ -46,7 +46,7 @@ and understand how to run and work with Dgraph.
 Install using npm:
 
 ```sh
-npm install dgraph-js grpc --save
+npm install dgraph-js @grpc/grpc-js --save
 # If you are using Typescript, you might also need:
 # npm install @types/google-protobuf @types/protobufjs --save-dev
 ```
@@ -54,7 +54,7 @@ npm install dgraph-js grpc --save
 or yarn:
 
 ```sh
-yarn add dgraph-js grpc
+yarn add dgraph-js @grpc/grpc-js
 # If you are using Typescript, you might also need:
 # yarn add @types/google-protobuf @types/protobufjs --dev
 ```
@@ -93,7 +93,7 @@ The following code snippet shows just one connection.
 
 ```js
 const dgraph = require("dgraph-js");
-const grpc = require("grpc");
+const grpc = require("@grpc/grpc-js");
 
 const clientStub = new dgraph.DgraphClientStub(
   // addr: optional, default: "localhost:9080"
