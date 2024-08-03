@@ -20,7 +20,7 @@ on:
     - master
 jobs:
   dgraph-js-tests:
-    runs-on: ubuntu-latest
+    runs-on: warp-ubuntu-latest-x64-8x
     strategy:
       fail-fast: true
       matrix:
