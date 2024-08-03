@@ -16,11 +16,11 @@ on:
           - beta
 jobs:
   dgraph-js-tests:
-    runs-on: ubuntu-20.04
+    runs-on: warp-ubuntu-latest-x64-8x
     strategy:
       fail-fast: true
       matrix:
-        node-version: [16.x, 18.x, 19.x, 20.x]
+        node-version: [18.x, 19.x, 20.x, 21.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
     - name: Checkout dgraph-js repo
@@ -63,7 +63,7 @@ jobs:
 
   dgraph-js-publish-npm:
     needs: [dgraph-js-tests]
-    runs-on: ubuntu-20.04
+    runs-on: warp-ubuntu-latest-x64-2x
     steps:
       - name: Checkout dgraph-js repo
         uses: actions/checkout@v4
