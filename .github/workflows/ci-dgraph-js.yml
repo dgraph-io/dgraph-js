@@ -22,7 +22,7 @@ jobs:
   dgraph-js-tests:
     runs-on: warp-ubuntu-latest-x64-16x
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         node-version: [18.x, 19.x, 20.x, 21.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
