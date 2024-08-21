@@ -7,8 +7,6 @@
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
-/* eslint-disable */
-// @ts-nocheck
 
 var jspb = require('google-protobuf');
 var goog = jspb;
@@ -3785,7 +3783,7 @@ proto.api.NQuad.prototype.setNamespace = function(value) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.api.Value.oneofGroups_ = [[1,2,3,4,5,6,7,8,9,10,11]];
+proto.api.Value.oneofGroups_ = [[1,2,3,4,5,6,7,8,9,10,11,13]];
 
 /**
  * @enum {number}
@@ -3802,7 +3800,8 @@ proto.api.Value.ValCase = {
   DATE_VAL: 8,
   DATETIME_VAL: 9,
   PASSWORD_VAL: 10,
-  UID_VAL: 11
+  UID_VAL: 11,
+  VFLOAT32_VAL: 13
 };
 
 /**
@@ -3853,7 +3852,8 @@ proto.api.Value.toObject = function(includeInstance, msg) {
     dateVal: msg.getDateVal_asB64(),
     datetimeVal: msg.getDatetimeVal_asB64(),
     passwordVal: jspb.Message.getFieldWithDefault(msg, 10, ""),
-    uidVal: jspb.Message.getFieldWithDefault(msg, 11, 0)
+    uidVal: jspb.Message.getFieldWithDefault(msg, 11, 0),
+    vfloat32Val: msg.getVfloat32Val_asB64()
   };
 
   if (includeInstance) {
@@ -3933,6 +3933,10 @@ proto.api.Value.deserializeBinaryFromReader = function(msg, reader) {
     case 11:
       var value = /** @type {number} */ (reader.readUint64());
       msg.setUidVal(value);
+      break;
+    case 13:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setVfloat32Val(value);
       break;
     default:
       reader.skipField();
@@ -4037,6 +4041,13 @@ proto.api.Value.serializeBinaryToWriter = function(message, writer) {
   if (f != null) {
     writer.writeUint64(
       11,
+      f
+    );
+  }
+  f = /** @type {!(string|Uint8Array)} */ (jspb.Message.getField(message, 13));
+  if (f != null) {
+    writer.writeBytes(
+      13,
       f
     );
   }
@@ -4532,6 +4543,66 @@ proto.api.Value.prototype.clearUidVal = function() {
  */
 proto.api.Value.prototype.hasUidVal = function() {
   return jspb.Message.getField(this, 11) != null;
+};
+
+
+/**
+ * optional bytes vfloat32_val = 13;
+ * @return {!(string|Uint8Array)}
+ */
+proto.api.Value.prototype.getVfloat32Val = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 13, ""));
+};
+
+
+/**
+ * optional bytes vfloat32_val = 13;
+ * This is a type-conversion wrapper around `getVfloat32Val()`
+ * @return {string}
+ */
+proto.api.Value.prototype.getVfloat32Val_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getVfloat32Val()));
+};
+
+
+/**
+ * optional bytes vfloat32_val = 13;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getVfloat32Val()`
+ * @return {!Uint8Array}
+ */
+proto.api.Value.prototype.getVfloat32Val_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getVfloat32Val()));
+};
+
+
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.api.Value} returns this
+ */
+proto.api.Value.prototype.setVfloat32Val = function(value) {
+  return jspb.Message.setOneofField(this, 13, proto.api.Value.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.api.Value} returns this
+ */
+proto.api.Value.prototype.clearVfloat32Val = function() {
+  return jspb.Message.setOneofField(this, 13, proto.api.Value.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.api.Value.prototype.hasVfloat32Val = function() {
+  return jspb.Message.getField(this, 13) != null;
 };
 
 

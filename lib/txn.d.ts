@@ -2,7 +2,7 @@ import * as grpc from "@grpc/grpc-js";
 import * as messages from "../generated/api_pb";
 import { DgraphClient } from "./client";
 import * as types from "./types";
-export declare type TxnOptions = {
+export type TxnOptions = {
     readOnly?: boolean;
     bestEffort?: boolean;
 };

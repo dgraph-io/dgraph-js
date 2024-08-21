@@ -538,6 +538,13 @@ export class Value extends jspb.Message {
   getUidVal(): number;
   setUidVal(value: number): void;
 
+  hasVfloat32Val(): boolean;
+  clearVfloat32Val(): void;
+  getVfloat32Val(): Uint8Array | string;
+  getVfloat32Val_asU8(): Uint8Array;
+  getVfloat32Val_asB64(): string;
+  setVfloat32Val(value: Uint8Array | string): void;
+
   getValCase(): Value.ValCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Value.AsObject;
@@ -562,6 +569,7 @@ export namespace Value {
     datetimeVal: Uint8Array | string,
     passwordVal: string,
     uidVal: number,
+    vfloat32Val: Uint8Array | string,
   }
 
   export enum ValCase {
@@ -577,6 +585,7 @@ export namespace Value {
     DATETIME_VAL = 9,
     PASSWORD_VAL = 10,
     UID_VAL = 11,
+    VFLOAT32_VAL = 13,
   }
 }
 
