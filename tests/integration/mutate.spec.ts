@@ -43,7 +43,7 @@ describe("mutate", () => {
 
     it("should insert vector", async () => {
         const client = await setup();
-        await setSchema(client, `project_discription_v: float32vector @index(hnsw(exponent: "5", metric: "euclidian")) .`);
+        await setSchema(client, `project_discription_v: float32vector @index(hnsw(exponent: "5", metric: "euclidean")) .`);
 
         let txn = client.newTxn();
         try {
