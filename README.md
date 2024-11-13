@@ -1,9 +1,7 @@
-# dgraph-js [![npm version](https://img.shields.io/npm/v/dgraph-js.svg?style=flat)](https://www.npmjs.com/package/dgraph-js) [![Build Status](https://teamcity.dgraph.io/guestAuth/app/rest/builds/buildType:(id:dgraphjs_Build)/statusIcon.svg)](https://teamcity.dgraph.io/viewLog.html?buildTypeId=dgraphjs_Build&buildId=lastFinished&guest=1) [![Coverage Status](https://img.shields.io/coveralls/github/dgraph-io/dgraph-js/master.svg?style=flat)](https://coveralls.io/github/dgraph-io/dgraph-js?branch=master)
+# dgraph-js [![npm version](https://img.shields.io/npm/v/dgraph-js.svg?style=flat)](https://www.npmjs.com/package/dgraph-js) [![Coverage Status](https://img.shields.io/coveralls/github/dgraph-io/dgraph-js/master.svg?style=flat)](https://coveralls.io/github/dgraph-io/dgraph-js?branch=master)
 
 Official Dgraph client implementation for JavaScript (Node.js v6 and above),
 using [gRPC].
-
-**Use [Discuss Issues](https://discuss.dgraph.io/c/issues/35/clients/46) for reporting issues about this repository.**
 
 **Looking for browser support? Check out [dgraph-js-http].**
 
@@ -14,18 +12,23 @@ This client follows the [Dgraph Go client][goclient] closely.
 
 [goclient]: https://github.com/dgraph-io/dgo
 
-Before using this client, we highly recommend that you go through [docs.dgraph.io],
+Before using this client, we highly recommend that you go through [dgraph.io/docs],
 and understand how to run and work with Dgraph.
 
-[docs.dgraph.io]:https://docs.dgraph.io
+[docs.dgraph.io]:https://dgraph.io/docs
+
 
 ## Table of contents
 
+- [dgraph-js  ](#dgraph-js--)
+  - [Table of contents](#table-of-contents)
   - [Install](#install)
   - [Supported Versions](#supported-versions)
   - [Quickstart](#quickstart)
   - [Using a Client](#using-a-client)
     - [Creating a Client](#creating-a-client)
+    - [Multi-tenancy](#multi-tenancy)
+    - [Creating a Client for Dgraph Cloud Endpoint](#creating-a-client-for-dgraph-cloud-endpoint)
     - [Altering the Database](#altering-the-database)
     - [Creating a Transaction](#creating-a-transaction)
     - [Running a Mutation](#running-a-mutation)
@@ -66,15 +69,11 @@ use a different version of this client.
 
 | Dgraph version | dgraph-js version |
 |:--------------:|:-----------------:|
-|     1.0.X      |      *1.X.Y*      |
-|     1.1.X      |      *2.X.Y*      |
 |    20.03.0     |     *20.03.0*     |
 |    21.03.0     |     *21.03.0*     |
-|    >=21.03.0   |     >=*21.03.0*     |
+|    >=21.03.0   |     >=*21.03.0*   |
+|    >=24.X.X    |     >=*24.X.X*    |
 
-Note: Only API breakage from *v1.X.Y* to *v2.X.Y* is in
-the function `DgraphClient.newTxn().mutate()`. This function returns a `messages.Assigned`
-type in *v1.X* but a `messages.Response` type in *v2.X*.
 
 ## Quickstart
 
@@ -116,7 +115,7 @@ In order to create a JavaScript client, and make the client login into namespace
 
 ```js
 const dgraphClientStub = new dgraph.DgraphClientStub("localhost:9080");
-await dgraphClientStub.loginIntoNamespace("groot", "password", 123); // where 123 is the namespaceId 
+await dgraphClientStub.loginIntoNamespace("groot", "password", 123); // where 123 is the namespaceId
 ```
 
 In the example above, the client logs into namespace `123` using username `groot` and password `password`.
@@ -166,7 +165,7 @@ await dgraphClient.alter(op);
 > NOTE: Many of the examples here use the `await` keyword which requires
 > `async/await` support which is available on Node.js >= v7.6.0. For prior versions,
 > the expressions following `await` can be used just like normal `Promise`:
-> 
+>
 > ```js
 > dgraphClient.alter(op)
 >     .then(function(result) { ... }, function(err) { ... })
@@ -328,8 +327,8 @@ console.log(JSON.stringify(res.getJson()));
 
 ### Running an Upsert: Query + Mutation
 
-The `txn.doRequest` function allows you to run upserts consisting of one query and one mutation. 
-Query variables could be defined and can then be used in the mutation. You can also use the 
+The `txn.doRequest` function allows you to run upserts consisting of one query and one mutation.
+Query variables could be defined and can then be used in the mutation. You can also use the
 `txn.doRequest` function to perform just a query or a mutation.
 
 To know more about upsert, we highly recommend going through the docs at https://docs.dgraph.io/mutations/#upsert-block.

@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/) starting v20.03.0.
 
+
+## [24.1.0] - 2024-11-13
+
+### Changed
+
+* Bump the minor-and-patch group with 4 updates (#234 #232 #230 #229 #227 #228 #234 #226 #223 #225 #222 #221 #220 #218 #217)
+* Remove `grpc` dependency (#233)
+* fix euclidean spelling (#224)
+* update examples (#219)
+
+
 ## [24.0.0] - 2024-08-22
 
 ### Added
@@ -25,7 +36,7 @@ Version bump.
 
 ### Added
 
-- LoginIntoNamespace API 
+- LoginIntoNamespace API
 
 ### Removed
 
