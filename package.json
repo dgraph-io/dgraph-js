@@ -64,7 +64,7 @@
     "@types/url-parse": "^1.4.11",
     "@typescript-eslint/eslint-plugin-tslint": "^7.0.2",
     "dgraph-js": "^21.3.1",
-    "eslint-plugin-lodash": "^7.4.0",
+    "eslint-plugin-lodash": "^8.0.0",
     "google-protobuf": "^3.21.4",
     "is-base64": "^1.1.0",
     "url-parse": "^1.5.10"
