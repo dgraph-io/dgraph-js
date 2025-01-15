@@ -1,15 +1,5 @@
 name: ci-dgraph-js-tests
 on:
-  push:
-    paths-ignore:
-      - '**/**.dockerignore'
-      - '**/**.gitignore'
-      - '**/**.md'
-      - '**/**.png'
-      - '**/**.gif'
-      - '**/**.ini'
-    branches: 
-    - master
   pull_request:
     types:
     - opened
@@ -17,7 +7,7 @@ on:
     - synchronize
     - ready_for_review
     branches: 
-    - master
+    - main
 jobs:
   dgraph-js-tests:
     runs-on: warp-ubuntu-latest-x64-16x
