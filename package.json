@@ -26,7 +26,7 @@
     "build:protos": "yarn build:protos:msgs && yarn build:protos:srvs",
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
-    "lint": "trunk check",
+    "lint": "eslint .",
     "pretest": "yarn lint",
     "test": "jest --coverage --runInBand",
     "test:watch": "jest --watch",
