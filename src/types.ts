@@ -10,7 +10,7 @@ import { b64ToStr, isBase64, strToB64, strToJson, strToU8, u8ToStr } from "./uti
  * Payload represents the return value of an alter operation.
  */
 export class Payload extends messages.Payload {
-  public getData(): unknown {
+  public getData(): object {
     let jsonStr: string
     const value = super.getData()
     if (value instanceof Uint8Array) {

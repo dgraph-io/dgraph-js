@@ -5,8 +5,8 @@ export function errorCode(err: unknown): { valid: boolean; code: number } {
   if (
     err === undefined ||
     typeof err !== "object" ||
-    !err.hasOwnProperty("code") ||
-    typeof err.code !== "number"
+    !Object.prototype.hasOwnProperty.call(err, "code") ||
+    typeof (err as { code?: unknown }).code !== "number"
   ) {
     return {
       valid: false,

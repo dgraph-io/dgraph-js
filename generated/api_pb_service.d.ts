@@ -49,13 +49,13 @@ type DgraphCheckVersion = {
   readonly responseType: typeof api_pb.Version
 }
 
-export class Dgraph {
-  static readonly serviceName: string
-  static readonly Login: DgraphLogin
-  static readonly Query: DgraphQuery
-  static readonly Alter: DgraphAlter
-  static readonly CommitOrAbort: DgraphCommitOrAbort
-  static readonly CheckVersion: DgraphCheckVersion
+export namespace Dgraph {
+  export const serviceName: string
+  export const Login: DgraphLogin
+  export const Query: DgraphQuery
+  export const Alter: DgraphAlter
+  export const CommitOrAbort: DgraphCommitOrAbort
+  export const CheckVersion: DgraphCheckVersion
 }
 
 export type ServiceError = {

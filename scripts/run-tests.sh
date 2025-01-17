@@ -80,7 +80,8 @@ function init {
 }
 
 # find parent directory of test script
-readonly _SRCDIR=$(readlink -f "${BASH_SOURCE[0]%/*}")
+readonly _SRCDIR
+_SRCDIR=$(readlink -f "${BASH_SOURCE[0]%/*}")
 SRCDIR=$(dirname "${_SRCDIR}")
 
 init
