@@ -51,5 +51,5 @@ jobs:
       - name: Run dgraph-js tests
         working-directory: dgraph-js
         run: |
-          npm ci --legacy-peer-deps
+          npm ci
           bash scripts/run-tests.sh
