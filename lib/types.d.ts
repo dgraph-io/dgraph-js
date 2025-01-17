@@ -1,27 +1,27 @@
 import * as messages from "../generated/api_pb"
 export declare class Payload extends messages.Payload {
-  getData(): unknown
+  getData(): string | Uint8Array
   getData_asB64(): string
   getData_asU8(): Uint8Array
-  setData(value: unknown): void
+  setData(value: any): void
 }
 export declare function createPayload(oldPayload: messages.Payload): Payload
 export declare class Response extends messages.Response {
-  getJson(): unknown
+  getJson(): string | Uint8Array
   getJson_asB64(): string
   getJson_asU8(): Uint8Array
-  setJson(value: unknown): void
+  setJson(value: any): void
 }
 export declare function createResponse(oldResponse: messages.Response): Response
 export declare class Mutation extends messages.Mutation {
-  getSetJson(): unknown
+  getSetJson(): string | Uint8Array
   getSetJson_asB64(): string
   getSetJson_asU8(): Uint8Array
-  setSetJson(value: unknown): void
-  getDeleteJson(): unknown
+  setSetJson(value: any): void
+  getDeleteJson(): string | Uint8Array
   getDeleteJson_asB64(): string
   getDeleteJson_asU8(): Uint8Array
-  setDeleteJson(value: unknown): void
+  setDeleteJson(value: any): void
   getSetNquads(): Uint8Array | string
   getSetNquads_asB64(): string
   getSetNquads_asU8(): Uint8Array

@@ -10,7 +10,7 @@ import { b64ToStr, isBase64, strToB64, strToJson, strToU8, u8ToStr } from "./uti
  * Payload represents the return value of an alter operation.
  */
 export class Payload extends messages.Payload {
-  public getData(): object {
+  public getData(): any {
     let jsonStr: string
     const value = super.getData()
     if (value instanceof Uint8Array) {
@@ -40,7 +40,7 @@ export class Payload extends messages.Payload {
     return value
   }
 
-  public setData(value: unknown): void {
+  public setData(value: any): void {
     if (value instanceof Uint8Array) {
       super.setData(value)
       return
@@ -68,7 +68,7 @@ export function createPayload(oldPayload: messages.Payload): Payload {
  * Response represents the return value of a mutation or query operations.
  */
 export class Response extends messages.Response {
-  public getJson(): unknown {
+  public getJson(): any {
     let jsonStr: string
     const value = super.getJson()
     if (value instanceof Uint8Array) {
@@ -98,7 +98,7 @@ export class Response extends messages.Response {
     return value
   }
 
-  public setJson(value: unknown): void {
+  public setJson(value: any): void {
     if (value instanceof Uint8Array) {
       super.setJson(value)
       return
@@ -126,7 +126,7 @@ export function createResponse(oldResponse: messages.Response): Response {
  * Mutation represents the request value of a muatate operation.
  */
 export class Mutation extends messages.Mutation {
-  public getSetJson(): unknown {
+  public getSetJson(): any {
     let jsonStr: string
     const value = super.getSetJson()
     if (value instanceof Uint8Array) {
@@ -156,7 +156,7 @@ export class Mutation extends messages.Mutation {
     return value
   }
 
-  public setSetJson(value: unknown): void {
+  public setSetJson(value: any): void {
     if (value instanceof Uint8Array) {
       super.setSetJson(value)
       return
@@ -170,7 +170,7 @@ export class Mutation extends messages.Mutation {
     super.setSetJson(strToU8(jsonStr))
   }
 
-  public getDeleteJson(): unknown {
+  public getDeleteJson(): any {
     let jsonStr: string
     const value = super.getDeleteJson()
     if (value instanceof Uint8Array) {
@@ -200,7 +200,7 @@ export class Mutation extends messages.Mutation {
     return value
   }
 
-  public setDeleteJson(value: unknown): void {
+  public setDeleteJson(value: any): void {
     if (value instanceof Uint8Array) {
       super.setDeleteJson(value)
       return

@@ -76,7 +76,7 @@ export class Txn {
    */
   public async queryWithVars(
     q: string,
-    vars?: { [k: string]: unknown },
+    vars?: { [k: string]: any },
     metadata?: grpc.Metadata,
     options?: grpc.CallOptions,
   ): Promise<types.Response> {
@@ -123,7 +123,7 @@ export class Txn {
    */
   public async queryRDFWithVars(
     q: string,
-    vars?: { [k: string]: unknown },
+    vars?: { [k: string]: any },
     metadata?: grpc.Metadata,
     options?: grpc.CallOptions,
   ): Promise<types.Response> {

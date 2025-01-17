@@ -95,7 +95,7 @@ export class DgraphClient {
 }
 
 // isJwtExpired returns true if the error indicates that the jwt has expired.
-export function isJwtExpired(err: unknown): boolean {
+export function isJwtExpired(err: any): boolean {
   if (!err) {
     return false
   }
