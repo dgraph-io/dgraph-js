@@ -1,5 +1,5 @@
 import * as dgraph from "../../src"
-
+import * as crypto from "crypto"
 import { setSchema, setup, wait } from "../helper"
 
 const concurrency = 5
@@ -79,8 +79,8 @@ async function runTxn(): Promise<void> {
   let toUid: string
 
   while (true) {
-    fromUid = uids[Math.floor(Math.random() * uids.length)]
-    toUid = uids[Math.floor(Math.random() * uids.length)]
+    fromUid = uids[crypto.randomInt(uids.length)]
+    toUid = uids[crypto.randomInt(uids.length)]
 
     if (fromUid !== toUid) {
       break
