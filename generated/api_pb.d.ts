@@ -365,7 +365,7 @@ export class Check extends jspb.Message {
 }
 
 export namespace Check {
-  export type AsObject = {}
+  export type AsObject = object
 }
 
 export class Version extends jspb.Message {

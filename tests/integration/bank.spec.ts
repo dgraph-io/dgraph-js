@@ -117,7 +117,7 @@ async function runTxnInLoop(): Promise<void> {
         finished = true
         return
       }
-    } catch (e) {
+    } catch {
       aborts += 1
     }
   }

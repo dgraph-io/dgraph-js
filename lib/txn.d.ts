@@ -18,7 +18,7 @@ export declare class Txn {
   queryWithVars(
     q: string,
     vars?: {
-      [k: string]: any
+      [k: string]: unknown
     },
     metadata?: grpc.Metadata,
     options?: grpc.CallOptions,
@@ -27,7 +27,7 @@ export declare class Txn {
   queryRDFWithVars(
     q: string,
     vars?: {
-      [k: string]: any
+      [k: string]: unknown
     },
     metadata?: grpc.Metadata,
     options?: grpc.CallOptions,

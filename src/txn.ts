@@ -76,7 +76,7 @@ export class Txn {
    */
   public async queryWithVars(
     q: string,
-    vars?: { [k: string]: any },
+    vars?: { [k: string]: unknown },
     metadata?: grpc.Metadata,
     options?: grpc.CallOptions,
   ): Promise<types.Response> {
@@ -123,7 +123,7 @@ export class Txn {
    */
   public async queryRDFWithVars(
     q: string,
-    vars?: { [k: string]: any },
+    vars?: { [k: string]: unknown },
     metadata?: grpc.Metadata,
     options?: grpc.CallOptions,
   ): Promise<types.Response> {
@@ -220,7 +220,7 @@ export class Txn {
         // Discarding the transaction enforces that the user cannot use the txn further.
         try {
           await this.discard(metadata, options)
-        } catch (e) {
+        } catch {
           // Ignore error - user should see the original error.
         }
 

@@ -1,7 +1,7 @@
 import * as grpc from "@grpc/grpc-js"
 import * as jspb from "google-protobuf"
 
-export function errorCode(err: any): { valid: boolean; code: number } {
+export function errorCode(err: unknown): { valid: boolean; code: number } {
   if (
     err === undefined ||
     typeof err !== "object" ||
@@ -20,30 +20,30 @@ export function errorCode(err: any): { valid: boolean; code: number } {
   }
 }
 
-export function isAbortedError(err: any): boolean {
+export function isAbortedError(err: unknown): boolean {
   const ec = errorCode(err)
   return ec.valid && ec.code === grpc.status.ABORTED
 }
 
-export function isConflictError(err: any): boolean {
+export function isConflictError(err: unknown): boolean {
   const ec = errorCode(err)
   return (
     ec.valid && (ec.code === grpc.status.ABORTED || ec.code === grpc.status.FAILED_PRECONDITION)
   )
 }
 
-export function isUnauthenticatedError(err: any): boolean {
+export function isUnauthenticatedError(err: unknown): boolean {
   const ec = errorCode(err)
   return ec.valid && ec.code === grpc.status.UNAUTHENTICATED
 }
 
 export function promisify1<A, T>(
   f: (arg: A, cb: (err?: Error, res?: T) => void) => void,
-  thisContext?: any,
+  thisContext?: unknown,
 ): (arg: A) => Promise<T> {
   return (arg: A) => {
     return new Promise(
-      (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void): void => {
+      (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: unknown) => void): void => {
         f.call(thisContext, arg, (err?: Error, result?: T): void =>
           err !== undefined && err !== null ? reject(err) : resolve(result),
         )
@@ -54,11 +54,11 @@ export function promisify1<A, T>(
 
 export function promisify3<A, B, C, T>(
   f: (argA: A, argB: B, argC: C, cb: (err?: Error, res?: T) => void) => void,
-  thisContext?: any,
+  thisContext?: unknown,
 ): (argA: A, argB: B, argC: C) => Promise<T> {
   return (argA: A, argB: B, argC: C) => {
     return new Promise(
-      (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void): void => {
+      (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: unknown) => void): void => {
         f.call(thisContext, argA, argB, argC, (err?: Error, result?: T): void =>
           err !== undefined && err !== null ? reject(err) : resolve(result),
         )
@@ -95,10 +95,10 @@ export function u8ToStr(arr: Uint8Array): string {
   return buf.toString()
 }
 
-export function strToJson(jsonStr: string): any {
+export function strToJson(jsonStr: string): unknown {
   try {
     return JSON.parse(jsonStr)
-  } catch (e) {
+  } catch {
     return {}
   }
 }
