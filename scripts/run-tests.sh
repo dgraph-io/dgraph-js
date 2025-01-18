@@ -5,7 +5,7 @@ sleepTime=5
 function wait-for-healthy() {
 	printf 'wait-for-healthy: waiting for %s to return 200 OK\n' "$1"
 	tries=0
-	until curl -sL -w '%{http_code}\n' "$1" -o /dev/null | grep -q 200; do
+	until curl -sL -w '%{http_code}\n' "$1" -o /dev/null | grep -q 200 || true; do
 		tries=${tries}+1
 		if [[ ${tries} -gt 300 ]]; then
 			printf "wait-for-healthy: Took longer than 1 minute to be healthy.\n"
@@ -31,10 +31,10 @@ function errorCheck {
 
 function stopCluster {
 	echo "shutting down dgraph alpha and zero..."
-	kill -9 $(pgrep -f "dgraph zero") >/dev/null  # kill dgraph zero
-	kill -9 $(pgrep -f "dgraph alpha") >/dev/null # kill dgraph alpha
+	kill -9 $(pgrep -f "dgraph zero") || true  # kill dgraph zero
+	kill -9 $(pgrep -f "dgraph alpha") || true # kill dgraph alpha
 
-	if pgrep -x dgraph >/dev/null; then
+	if pgrep -x dgraph >/dev/null || true; then
 		echo "sleeping for 5 seconds so dgraph can shutdown"
 		sleep 5
 	fi
