@@ -2,9 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es5",
-    "lib": [
-      "es2015"
-    ],
+    "lib": ["es2015"],
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "alwaysStrict": true,
@@ -21,8 +19,5 @@
     "outDir": "lib",
     "baseUrl": "."
   },
-  "include": [
-    "src/**/*",
-    "tests/**/*"
-  ]
+  "include": ["src/**/*", "tests/**/*"]
 }

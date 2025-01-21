@@ -1,14 +1,14 @@
 // package: api
 // file: api.proto
 
-var api_pb = require("./api_pb");
-var grpc = require("@improbable-eng/grpc-web").grpc;
+var api_pb = require("./api_pb")
+var grpc = require("@improbable-eng/grpc-web").grpc
 
 var Dgraph = (function () {
   function Dgraph() {}
-  Dgraph.serviceName = "api.Dgraph";
-  return Dgraph;
-}());
+  Dgraph.serviceName = "api.Dgraph"
+  return Dgraph
+})()
 
 Dgraph.Login = {
   methodName: "Login",
@@ -16,8 +16,8 @@ Dgraph.Login = {
   requestStream: false,
   responseStream: false,
   requestType: api_pb.LoginRequest,
-  responseType: api_pb.Response
-};
+  responseType: api_pb.Response,
+}
 
 Dgraph.Query = {
   methodName: "Query",
@@ -25,8 +25,8 @@ Dgraph.Query = {
   requestStream: false,
   responseStream: false,
   requestType: api_pb.Request,
-  responseType: api_pb.Response
-};
+  responseType: api_pb.Response,
+}
 
 Dgraph.Alter = {
   methodName: "Alter",
@@ -34,8 +34,8 @@ Dgraph.Alter = {
   requestStream: false,
   responseStream: false,
   requestType: api_pb.Operation,
-  responseType: api_pb.Payload
-};
+  responseType: api_pb.Payload,
+}
 
 Dgraph.CommitOrAbort = {
   methodName: "CommitOrAbort",
@@ -43,8 +43,8 @@ Dgraph.CommitOrAbort = {
   requestStream: false,
   responseStream: false,
   requestType: api_pb.TxnContext,
-  responseType: api_pb.TxnContext
-};
+  responseType: api_pb.TxnContext,
+}
 
 Dgraph.CheckVersion = {
   methodName: "CheckVersion",
@@ -52,19 +52,19 @@ Dgraph.CheckVersion = {
   requestStream: false,
   responseStream: false,
   requestType: api_pb.Check,
-  responseType: api_pb.Version
-};
+  responseType: api_pb.Version,
+}
 
-exports.Dgraph = Dgraph;
+exports.Dgraph = Dgraph
 
 function DgraphClient(serviceHost, options) {
-  this.serviceHost = serviceHost;
-  this.options = options || {};
+  this.serviceHost = serviceHost
+  this.options = options || {}
 }
 
 DgraphClient.prototype.login = function login(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
-    callback = arguments[1];
+    callback = arguments[1]
   }
   var client = grpc.unary(Dgraph.Login, {
     request: requestMessage,
@@ -75,27 +75,27 @@ DgraphClient.prototype.login = function login(requestMessage, metadata, callback
     onEnd: function (response) {
       if (callback) {
         if (response.status !== grpc.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
+          var err = new Error(response.statusMessage)
+          err.code = response.status
+          err.metadata = response.trailers
+          callback(err, null)
         } else {
-          callback(null, response.message);
+          callback(null, response.message)
         }
       }
-    }
-  });
+    },
+  })
   return {
     cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
+      callback = null
+      client.close()
+    },
+  }
+}
 
 DgraphClient.prototype.query = function query(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
-    callback = arguments[1];
+    callback = arguments[1]
   }
   var client = grpc.unary(Dgraph.Query, {
     request: requestMessage,
@@ -106,27 +106,27 @@ DgraphClient.prototype.query = function query(requestMessage, metadata, callback
     onEnd: function (response) {
       if (callback) {
         if (response.status !== grpc.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
+          var err = new Error(response.statusMessage)
+          err.code = response.status
+          err.metadata = response.trailers
+          callback(err, null)
         } else {
-          callback(null, response.message);
+          callback(null, response.message)
         }
       }
-    }
-  });
+    },
+  })
   return {
     cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
+      callback = null
+      client.close()
+    },
+  }
+}
 
 DgraphClient.prototype.alter = function alter(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
-    callback = arguments[1];
+    callback = arguments[1]
   }
   var client = grpc.unary(Dgraph.Alter, {
     request: requestMessage,
@@ -137,27 +137,27 @@ DgraphClient.prototype.alter = function alter(requestMessage, metadata, callback
     onEnd: function (response) {
       if (callback) {
         if (response.status !== grpc.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
+          var err = new Error(response.statusMessage)
+          err.code = response.status
+          err.metadata = response.trailers
+          callback(err, null)
         } else {
-          callback(null, response.message);
+          callback(null, response.message)
         }
       }
-    }
-  });
+    },
+  })
   return {
     cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
+      callback = null
+      client.close()
+    },
+  }
+}
 
 DgraphClient.prototype.commitOrAbort = function commitOrAbort(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
-    callback = arguments[1];
+    callback = arguments[1]
   }
   var client = grpc.unary(Dgraph.CommitOrAbort, {
     request: requestMessage,
@@ -168,27 +168,27 @@ DgraphClient.prototype.commitOrAbort = function commitOrAbort(requestMessage, me
     onEnd: function (response) {
       if (callback) {
         if (response.status !== grpc.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
+          var err = new Error(response.statusMessage)
+          err.code = response.status
+          err.metadata = response.trailers
+          callback(err, null)
         } else {
-          callback(null, response.message);
+          callback(null, response.message)
         }
       }
-    }
-  });
+    },
+  })
   return {
     cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
+      callback = null
+      client.close()
+    },
+  }
+}
 
 DgraphClient.prototype.checkVersion = function checkVersion(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
-    callback = arguments[1];
+    callback = arguments[1]
   }
   var client = grpc.unary(Dgraph.CheckVersion, {
     request: requestMessage,
@@ -199,23 +199,22 @@ DgraphClient.prototype.checkVersion = function checkVersion(requestMessage, meta
     onEnd: function (response) {
       if (callback) {
         if (response.status !== grpc.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
+          var err = new Error(response.statusMessage)
+          err.code = response.status
+          err.metadata = response.trailers
+          callback(err, null)
         } else {
-          callback(null, response.message);
+          callback(null, response.message)
         }
       }
-    }
-  });
+    },
+  })
   return {
     cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
+      callback = null
+      client.close()
+    },
+  }
+}
 
-exports.DgraphClient = DgraphClient;
-
+exports.DgraphClient = DgraphClient

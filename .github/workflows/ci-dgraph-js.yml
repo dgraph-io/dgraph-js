@@ -1,50 +1,55 @@
 name: ci-dgraph-js-tests
+
 on:
   pull_request:
     types:
-    - opened
-    - reopened
-    - synchronize
-    - ready_for_review
-    branches: 
-    - main
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    branches:
+      - main
+
+permissions:
+  contents: read
+
 jobs:
   dgraph-js-tests:
     runs-on: warp-ubuntu-latest-x64-16x
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18.x, 19.x, 20.x, 21.x, 22.x]
+        node-version: [18.x, 20.x, 22.x, 23.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-    - name: Checkout dgraph-js repo
-      uses: actions/checkout@v4
-      with: 
-        path: dgraph-js
-        repository: dgraph-io/dgraph-js
-        ref: ${{ github.ref }}
-    - name: Checkout dgraph repo
-      uses: actions/checkout@v4
-      with:
-        path: dgraph
-        repository: dgraph-io/dgraph
-        ref: main
-    - name: Set up Go
+      - name: Checkout dgraph-js repo
+        uses: actions/checkout@v4
+        with:
+          path: dgraph-js
+          repository: hypermodeinc/dgraph-js
+          ref: ${{ github.ref }}
+      - name: Checkout dgraph repo
+        uses: actions/checkout@v4
+        with:
+          path: dgraph
+          repository: hypermodeinc/dgraph
+          ref: main
+      - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
-    - name: Build dgraph binary
-      run: cd dgraph && make docker-image # also builds dgraph binary
-    - name: Move dgraph binary to gopath
-      run: cd dgraph && mv dgraph/dgraph ~/go/bin/dgraph
-    - name: Setup node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: dgraph-js/package-lock.json
-    - name: Run dgraph-js tests
-      working-directory: dgraph-js
-      run: | 
-        npm ci --legacy-peer-deps
-        bash scripts/run-tests.sh
+          go-version-file: dgraph/go.mod
+      - name: Build dgraph binary
+        run: cd dgraph && make docker-image # also builds dgraph binary
+      - name: Move dgraph binary to gopath
+        run: cd dgraph && mv dgraph/dgraph ~/go/bin/dgraph
+      - name: Setup node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: dgraph-js/package-lock.json
+      - name: Run dgraph-js tests
+        working-directory: dgraph-js
+        run: |
+          npm ci
+          bash scripts/run-tests.sh

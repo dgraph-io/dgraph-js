@@ -21,103 +21,102 @@
 // SongServerRequest. Use snake_case (underscore_separated_names) for field names – for
 // example, song_name.
 //
-'use strict';
-var grpc = require('@grpc/grpc-js');
-var api_pb = require('./api_pb.js');
+"use strict"
+var grpc = require("@grpc/grpc-js")
+var api_pb = require("./api_pb.js")
 
 function serialize_api_Check(arg) {
   if (!(arg instanceof api_pb.Check)) {
-    throw new Error('Expected argument of type api.Check');
+    throw new Error("Expected argument of type api.Check")
   }
-  return Buffer.from(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary())
 }
 
 function deserialize_api_Check(buffer_arg) {
-  return api_pb.Check.deserializeBinary(new Uint8Array(buffer_arg));
+  return api_pb.Check.deserializeBinary(new Uint8Array(buffer_arg))
 }
 
 function serialize_api_LoginRequest(arg) {
   if (!(arg instanceof api_pb.LoginRequest)) {
-    throw new Error('Expected argument of type api.LoginRequest');
+    throw new Error("Expected argument of type api.LoginRequest")
   }
-  return Buffer.from(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary())
 }
 
 function deserialize_api_LoginRequest(buffer_arg) {
-  return api_pb.LoginRequest.deserializeBinary(new Uint8Array(buffer_arg));
+  return api_pb.LoginRequest.deserializeBinary(new Uint8Array(buffer_arg))
 }
 
 function serialize_api_Operation(arg) {
   if (!(arg instanceof api_pb.Operation)) {
-    throw new Error('Expected argument of type api.Operation');
+    throw new Error("Expected argument of type api.Operation")
   }
-  return Buffer.from(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary())
 }
 
 function deserialize_api_Operation(buffer_arg) {
-  return api_pb.Operation.deserializeBinary(new Uint8Array(buffer_arg));
+  return api_pb.Operation.deserializeBinary(new Uint8Array(buffer_arg))
 }
 
 function serialize_api_Payload(arg) {
   if (!(arg instanceof api_pb.Payload)) {
-    throw new Error('Expected argument of type api.Payload');
+    throw new Error("Expected argument of type api.Payload")
   }
-  return Buffer.from(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary())
 }
 
 function deserialize_api_Payload(buffer_arg) {
-  return api_pb.Payload.deserializeBinary(new Uint8Array(buffer_arg));
+  return api_pb.Payload.deserializeBinary(new Uint8Array(buffer_arg))
 }
 
 function serialize_api_Request(arg) {
   if (!(arg instanceof api_pb.Request)) {
-    throw new Error('Expected argument of type api.Request');
+    throw new Error("Expected argument of type api.Request")
   }
-  return Buffer.from(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary())
 }
 
 function deserialize_api_Request(buffer_arg) {
-  return api_pb.Request.deserializeBinary(new Uint8Array(buffer_arg));
+  return api_pb.Request.deserializeBinary(new Uint8Array(buffer_arg))
 }
 
 function serialize_api_Response(arg) {
   if (!(arg instanceof api_pb.Response)) {
-    throw new Error('Expected argument of type api.Response');
+    throw new Error("Expected argument of type api.Response")
   }
-  return Buffer.from(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary())
 }
 
 function deserialize_api_Response(buffer_arg) {
-  return api_pb.Response.deserializeBinary(new Uint8Array(buffer_arg));
+  return api_pb.Response.deserializeBinary(new Uint8Array(buffer_arg))
 }
 
 function serialize_api_TxnContext(arg) {
   if (!(arg instanceof api_pb.TxnContext)) {
-    throw new Error('Expected argument of type api.TxnContext');
+    throw new Error("Expected argument of type api.TxnContext")
   }
-  return Buffer.from(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary())
 }
 
 function deserialize_api_TxnContext(buffer_arg) {
-  return api_pb.TxnContext.deserializeBinary(new Uint8Array(buffer_arg));
+  return api_pb.TxnContext.deserializeBinary(new Uint8Array(buffer_arg))
 }
 
 function serialize_api_Version(arg) {
   if (!(arg instanceof api_pb.Version)) {
-    throw new Error('Expected argument of type api.Version');
+    throw new Error("Expected argument of type api.Version")
   }
-  return Buffer.from(arg.serializeBinary());
+  return Buffer.from(arg.serializeBinary())
 }
 
 function deserialize_api_Version(buffer_arg) {
-  return api_pb.Version.deserializeBinary(new Uint8Array(buffer_arg));
+  return api_pb.Version.deserializeBinary(new Uint8Array(buffer_arg))
 }
 
-
 // Graph response.
-var DgraphService = exports.DgraphService = {
+var DgraphService = (exports.DgraphService = {
   login: {
-    path: '/api.Dgraph/Login',
+    path: "/api.Dgraph/Login",
     requestStream: false,
     responseStream: false,
     requestType: api_pb.LoginRequest,
@@ -128,7 +127,7 @@ var DgraphService = exports.DgraphService = {
     responseDeserialize: deserialize_api_Response,
   },
   query: {
-    path: '/api.Dgraph/Query',
+    path: "/api.Dgraph/Query",
     requestStream: false,
     responseStream: false,
     requestType: api_pb.Request,
@@ -139,7 +138,7 @@ var DgraphService = exports.DgraphService = {
     responseDeserialize: deserialize_api_Response,
   },
   alter: {
-    path: '/api.Dgraph/Alter',
+    path: "/api.Dgraph/Alter",
     requestStream: false,
     responseStream: false,
     requestType: api_pb.Operation,
@@ -150,7 +149,7 @@ var DgraphService = exports.DgraphService = {
     responseDeserialize: deserialize_api_Payload,
   },
   commitOrAbort: {
-    path: '/api.Dgraph/CommitOrAbort',
+    path: "/api.Dgraph/CommitOrAbort",
     requestStream: false,
     responseStream: false,
     requestType: api_pb.TxnContext,
@@ -161,7 +160,7 @@ var DgraphService = exports.DgraphService = {
     responseDeserialize: deserialize_api_TxnContext,
   },
   checkVersion: {
-    path: '/api.Dgraph/CheckVersion',
+    path: "/api.Dgraph/CheckVersion",
     requestStream: false,
     responseStream: false,
     requestType: api_pb.Check,
@@ -171,6 +170,6 @@ var DgraphService = exports.DgraphService = {
     responseSerialize: serialize_api_Version,
     responseDeserialize: deserialize_api_Version,
   },
-};
+})
 
-exports.DgraphClient = grpc.makeGenericClientConstructor(DgraphService);
+exports.DgraphClient = grpc.makeGenericClientConstructor(DgraphService)

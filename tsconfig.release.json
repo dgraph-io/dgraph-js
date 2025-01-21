@@ -3,7 +3,5 @@
   "compilerOptions": {
     "removeComments": true
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }
