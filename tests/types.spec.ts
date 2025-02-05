@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: © Hypermode Inc. <hello@hypermode.com>
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import * as dgraph from "../src"
 import { b64ToStr, strToB64, strToU8, u8ToStr } from "../src/util"
 

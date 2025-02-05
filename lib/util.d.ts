@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: © Hypermode Inc. <hello@hypermode.com>
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import * as jspb from "google-protobuf"
 export declare function errorCode(err: any): {
   valid: boolean
