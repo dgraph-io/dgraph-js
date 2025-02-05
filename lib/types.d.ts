@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: © Hypermode Inc. <hello@hypermode.com>
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import * as messages from "../generated/api_pb"
 export declare class Payload extends messages.Payload {
   getData(): string | Uint8Array

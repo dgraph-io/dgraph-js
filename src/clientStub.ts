@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: © Hypermode Inc. <hello@hypermode.com>
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import * as grpc from "@grpc/grpc-js"
 
 import * as services from "../generated/api_grpc_pb"
