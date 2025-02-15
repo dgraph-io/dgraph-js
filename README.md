@@ -1,6 +1,6 @@
-# dgraph-js [![npm version](https://img.shields.io/npm/v/dgraph-js.svg?style=flat)](https://www.npmjs.com/package/dgraph-js) [![Coverage Status](https://img.shields.io/coveralls/github/hypermodeinc/dgraph-js/master.svg?style=flat)](https://coveralls.io/github/hypermodeinc/dgraph-js?branch=master)
+# dgraph-js [![npm version](https://img.shields.io/npm/v/dgraph-js.svg?style=flat)](https://www.npmjs.com/package/dgraph-js)
 
-Official Dgraph client implementation for JavaScript (Node.js v6 and above), using [gRPC].
+Official Dgraph client implementation for JavaScript, using [gRPC].
 
 **Looking for browser support? Check out [dgraph-js-http].**
 
