@@ -35,7 +35,7 @@ lint:
         - "**/*.html"
         - "**/*.json"
   enabled:
-    - trivy@0.61.0
+    - trivy@0.71.2
     - actionlint@1.7.7
     - checkov@3.2.396
     - git-diff-check
