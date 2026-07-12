@@ -38,7 +38,7 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.12.5",
     "@types/url-parse": "^1.4.11",
-    "google-protobuf": "^3.21.4",
+    "google-protobuf": "^3.21.4 || ^4.0.0",
     "@improbable-eng/grpc-web": "^0.15.0",
     "is-base64": "^1.1.0",
     "url-parse": "^1.5.10"
