@@ -29,19 +29,19 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
       - name: Checkout dgraph-js repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           path: dgraph-js
           repository: hypermodeinc/dgraph-js
           ref: ${{ github.event.inputs.releasetag }}
       - name: Checkout dgraph repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           path: dgraph
           repository: hypermodeinc/dgraph
           ref: main
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version-file: dgraph/go.mod
       - name: Build dgraph binary
@@ -49,7 +49,7 @@ jobs:
       - name: Move dgraph binary to gopath
         run: cd dgraph && mv dgraph/dgraph ~/go/bin/dgraph
       - name: Setup node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
@@ -65,11 +65,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout dgraph-js repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: Setup node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 22.x
+          node-version: 22.x || 24.x
           registry-url: https://registry.npmjs.org
       - name: Build dgraph-js package
         run: npm ci
